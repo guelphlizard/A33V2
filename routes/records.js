@@ -1353,11 +1353,18 @@ res.redirect('/records/dash')*/
 
 
 router.get('/genEmailExam',isLoggedIn,function(req,res){
-  User.find({role:"parent"},function(err,docs){
+  var m = moment()
+  var mformat = m.format('L')
+  var month = m.format('MMMM')
+  var year = m.format('YYYY')
+  var term = req.user.term
+
+
+  User.find({role:"student"},function(err,docs){
  
    for(var i = 0;i<docs.length;i++){
      let email = docs[i].email
-     let studentId = docs[i].studentId
+     let uid = docs[i].uid
  
  
  

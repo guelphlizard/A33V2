@@ -95,6 +95,7 @@ const methodOverride = require('method-override');
 
 const arr = {}
 const arr2 = {}
+const arr9 ={}
 const arrInvoice = {}
 //const data = require('../data.json')
 
@@ -3166,12 +3167,653 @@ router.get('/feesUpdateX',isLoggedIn,function(req,res){
 
 
 
+//aggStudentTerm
+
+//monthly student voucher reports
+router.get('/arrInvoiceUpdate',isLoggedIn,function(req,res){
+
+  
+ User.find({role:"student"},function(err,docs){
+    for(var i=0;i<docs.length;i++){
+      let studentId = docs[i].uid
+       arr9[studentId]=[]
+    }
+  })
+  
+  res.redirect('/clerk/invoProcess')
+  
+  })
+  
+//aggTerm
+
+
+ //aggg
+//aggVouchers
+
+router.get('/invoProcess',isLoggedIn,function(req,res){
+
+ 
+  
+  
+  //console.log(docs[i].uid,'ccc')
+  
+  //let uid = "SZ125"
+  
+  
+  //TestX.find({year:year,uid:uid},function(err,vocs) {
+  User.find({role:'student'}).lean().then(vocs=>{
+  
+  
+  for(var x = 0;x<vocs.length;x++){
+
+    let uid = vocs[x].uid
+  
+  
+  if( arr9[uid].length > 0 && arr9[uid].find(value => value.uid == uid) ){
+  
+  arr9[uid].push(vocs[x])
+  
+      }
+      
+       
+      
+      
+      else{
+        arr9[uid].push(vocs[x])
+            
+        } 
+  
+  
+   
+  
+       
+  
+  }  
+      })
+      
+      res.redirect('/clerk/invoGeneration2')
+    
+  
+  /*})*/
+  
+  })
+  
+  
+
+
+  router.get('/invoGeneration2',isLoggedIn,function(req,res){
+  console.log(arr9,'arr9')
+    var m = moment()
+    var mformat = m.format('L')
+    var month = m.format('MMMM')
+    var year = m.format('YYYY')
+    var term = req.user.term
+      
+    
+  /*console.log(arr,'iiii')*/
+  User.find({role:"student"},function(err,locs){
+    for(var x = 0; x<locs.length;x++){
+      let uid= locs[x].uid
+     
+      let name = locs[x].fullname
+
+    
+    
+    
+  //console.log(docs,'docs')
+  
+  const compile = async function (templateName, arr9){
+    const filePath = path.join(process.cwd(),'templates',`${templateName}.hbs`)
+  
+    const html = await fs.readFile(filePath, 'utf8')
+  
+    return hbs.compile(html)(arr9)
+   
+  };
+  
+  
+  
+  
+   (async function(){
+  
+  try{
+  //const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+  });
+  
+  const page = await browser.newPage()
+  
+  
+  
+   //const content = await compile('report3',arr[uid])
+   const content = await compile('euritInvoice',arr9[uid])
+  
+
+  await page.setContent(content, { waitUntil: 'networkidle2'});
+   //await page.setContent(content)
+  //create a pdf document
+  await page.emulateMediaType('screen')
+  await page.evaluate(() => matchMedia('screen').matches);
+  await page.setContent(content, { waitUntil: 'networkidle0'});
+  //console.log(await page.pdf(),'7777')
+  
+  await page.pdf({
+    //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
+    path:(`./invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
+    format:"A4",
+    width:'30cm',
+  height:'21cm',
+    printBackground:true
+  })
+  
+  
+  var repo = new InvoiceFile();
+      
+      repo.studentName =name
+      repo.month = month;
+      repo.code = uid;
+      repo.term = term;
+      repo.type = 'Invoice';
+      repo.filename = uid+'_'+name+'.pdf';
+      repo.year = year;
+      repo.date = mformat
+      repo.save().then(poll =>{
+      console.log("Done creating pdf",)
+      })
+  
+  
+  /*await browser.close()
+  
+  process.exit()*/
+
+  
+  
+  /*req.flash('success', 'Report Generation Success');
+ 
+  res.redirect('/clerk/dash');*/
+  
+  }catch(e) {
+  
+    console.log(e)
+  
+  
+  }
+
+  
+  }) ()
+
+
+  
+
+}
+})  
+
+  })
+
+
+
+
+  router.get('/genEmailInvo',isLoggedIn,function(req,res){
+    var m = moment()
+    var mformat = m.format('L')
+    var month = m.format('MMMM')
+    var year = m.format('YYYY')
+    var term = req.user.term
+  
+  
+    User.find({role:"student"},function(err,docs){
+   
+     for(var i = 0;i<docs.length;i++){
+       let email = docs[i].email
+       let uid = docs[i].uid
+       let name = docs[i].fullname
+   
+   
+   
+   
+   
+               
+     const transporter = nodemailer.createTransport({
+       service: 'gmail',
+       port:465,
+       secure:true,
+       logger:true,
+       debug:true,
+       secureConnection:false,
+       auth: {
+           user: "kratosmusasa@gmail.com",
+           pass: "znbmadplpvsxshkg",
+       },
+       tls:{
+         rejectUnAuthorized:true
+       }
+       //host:'smtp.gmail.com'
+     });
+     let mailOptions ={
+       from: '"Admin" <kratosmusasa@gmail.com>', // sender address
+                   to: email, // list of receivers
+                   subject: "2nd Term Invoices",
+       text:"Please find the attached invoices",
+       attachments: [
+         {
+           filename:'document.pdf',
+           path:`./invoiceReports/${year}/${term}/${uid}_${name}.pdf`
+         }
+       ]
+     };
+     transporter.sendMail(mailOptions, function (error,info){
+       if(error){
+         console.log(error)
+         req.flash('danger', 'Reports Not Emailed!');
+    
+  res.redirect('/clerk/dashX')
+       }else{
+         console.log('Email sent successfully')
+         req.flash('success', 'Reports Emailed Successfully!');
+    
+  res.redirect('/clerk/dashX')
+       }
+     })
+   
+   }
+   })
+   
+   })
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+  
+router.get('/importYears',isLoggedIn, function(req,res){
+  var pro = req.user
+
+ 
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+
+
+   title = "Import Years"
+
+  
+
+  
+ res.render('imports/years',{pro:pro,title:title,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg}) 
+
+   })
+
+
+
+  
+ router.post('/importYears',isLoggedIn, uploadX.single('file'),function(req,res){
+   var term = req.user.term;
+   var m = moment()
+ 
+   var pro = req.user
+
+
+ 
+   
+ /*  if(!req.file){
+       req.session.message = {
+         type:'errors',
+         message:'Select File!'
+       }     
+         res.render('imports/students', {message:req.session.message,pro:pro}) */
+         if (!req.file || req.file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+           req.session.message = {
+               type:'errors',
+               message:'Upload Excel File'
+             }     
+               res.render('imports/years', {message:req.session.message,pro:pro
+                    
+                }) 
+ 
+ 
+ 
+       }
+         
+       else{
+
+       
+           const file = req.file.filename;
+   
+           
+                var wb =  xlsx.readFile(`./public/uploads/` + file)
+        
+                var sheets = wb.Sheets;
+                var sheetNames = wb.SheetNames;
+    
+                var sheetName = wb.SheetNames[0];
+    var sheet = wb.Sheets[sheetName ];
+    
+       for (var i = 0; i < wb.SheetNames.length; ++i) {
+        var sheet = wb.Sheets[wb.SheetNames[i]];
+    
+        console.log(wb.SheetNames.length)
+        var data =xlsx.utils.sheet_to_json(sheet)
+            
+        var newData = data.map(async function (record){
+    
+       
+        
+     
+         
+      
+      
+     
+           let name = record.name;
+        
+
+
+
+
+
+          req.body.name = record.name
+
+
+       req.check('name','Enter Year').notEmpty();
+
+   
+
+var errors = req.validationErrors();
+ 
+if (errors) {
+ 
+ req.session.errors = errors;
+ req.session.success = false;
+ console.log( req.session.errors[0].msg)
+ req.flash('danger', req.session.errors[0].msg);
+      
+       
+ res.redirect('/clerk/importYears');
+
+}
+
+else
+
+
+           {
+             Year.findOne({'year':name})
+             .then(user =>{
+                 if(user){ 
+               // req.session.errors = errors
+                 //req.success.user = false;
+           
+           
+           
+                 req.flash('danger', 'Room already in the system');
+
+                 res.redirect('/clerk/importYears') 
+ 
+                 //res.redirect('/records/import')
+               
+           }
+           else
+
+
+
+
+
+           var user = new Year();
+           user.year = name
+          
+          
+          
+           user.save()
+             .then(user =>{
+              
+             
+                 
+             /*  req.session.message = {
+                 type:'success',
+                 message:'Account Registered'
+               }  
+               res.render('imports/teacherX',{message:req.session.message});*/
+             })
+
+           })
+         }
+                  
+                   // .catch(err => console.log(err))
+                 
+               
+                   
+                 
+                 
+        
+                 
+                 
+                 
+                   
+                   
+       
+                  
+       
+                  
+            
+               })
+               
+               req.flash('success', 'File Imported Successfully!');
+ 
+               res.redirect('/clerk/importYears') 
+     
+       }
+     }
+ 
+ })
+ //import month
+ 
+  
+ router.get('/importMonth',isLoggedIn,function(req,res){
+  var pro = req.user
+
+ 
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+
+
+   title = "Import Month"
+
+  
+
+  
+ res.render('imports/month',{pro:pro,title:title,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg}) 
+
+   })
+
+
+
+  
+ router.post('/importMonth',isLoggedIn, uploadX.single('file'),function(req,res){
+   var term = req.user.term;
+   var m = moment()
+   var year = m.format('YYYY')
+   var id =   req.user._id
+   var idNumber = req.user.idNumber
+   var pro = req.user
+
+
+ 
+   
+ /*  if(!req.file){
+       req.session.message = {
+         type:'errors',
+         message:'Select File!'
+       }     
+         res.render('imports/students', {message:req.session.message,pro:pro}) */
+         if (!req.file || req.file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+           req.session.message = {
+               type:'errors',
+               message:'Upload Excel File'
+             }     
+               res.render('imports/month', {message:req.session.message,pro:pro
+                    
+                }) 
+ 
+ 
+ 
+       }
+         
+       else{
+
+       
+           const file = req.file.filename;
+   
+           
+                var wb =  xlsx.readFile(`./public/uploads/` + file)
+        
+                var sheets = wb.Sheets;
+                var sheetNames = wb.SheetNames;
+    
+                var sheetName = wb.SheetNames[0];
+    var sheet = wb.Sheets[sheetName ];
+    
+       for (var i = 0; i < wb.SheetNames.length; ++i) {
+        var sheet = wb.Sheets[wb.SheetNames[i]];
+    
+        console.log(wb.SheetNames.length)
+        var data =xlsx.utils.sheet_to_json(sheet)
+            
+        var newData = data.map(async function (record){
+    
+       
+        
+     
+         
+      
+      
+     
+           let month = record.month;
+        
+           let num = record.num;
+
+
+
+
+          req.body.month = record.month 
+          req.body.num = record.num   
+
+
+       req.check('month','Enter Month').notEmpty();
+
+   
+
+var errors = req.validationErrors();
+ 
+if (errors) {
+ 
+ req.session.errors = errors;
+ req.session.success = false;
+ console.log( req.session.errors[0].msg)
+ req.flash('danger', req.session.errors[0].msg);
+      
+       
+ res.redirect('/clerk/importMonth');
+
+}
+
+else
+
+
+           {
+             Month.findOne({'month':month})
+             .then(user =>{
+                 if(user){ 
+               // req.session.errors = errors
+                 //req.success.user = false;
+           
+           
+           
+                 req.flash('danger', 'Month already in the system');
+
+                 res.redirect('/clerk/importMonth') 
+ 
+                 //res.redirect('/records/import')
+               
+           }
+           else
+
+
+
+
+
+           var user = new Month();
+           user.month = month
+           user.num = num
+          
+          
+          
+           user.save()
+             .then(user =>{
+              
+             
+                 
+             /*  req.session.message = {
+                 type:'success',
+                 message:'Account Registered'
+               }  
+               res.render('imports/teacherX',{message:req.session.message});*/
+             })
+
+           })
+         }
+                  
+                   // .catch(err => console.log(err))
+                 
+               
+                   
+                 
+                 
+        
+                 
+                 
+                 
+                   
+                   
+       
+                  
+       
+                  
+            
+               })
+               
+               req.flash('success', 'File Imported Successfully!');
+ 
+               res.redirect('/clerk/importMonth') 
+     
+       }
+     }
+ 
+ })
+
+
+
+
+  router.get('/euritInvoice',function(req,res){
+    res.render('acc2/euritInvoice')
+  })
 module.exports = router;
 
 
