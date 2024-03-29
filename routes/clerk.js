@@ -3242,7 +3242,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
 
 
   router.get('/invoGeneration2',isLoggedIn,function(req,res){
-  console.log(arr9,'arr9')
+  //console.log(arr9,'arr9')
     var m = moment()
     var mformat = m.format('L')
     var month = m.format('MMMM')
