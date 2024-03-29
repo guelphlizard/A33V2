@@ -3252,7 +3252,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
     
   /*console.log(arr,'iiii')*/
   User.find({role:"student"},function(err,locs){
-    for(var x = 0; x<locs.length;x++){
+    for(var x = 0; x<10;x++){
       let uid= locs[x].uid
      
       let name = locs[x].fullname
