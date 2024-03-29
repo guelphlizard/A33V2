@@ -3174,7 +3174,7 @@ router.get('/arrInvoiceUpdate',isLoggedIn,function(req,res){
 
   
  User.find({role:"student"},function(err,docs){
-    for(var i=0;i<docs.length;i++){
+    for(var i=0;i<10;i++){
       let studentId = docs[i].uid
        arr9[studentId]=[]
     }
@@ -3204,7 +3204,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   User.find({role:'student'}).lean().then(vocs=>{
   
   
-  for(var x = 0;x<vocs.length;x++){
+  for(var x = 0;x<10;x++){
 
     let uid = vocs[x].uid
   
