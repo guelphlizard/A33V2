@@ -2868,7 +2868,24 @@ router.get('/downloadTermlyInvoiceReport/:id',isLoggedIn,function(req,res){
    
   })
 
-  
+  router.get('/balanceUpdate',isLoggedIn,function(req,res){
+    User.find({role:"student"},function(err,docs){
+      for(var i =0;i<docs.length;i++){
+        let id = docs[i]._id
+        let balance = docs[i].balance
+
+        if(balance >0){
+          User.findByIdAndUpdate(id,{set:{status:"paid"}},function(err,locs){
+
+          })
+        }else{
+          User.findByIdAndUpdate(id,{$set:{status:"owing"}},function(err,pocs){
+
+          })
+        }
+      }
+    })
+  })
   
 
   
