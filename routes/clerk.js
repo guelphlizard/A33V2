@@ -3401,7 +3401,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
        //host:'smtp.gmail.com'
      });
      let mailOptions ={
-       from: '"Admin" <kratosmusasa@gmail.com>', // sender address
+       from: '"St Eurit International School" <kratosmusasa@gmail.com>', // sender address
                    to: email, // list of receivers
                    subject: "2nd Term Invoices",
        text:"Please find the attached invoices",
