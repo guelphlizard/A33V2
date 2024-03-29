@@ -1036,7 +1036,7 @@ router.post('/offlineMulti', function(req,res){
   var adminName = req.body.admin_name;
   var adminSurname = req.body.admin_surname;
   var fullname = adminName +" "+ adminSurname
-  var role = 'admin'
+  var role = 'records'
   var email = req.body.business_email
   var accountNumber,idNumber ;
   var a = moment();

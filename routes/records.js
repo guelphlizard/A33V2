@@ -3635,7 +3635,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
   
 
   
-  router.post('/import',isLoggedIn,records, upload.single('file'),  (req,res)=>{
+  router.post('/import',isLoggedIn,records, uploadX.single('file'),  (req,res)=>{
     var count = req.user.actualCount
     var m = moment()
  
@@ -3700,11 +3700,14 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
             let levelX
             let adminBal = req.user.balance
             let uid = record.uid;
+            let accountStatus = record.status
             let name = record.name;
             let surname = record.surname;
             let fullname = name +" "+ surname
             let role = 'student';
-            let address = record.address
+            let balance= record.balance
+            let balance2  = record.totalBalance
+            let address1 = record.address1
             let address2 = record.address2
             let mobile = record.mobile;
            // let gender = record.gender;
@@ -3712,7 +3715,9 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
             let email = record.email
             let class1 = record.class1;
             let grade = record.grade
+      
             let password = record.password;
+            let parentEmail = record.parentEmail
             let term = req.user.term
             var year = m.format('YYYY')
             let suffix = 'null'
@@ -3742,7 +3747,7 @@ req.body.password = record.password
         
             
               req.check('uid','Enter uid').notEmpty();
-              req.check('name','Enter Name').notEmpty();
+              //req.check('name','Enter Name').notEmpty();
               req.check('surname','Enter Surname').notEmpty();
               req.check('email','Enter email').notEmpty();
               req.check('email','Enter valid email').notEmpty().isEmail();
@@ -3782,9 +3787,9 @@ else
 
       req.flash('danger', 'User already in the system');
   
-      //res.redirect('/records/import')
+      res.redirect('/records/import')
 }
-else
+else{
 
 
 
@@ -3818,26 +3823,27 @@ user.receiptNumber = 0;
 user.year = year;
 user.prefix = prefix
 user.possibleMark = 0;
-user.balance = adminBal;
+user.balance =balance;
+user.balance2 = balance2
 user.balanceCarriedOver = 0;
 user.status = 'owing';
 user.status4 = 'null';
 user.number = 0;
 user.paymentId = 'null';
 user.suffix = suffix;
-user.photo = photo;
-user.level = 'null';
+user.photo ="propic.jpg";
+user.level = 0;
 user.levelX = 'normal';
 user.pollUrl ='null';
 user.annual = 0;
 user.fees = 0;
 user.state = 'new'
-
+user.accountStatus = accountStatus
 user.idNumber = 0;
 user.idNumX = 0
 user.recNumber=0
 user.type = 'null';
-user.address = address;
+user.address = address1;
 user.email = email
 user.category = 'null';
 user.subject = 0;
@@ -3864,11 +3870,15 @@ user.subjectNo = 0
 user.quizDuration = 0
 user.inboxNo = 0
 user.quizNo = 0
+user.parentEmail = parentEmail
+
 user.quizBatch = 0
 user.quizId = 'null'
 user.testId = 'null'
 user.industry = 'null'
 user.text = password
+user.address1 = address1
+user.address2 = address2
 user.parentId = 'null'
 user.save()
   .then(user =>{
@@ -3877,6 +3887,7 @@ user.save()
  
 
   })
+}
   
   })
 
@@ -3913,7 +3924,16 @@ user.save()
   
   })
   
-  
+  router.get('/stDelete',function(req,res){
+    User.find({role:"student"},function(err,docs){
+      for(var i = 0; i<docs.length;i++){
+        let id = docs[i]._id
+        User.findByIdAndRemove(id,function(err,locs){
+
+        })
+      }
+    })
+  })
   
   
     //user account activation route  (students)

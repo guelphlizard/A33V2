@@ -1956,7 +1956,7 @@ router.get('/invoiceCode',isLoggedIn,function(req,res){
   var year = m.format('YYYY')
   var mformat = m.format('L')
 var prefix = req.user.prefix
-var num = req.user.num
+var num = req.user.number
 
 var code = prefix+num
 
@@ -2081,10 +2081,12 @@ res.redirect('/clerk/addFees')
         fees.save()
           .then(fee =>{
             User.find({uid:uid},function(err,docs){
+             // console.log(docs,'docs')
               let parentEmail =docs[0].parentEmail
-             User.findByIdAndUpdate(xId,{$set:{studentId:studentId,amount:amount,receiptNumber:receiptNumber,paymentCode:fee._id,parentEmail:parentEmail}},function(err,gocs){
+              let idS = docs[0]._id
+             User.findByIdAndUpdate(xId,{$set:{studentId:idS,amount:amount,receiptNumber:receiptNumber,paymentCode:fee._id,parentEmail:parentEmail}},function(err,gocs){
             
-  
+
   console.log('xId',xId)
   
               balance = docs[0].balance;
@@ -2131,19 +2133,21 @@ res.redirect('/clerk/addFees')
   
   router.get('/printX',isLoggedIn,function(req,res){
 var code = req.user.invoCode
-    
+    var term= req.user.term
 var m = moment()
 var month = m.format('MMMM')
   var year = m.format('YYYY')
   var mformat = m.format('L')
   var studentId = req.user.studentId
- // console.log(arr,'arr')
+  console.log(studentId,'arr')
 /*console.log(arr,'iiii')*/
 
 //User.findById(studentId,function(err,docs){
   User.findById(studentId).lean().then(docs=>{
+    //console.log(docs,'uid')
 let uid = docs.uid
-console.log(uid,'uid')
+let name = docs.fullname
+
 const compile = async function (templateName, docs){
 const filePath = path.join(process.cwd(),'templates',`${templateName}.hbs`)
 

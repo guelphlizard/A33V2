@@ -1143,7 +1143,7 @@
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Students List</h1>
+									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Debtors List</h1>
 									<!--end::Title-->
 									<!--begin::Separator-->
 									<span class="h-20px border-gray-300 border-start mx-4"></span>
@@ -1338,10 +1338,10 @@
 											
 													<th class="min-w-125px">Gender</th>
                                                     <th class="min-w-125px"> Grade</th>
-													<th class="min-w-125px">Room</th>
+													<th class="min-w-125px">Class</th>
 													
-													<th class="min-w-125px">Floor</th>
-													<th class="min-w-125px">Hostel</th>
+													<th class="min-w-125px">Mobile</th>
+													<th class="min-w-125px">Address</th>
 													<th class="text-end min-w-100px">Actions</th>
 												</tr>
 												<!--end::Table row-->
@@ -1361,7 +1361,7 @@
 													<td class="d-flex align-items-center">
 														<!--begin:: Avatar -->
 														<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-															<a href="/hostel/studentProfile/{{this._id}}">
+															<a href="/clerk/studentProfile/{{this._id}}">
 																<div class="symbol-label">
 																	<img src="uploads/{{this.photo}}" alt="{{this.fullname}}" class="w-100" />
 																</div>
@@ -1370,7 +1370,7 @@
 														<!--end::Avatar-->
 														<!--begin::User details-->
 														<div class="d-flex flex-column">
-															<a href="/hostel/studentProfile/{{this._id}}" class="text-gray-800 text-hover-primary mb-1">{{this.fullname}}</a>
+															<a href="/clerk/studentProfile/{{this._id}}" class="text-gray-800 text-hover-primary mb-1">{{this.fullname}}</a>
 															<span>{{this.email}}</span>
 														</div>
 														<!--begin::User details-->
@@ -1381,14 +1381,14 @@
 													<!--end::Role=-->
 															<td><div class="badge badge-light-success fw-bolder">{{this.grade}}</div></td>
 
-															<td><div class="badge badge-light-success fw-bolder">{{this.room}}</div></td>
+															<td><div class="badge badge-light-success fw-bolder">{{this.class1}}</div></td>
 													<!--begin::Last login=-->
 													<td>
-														<div class="badge badge-light fw-bolder">{{this.floor}}</div>
+														<div class="badge badge-light fw-bolder">{{this.mobile}}</div>
 													</td>
 													<!--end::Last login=-->
 														<td>
-														<div class="badge badge-light fw-bolder">{{this.hostel}}</div>
+														<div class="badge badge-light fw-bolder">{{this.address1}}</div>
 													</td>
 													<!--begin::Two step=-->
 												
@@ -1407,12 +1407,12 @@
 														<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 															<!--begin::Menu item-->
 															<div class="menu-item px-3">
-																<a href="/hostel/studentProfile/{{this._id}}" class="menu-link px-3">View</a>
+																<a href="/clerk/studentProfile/{{this._id}}" class="menu-link px-3">View</a>
 															</div>
-															<!--end::Menu item--
+															<!--end::Menu item-->
 															<div class="menu-item px-3">
-																<a href="/records/{{this._id}}" class="menu-link px-3">Update</a>
-															</div>-
+																<a href="/clerk/debtorInvoice/{{this._id}}" class="menu-link px-3">Generate Invoice</a>
+															</div>
 
 															<div class="menu-item px-3">
 																<a href="/records/usr/{{this.status4}}/{{this._id}}" class="menu-link px-3">{{this.status4}} </a>
