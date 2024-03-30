@@ -3,7 +3,7 @@
 
     
 <style type="text/css">
- /*!
+/*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -57,13 +57,13 @@ table {
 }
 
 .column-bordered-table td {
-    border-left: 1px solid #c3c3c3;
-    border-right: 1px solid #c3c3c3;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
 }
 
 .column-bordered-table tfoot tr {
-    border-top: 1px solid #c3c3c3;
-    border-bottom: 1px solid #c3c3c3;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
 }
 
 .header img   {
@@ -89,7 +89,7 @@ table {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url("https://steuritinternationalschool.org/pic6.png");
+    background-image: url("https://steuritinternationalschool.org/pic6.jpg");
     background-size: 500px;
     background-position: center;
     background-repeat: no-repeat;
@@ -104,95 +104,7 @@ table {
     z-index: 5;
 }
 
-/*.container {
-  width: 100%;
-  height: 100vh;
-}*/
-
-.toppane {
-  width: 100%;
-  height: 100px;
-  background-color: #4da6ff;
-}
-
-.leftpane {
-  width: 25%;
-  height: 35vh;
- 
-}
-
-.middlepane {
-  width: 55%;
-  height: 20vh;
-  
-}
-
-.rightpane {
-  width: 20%;
-  height: 35vh;
-
-}
-
-body {
-  margin: 0!important;
-}
-
-.d-flex {
-  display: flex;
-}
-/*
-h1 {
-    display: inline;
-    text-align: center;
-    border: 3px solid #FFA500;
-    border-radius: 15px;
-    box-shadow: 5px 5px 5px #828282;
-}
-
-header {
-    text-align: center;
-    letter-spacing: 1px;
-    height: 8em;
-    padding: 2em 10%;
-}
-
-.figure {
-    vertical-align:middle;
-
-}*/
-
 </style>
-<!--
-<header style="margin-bottom:240px;">
-    <a href="index.html">
-        <img src="https://steuritinternationalschool.org/pic6.jpg" style="width: 300px; height:400px;margin-right:600px; " alt="kumquat logo" class="figure">
-    </a>
-    <h1 style="align:right;">Kumquat Central</h1>
-</header>-->
-<!--<img src="https://steuritinternationalschool.org/pic6.jpg" style="width: 300px; height:400px; display:inline-block; margin-left:200px;" alt="kumquat logo" class="figure">
-<h1 style="display: inline-block" >ST EURIT INTERNATIONAL <br> SCHOOL</h1>
-<h1 style="display: inline-block" >Text 2</h1>-->
-
-<div class="container">
- 
-  <div class="d-flex">
-    <div class="leftpane">
-     <img src="https://steuritinternationalschool.org/pic6.jpg" style="width: 400px; height:300px; display:inline-block;" alt="kumquat logo">
-    </div>
-    <div class="middlepane">
-        <h1 style="text-align: center;font-family: Georgia, serif;"> <b></b> ST EURIT INTERNATIONAL <br> SCHOOL <b></h1>
-         
-        <p style="text-align: center; ">129 Bishop Gaul Ave<br> Avondale <br>Harare,Zim <br>  </p>
-        <p style="text-align: center;   "> st.eurit.internationalschool@gmail.com</p>
-       
-    </div>
-    <div class="rightpane">
-      <h1>INVOICE</h1>
-    </div>
-  </div>
-</div>
-
-
 <div class="content-container">
     <div class="contents">
 
@@ -200,7 +112,27 @@ header {
 
 <div class="container">
 
-   
+    <div class="header">
+
+<img src="https://steuritinternationalschool.org/pic6.jpg"  alt="Responsive image"   vspace="5"  style="display: block;
+width: 150px; 
+padding:0;
+
+" >
+
+
+    <h1 style="font-size:25px;text-align: center; margin-right: 140px; ">  <b> ST. EURIT INTERNATIONAL <br> SCHOOL</b> </h1>
+    
+        
+        <p style="text-align: center; margin-right: 140px; ">129 Bishop Gaul Ave<br> Avondale <br>Harare,Zim <br>  </p>
+        <p style="text-align: center; margin-left: 20px;  "> st.eurit.internationalschool@gmail.com</p>
+       
+
+    
+   <h2 style="font-size:25px;text-align: center; " >   <b>INVOICE</b> </h2>
+</div>
+
+
 
 
 <div class="row">
@@ -212,12 +144,12 @@ header {
 
     <table border="1" >
      <tr>
-         <td colspan="2" style=" height: 30px;">Invoice To</td>
+         <td colspan="2" style=" height: 30px; text-align:center">Invoice To</td>
       
      </tr>
      <tr>
-        <td colspan="2" style=" height: 50px;"> {{this.0.fullname}} <br>
-        {{this.address1}}  <br>{{this.0.mobile}} <br> {{this.0.email}} </td>
+        <td colspan="2" style=" height: 50px; text-align:center"> {{this.0.fullname}} <br>
+        {{this.0.address1}}  <br>{{this.0.mobile}} <br> {{this.0.email}} </td>
       
     </tr>
     
@@ -230,13 +162,13 @@ header {
     
     <table border="1" >
         <tr>
-            <td >Date</td>
-            <td> 03-March-2024</td>
+            <td style="text-align:center">Date</td>
+            <td  style="text-align:center"> 03-March-2024</td>
          
         </tr>
         <tr>
-           <td> Invoice No </td>
-           <td> 5091 </td>
+           <td  style="text-align:center"> Invoice No </td>
+           <td  style="text-align:center"> 5091 </td>
          
        </tr>
        
@@ -247,27 +179,27 @@ header {
 
 
 
-    <table border="1"  class="column-bordered-table thead td" >
+    <table border="1" class="column-bordered-table td thead"  >
    
     <thead>
      
         <tr >
-            <th style="width: 10%;">
+            <th  style="text-align:center;width: 10%;" >
                Qty
             </th>
 
-            <th  >
+            <th style="text-align:center" >
              Item
-            </th>
+            </th  style="text-align:center">
 
-            <th style="width: 50%;"> 
+            <th  style="text-align:center;width: 50%;">
                 Description
             </th>
-            <th >
+            <th  style="text-align:center">
               Rate
                </th>
 
-               <th >
+               <th  style="text-align:center">
                 Amount
                 </th>
         
@@ -283,14 +215,14 @@ header {
                
             </td>
            
-            <td style="border: 0; ">
+            <td style="border: 0;text-align:center">
              SF1T2024
             </td>
           
-            <td style="width:100px;">
+            <td style="text-align:center; width:50%;" >
 School Fees 2nd Term 2024
             </td>
-            <td style="text-align: end;">
+            <td style="text-align: end; ">
               $650.00
             </td>
 
@@ -308,11 +240,11 @@ School Fees 2nd Term 2024
     </td>
 
 
-            <td>
+            <td style="text-align:center">
                 SF2024
             </td>
            
-            <td>
+            <td style="text-align:center">
           Sports Fee 2024
             </td>
           
@@ -368,54 +300,18 @@ School Fees 2nd Term 2024
 </table>
 
 
-<div class="column" style="width:65%">
-    
-    
-    </div>
-
-   
-        </div>
-
-      <div class="column" style="border: 1px solid black;width:27%; margin-left:92px;">
-    
-    
-    
-  <div class="column" style="width:65%">
-    
-    
-    </div>
-
-   
-        </div>
-
-     
 
     <div class="column" style="border: 1px solid black;width:27%; margin-left:522px;">
     
     
-      <table border="1" >
-        <tr>
-            <td >Date</td>
-            <td> 03-March-2024</td>
-         
-        </tr>
-        <tr>
-           <td> Invoice No </td>
-           <td> 5091 </td>
-         
-       </tr>
+        <table border="0" style="width: 100%; margin-bottom:20px; "  >
+            <tr>
+                <td style="border:1;text-align:center;" ><b> Total Amount <b></td>
+                <td style=" text-align: end;"> $690.00</td>
        
-       </table>
-
-    </div>
+           </table>
     
         </div>
-
-
-
-    </div>
-
-
 
 </div>
 

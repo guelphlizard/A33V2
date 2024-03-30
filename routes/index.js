@@ -10,6 +10,7 @@ const Class1 =require('../models/class');
 const CV =require('../models/cv');
 const JobAd =require('../models/jobAd');
 let pdf = require('html-pdf');
+var InvoNum = require('../models/invoNum');
 const Report2 = require('../models/reportsT');
 const Enroll = require('../models/enroll');
 var Learn = require('../models/learn');
@@ -899,6 +900,93 @@ router.post('/addNum',  function(req,res){
     
     
 })
+
+
+
+
+router.get('/addReceiptNum', function(req,res){
+  
+  res.render('acc2/receiptNum')
+})
+
+router.post('/addReceiptNum',  function(req,res){
+
+  var receiptNumber = req.body.receiptNumber;
+  //var idNumber = req.body.idNumber;
+  
+ 
+      req.check('receiptNumber','Enter Receipt Number').notEmpty().isNumeric();
+      //req.check('idNumber','Enter ID Number').notEmpty().isNumeric();
+
+    
+      
+      var errors = req.validationErrors();
+           
+      if (errors) {
+      
+        req.session.errors = errors;
+        req.session.success = false;
+        res.render('acc2/receiptNum',{ errors:req.session.errors,})
+      
+    }
+    else{
+      
+        InvoNum.findOne({'num':receiptNumber})
+        .then(dept =>{
+            if(dept){ 
+  
+           req.session.message = {
+            type:'errors',
+             message:'Number already exists'
+           }     
+              res.render('acc2/receiptNum', {
+                 message:req.session.message ,
+              })
+            }else{
+
+          
+    
+      var num = new InvoNum();
+    
+      num.num = receiptNumber;
+     
+     
+   
+    
+    
+      num.save()
+        .then(dep =>{
+         
+          req.session.message = {
+            type:'success',
+            message:'Number added'
+          }  
+          res.render('acc2/receiptNum',{message:req.session.message,});
+      
+    
+      })
+    
+     }
+      
+      
+      })
+    }
+    
+    
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 router.get('/book',function(req,res){

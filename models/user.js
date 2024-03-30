@@ -116,6 +116,7 @@ var userSchema = new mongoose.Schema({
     merit:{type:Number},
     floor:{type:String},
     invoCode:{type:String},
+    invoNumber:{type:Number},
     quoteCode:{type:String},
     num:{type:Number},
     clientName:{type:String},

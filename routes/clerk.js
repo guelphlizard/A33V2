@@ -10,6 +10,7 @@ var QuoteSub = require('../models/quoteSub');
 var QuoteFiles = require('../models/quoteFiles');
 var InvoiceSub = require('../models/invoiceSub');
 var InvoiceCode = require('../models/invoiceCode');
+var InvoNum = require('../models/invoNum');
 var InvoiceFiles = require('../models/invoiceFiles');
 var InvoiceFile = require('../models/invoiceFile');
 var ReceiptFile = require('../models/receiptFile');
@@ -3174,18 +3175,53 @@ router.get('/arrInvoiceUpdate',isLoggedIn,function(req,res){
 
   
  User.find({role:"student"},function(err,docs){
-    for(var i=0;i<10;i++){
+    for(var i=0;i<docs.length;i++){
       let studentId = docs[i].uid
        arr9[studentId]=[]
     }
   })
   
-  res.redirect('/clerk/invoProcess')
+  res.redirect('/clerk/invoiceNumberUpdate2')
   
   })
   
 //aggTerm
 
+router.get('/invoiceNumberUpdate2',isLoggedIn,function(req,res){
+  var id = req.user._id
+    InvoNum.find(function(err,doc){
+      let invoNum = doc[0].num
+      let invoId = doc[0]._id
+  
+  User.find({role:"student"},function(err,rocs){
+for(var i = 0;i<rocs.length;i++){
+
+let uid=rocs[i]._id
+ 
+  User.findByIdAndUpdate(uid,{$set:{invoNumber:invoNum}},function(err,docs){
+  
+  })
+  invoNum++
+  InvoNum.findByIdAndUpdate(invoId,{$set:{num:invoNum}},function(err,tocs){
+  
+  })
+
+
+
+
+}
+  /*
+  InvoNum.findByIdAndUpdate(invoId,{$set:{num:invoNum}},function(err,tocs){
+  
+  })
+  */
+    })
+    res.redirect('/clerk/invoProcess')
+
+  })
+  
+  })
+  
 
  //aggg
 //aggVouchers
@@ -3204,7 +3240,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   User.find({role:'student'}).lean().then(vocs=>{
   
   
-  for(var x = 0;x<10;x++){
+  for(var x = 0;x<vocs.length;x++){
 
     let uid = vocs[x].uid
   
@@ -3252,11 +3288,12 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
     
   /*console.log(arr,'iiii')*/
   User.find({role:"student"},function(err,locs){
-    for(var x = 0; x<10;x++){
+    for(var x = 0; x<locs.length;x++){
       let uid= locs[x].uid
      
       let name = locs[x].fullname
-
+      let fees = 690
+      let invoNum = locs[x].invoNumber
     
     
     
@@ -3304,6 +3341,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
    //await page.setContent(content)
   //create a pdf document
   await page.emulateMediaType('screen')
+  let height = await page.evaluate(() => document.documentElement.offsetHeight);
   await page.evaluate(() => matchMedia('screen').matches);
   await page.setContent(content, { waitUntil: 'networkidle0'});
   //console.log(await page.pdf(),'7777')
@@ -3311,9 +3349,10 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   await page.pdf({
     //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
     path:(`./invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
-    format:"A4",
-    width:'30cm',
-  height:'21cm',
+    //format:"A4",
+    /*width:'30cm',
+  height:'21cm',*/
+  height: height + 'px',
     printBackground:true
   })
   
@@ -3328,6 +3367,11 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
       repo.filename = uid+'_'+name+'.pdf';
       repo.year = year;
       repo.date = mformat
+      repo.invoiceNumber = invoNum
+      repo.status = "unpaid"
+      repo.amountPaid = 0
+      repo.amountDue= fees
+      repo.datePaid = "null"
       repo.save().then(poll =>{
       console.log("Done creating pdf",)
       })
@@ -3378,6 +3422,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
        let email = docs[i].email
        let uid = docs[i].uid
        let name = docs[i].fullname
+       let invoNumber = docs[i].invoNumber
    
    
    
@@ -3403,11 +3448,13 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
      let mailOptions ={
        from: '"St Eurit International School" <kratosmusasa@gmail.com>', // sender address
                    to: email, // list of receivers
-                   subject: "2nd Term Invoices",
-       text:"Please find the attached invoices",
+                   subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
        attachments: [
          {
-           filename:'document.pdf',
+           filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
            path:`./invoiceReports/${year}/${term}/${uid}_${name}.pdf`
          }
        ]
@@ -3807,6 +3854,26 @@ else
      }
  
  })
+
+router.get('/invoiceNumberUpdate',isLoggedIn,function(req,res){
+var id = req.user._id
+  InvoNum.find(function(err,doc){
+    let invoNum = doc[0].num
+    let invoId = doc[0]._id
+
+
+User.findByIdAndUpdate(id,{$set:{invoNumber:invoNum}},function(err,docs){
+
+})
+invoNum++
+
+InvoNum.findByIdAndUpdate(invoId,{$set:{num:invoNum}},function(err,tocs){
+
+})
+
+  })
+
+})
 
 
 
