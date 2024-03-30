@@ -3174,7 +3174,7 @@ router.get('/feesUpdateX',isLoggedIn,function(req,res){
 router.get('/arrInvoiceUpdate',isLoggedIn,function(req,res){
 
   
- User.find({role:"student"},function(err,docs){
+ User.find({role:"student",grade:1},function(err,docs){
     for(var i=0;i<docs.length;i++){
       let studentId = docs[i].uid
        arr9[studentId]=[]
@@ -3193,7 +3193,7 @@ router.get('/invoiceNumberUpdate2',isLoggedIn,function(req,res){
       let invoNum = doc[0].num
       let invoId = doc[0]._id
   
-  User.find({role:"student"},function(err,rocs){
+  User.find({role:"student",grade:1},function(err,rocs){
 for(var i = 0;i<rocs.length;i++){
 
 let uid=rocs[i]._id
@@ -3237,7 +3237,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   
   
   //TestX.find({year:year,uid:uid},function(err,vocs) {
-  User.find({role:'student'}).lean().then(vocs=>{
+  User.find({role:'student',grade:1}).lean().then(vocs=>{
   
   
   for(var x = 0;x<vocs.length;x++){
@@ -3287,7 +3287,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
       
     
   /*console.log(arr,'iiii')*/
-  User.find({role:"student"},function(err,locs){
+  User.find({role:"student",grade:1},function(err,locs){
     for(var x = 0; x<locs.length;x++){
       let uid= locs[x].uid
      
@@ -3416,7 +3416,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
     var term = req.user.term
   
   
-    User.find({role:"student"},function(err,docs){
+    User.find({role:"student",grade:1},function(err,docs){
    
      for(var i = 0;i<docs.length;i++){
        let email = docs[i].email
