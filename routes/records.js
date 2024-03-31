@@ -3887,6 +3887,8 @@ user.text = password
 user.address1 = address1
 user.address2 = address2
 user.parentId = 'null'
+user.countN =1
+user.studentNumber = record.num
 user.save()
   .then(user =>{
    

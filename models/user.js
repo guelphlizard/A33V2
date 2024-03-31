@@ -126,6 +126,8 @@ var userSchema = new mongoose.Schema({
     companyCity:{type:String},
     companyMobile:{type:String},
     companyCountry:{type:String},
+    countN:{type:Number},
+    studentNumber:{type:Number},
 });
 
 // Custom validation for email

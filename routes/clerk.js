@@ -3165,7 +3165,67 @@ router.get('/feesUpdateX',isLoggedIn,function(req,res){
 
 ////invoice
 
+router.get('/stDelete',function(req,res){
+  User.find({role:"student"},function(err,docs){
+    for(var i = 0;i<docs.length;i++){
+    let id = docs[i]._id
+    User.findByIdAndRemove(id,function(err,locs){
 
+    })
+
+  }
+  })
+})
+
+router.get('/chunks',isLoggedIn,function(req,res){
+  var count = req.user.countN 
+  var count2 = count * 10
+  var n = count2 - 10
+  console.log(n,'nnn')
+  console.log(count,'count')
+var chunk = count * 20
+
+var id = req.user._id
+
+ 
+  User.find({role:'student'}).sort({studentNumber:1}).then(docs=>{
+    if(count2>docs.length){
+      let newCount = count2 - docs.length
+for(var i = n; i<docs.length;i++ ){
+  let studentId = docs[i].uid
+  arr9[studentId]=[]
+}
+
+count++
+User.findByIdAndUpdate(id,{$set:{countN:count}},function(err,docs){
+
+})
+console.log(arr9,'arr90')
+
+
+    }else{
+      for(var i = n; i<count2;i++ ){
+        let studentId = docs[i].uid
+        arr9[studentId]=[]
+      }
+      
+      count++
+      User.findByIdAndUpdate(id,{$set:{countN:count}},function(err,docs){
+      
+      })
+    }
+
+
+
+    res.redirect('/clerk/invoiceNumberUpdate2')
+  })
+
+
+
+
+
+
+})
 
 
 //aggStudentTerm
@@ -3174,7 +3234,7 @@ router.get('/feesUpdateX',isLoggedIn,function(req,res){
 router.get('/arrInvoiceUpdate',isLoggedIn,function(req,res){
 
   
- User.find({role:"student",grade:1},function(err,docs){
+ User.find({role:"student"},function(err,docs){
     for(var i=0;i<docs.length;i++){
       let studentId = docs[i].uid
        arr9[studentId]=[]
@@ -3189,13 +3249,24 @@ router.get('/arrInvoiceUpdate',isLoggedIn,function(req,res){
 
 router.get('/invoiceNumberUpdate2',isLoggedIn,function(req,res){
   var id = req.user._id
+  var count = req.user.countN - 1
+  let count2 = count * 10
+  var n = count2 - 10
+  console.log(n,'nnn')
+  console.log(count,'count')
     InvoNum.find(function(err,doc){
       let invoNum = doc[0].num
       let invoId = doc[0]._id
-  
-  User.find({role:"student",grade:1},function(err,rocs){
-for(var i = 0;i<rocs.length;i++){
+ 
+        console.log('yessssssss')
+      User.find({role:'student'}).sort({studentNumber:1}).then(rocs=>{
 
+        if(count2 > rocs.length){
+//count2 = rocs.length
+let newCount = count2 - rocs.length
+     
+for(var i = n;i<rocs.length;i++){
+//console.log(rocs[i],'rocks')
 let uid=rocs[i]._id
  
   User.findByIdAndUpdate(uid,{$set:{invoNumber:invoNum}},function(err,docs){
@@ -3215,11 +3286,32 @@ let uid=rocs[i]._id
   
   })
   */
-    })
-    res.redirect('/clerk/invoProcess')
 
-  })
+}else{
+  for(var i = n;i<count2;i++){
+    //console.log(rocs[i],'rocks')
+    let uid=rocs[i]._id
+     
+      User.findByIdAndUpdate(uid,{$set:{invoNumber:invoNum}},function(err,docs){
+      
+      })
+      invoNum++
+      InvoNum.findByIdAndUpdate(invoId,{$set:{num:invoNum}},function(err,tocs){
+      
+      })
+    
+    
+    
+    
+    }
+}
+    })
+
   
+    res.redirect('/clerk/invoProcess')
+  
+  })
+
   })
   
 
@@ -3227,20 +3319,24 @@ let uid=rocs[i]._id
 //aggVouchers
 
 router.get('/invoProcess',isLoggedIn,function(req,res){
-
- 
+  var count = req.user.countN - 1
+  var count2 = count * 10
+  var n = count2 - 10
+  console.log(n,'nnn')
+  console.log(count,'count')
   
-  
+  console.log(count,'countProcess')
   //console.log(docs[i].uid,'ccc')
   
   //let uid = "SZ125"
   
   
   //TestX.find({year:year,uid:uid},function(err,vocs) {
-  User.find({role:'student',grade:1}).lean().then(vocs=>{
-  
-  
-  for(var x = 0;x<vocs.length;x++){
+    
+      User.find({role:'student'}).lean().sort({studentNumber:1}).then(vocs=>{
+        if(count2 > vocs.length){
+          let newCount = count2 - vocs.length
+  for(var x = n;x<vocs.length;x++){
 
     let uid = vocs[x].uid
   
@@ -3264,8 +3360,44 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   
        
   
-  }  
+  }
+}else{
+
+
+  for(var x = n;x<count2;x++){
+
+    let uid = vocs[x].uid
+  
+  
+  if( arr9[uid].length > 0 && arr9[uid].find(value => value.uid == uid) ){
+  
+  arr9[uid].push(vocs[x])
+  
+      }
+      
+       
+      
+      
+      else{
+        arr9[uid].push(vocs[x])
+            
+        } 
+  
+  
+   
+  
+       
+  
+  }
+
+
+
+}
+  
+
       })
+
+    
       
       res.redirect('/clerk/invoGeneration2')
     
@@ -3278,6 +3410,12 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
 
 
   router.get('/invoGeneration2',isLoggedIn,function(req,res){
+
+    var count = req.user.countN - 1
+    var count2 = count * 10
+    var n = count2 - 10
+    console.log(n,'nnn')
+    console.log(count,'count')
   //console.log(arr9,'arr9')
     var m = moment()
     var mformat = m.format('L')
@@ -3287,8 +3425,15 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
       
     
   /*console.log(arr,'iiii')*/
-  User.find({role:"student",grade:1},function(err,locs){
-    for(var x = 0; x<locs.length;x++){
+  
+    User.find({role:'student'}).lean().sort({studentNumber:1}).then(locs=>{
+
+      if(count2>locs.length){
+       
+        let newCount = count2 - locs.length
+        let newCount2 = newCount * 10
+        console.log('eheeee',count2,locs.length,newCount,newCount2)
+    for(var x = n; x<locs.length;x++){
       let uid= locs[x].uid
      
       let name = locs[x].fullname
@@ -3401,7 +3546,131 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   
 
 }
-})  
+      }
+      else{
+
+        for(var x = n; x<count2;x++){
+          let uid= locs[x].uid
+         
+          let name = locs[x].fullname
+          let fees = 690
+          let invoNum = locs[x].invoNumber
+        
+        
+        
+      //console.log(docs,'docs')
+      
+      const compile = async function (templateName, arr9){
+        const filePath = path.join(process.cwd(),'templates',`${templateName}.hbs`)
+      
+        const html = await fs.readFile(filePath, 'utf8')
+      
+        return hbs.compile(html)(arr9)
+       
+      };
+      
+      
+      
+      
+       (async function(){
+      
+      try{
+      //const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+          "--disable-setuid-sandbox",
+          "--no-sandbox",
+          "--single-process",
+          "--no-zygote",
+        ],
+        executablePath:
+          process.env.NODE_ENV === "production"
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : puppeteer.executablePath(),
+      });
+      
+      const page = await browser.newPage()
+      
+      
+      
+       //const content = await compile('report3',arr[uid])
+       const content = await compile('euritInvoice',arr9[uid])
+      
+    
+      await page.setContent(content, { waitUntil: 'networkidle2'});
+       //await page.setContent(content)
+      //create a pdf document
+      await page.emulateMediaType('screen')
+      let height = await page.evaluate(() => document.documentElement.offsetHeight);
+      await page.evaluate(() => matchMedia('screen').matches);
+      await page.setContent(content, { waitUntil: 'networkidle0'});
+      //console.log(await page.pdf(),'7777')
+      
+      await page.pdf({
+        //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
+        path:(`./invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
+        //format:"A4",
+        /*width:'30cm',
+      height:'21cm',*/
+      height: height + 'px',
+        printBackground:true
+      })
+      
+      
+      var repo = new InvoiceFile();
+          
+          repo.studentName =name
+          repo.month = month;
+          repo.code = uid;
+          repo.term = term;
+          repo.type = 'Invoice';
+          repo.filename = uid+'_'+name+'.pdf';
+          repo.year = year;
+          repo.date = mformat
+          repo.invoiceNumber = invoNum
+          repo.status = "unpaid"
+          repo.amountPaid = 0
+          repo.amountDue= fees
+          repo.datePaid = "null"
+          repo.save().then(poll =>{
+          console.log("Done creating pdf",)
+          })
+      
+      
+      /*await browser.close()
+      
+      process.exit()*/
+    
+      
+      
+      /*req.flash('success', 'Report Generation Success');
+     
+      res.redirect('/clerk/dash');*/
+      
+      }catch(e) {
+      
+        console.log(e)
+      
+      
+      }
+    
+      
+      }) ()
+    
+    
+      
+    
+    }
+
+
+
+
+
+      }
+
+}) 
+  
 
   })
 
@@ -3416,7 +3685,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
     var term = req.user.term
   
   
-    User.find({role:"student",grade:1},function(err,docs){
+    User.find({role:"student"},function(err,docs){
    
      for(var i = 0;i<docs.length;i++){
        let email = docs[i].email
