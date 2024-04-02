@@ -1151,7 +1151,7 @@
 																<tbody>
 																	<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
 																		<td class="pe-7">
-																			<input type="text" class="form-control form-control-solid mb-2" name="name[]" id="title"  />
+																			<input type="text" class="form-control form-control-solid mb-2" name="name[]" id="item"  />
 																		
 																			<!--<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />-->
 																		</td>
@@ -1208,439 +1208,14 @@
 																<!--end::Table foot-->
 															</table>
 														</div>
-	<script>
-		function buttonClick(){
-
-var num = document.getElementById('num').value
-let item = document.getElementById('title').value
-let itemX3 = document.getElementById('price').value
-let itemXX = document.getElementById('xid').value
-let itemX = document.getElementById('quantity').value
-let itemX4 = document.getElementById('businessName').value
-let companyEmail= document.getElementById('companyEmail').value
-let companyClerk = document.getElementById('companyClerk').value
-
-let itemX5= document.getElementById('clientName').value
-let itemX6= document.getElementById('clientEmail').value
-let invoiceDescription ="software";
-let dueDate = document.getElementById('invoice_due_date').value
-let date = document.getElementById('invoice_date').value
-
-
-var e
-if(num == 1){
-
-
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=2
-
-
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-	companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-
-}
-
-if(num ==2){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=3
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-			companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-
-if(num ==3){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-   console.log(document.getElementById('title1').value,'99')
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=4
-
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-			companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-
-if(num ==4){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-   console.log(document.getElementById('title1').value,'99')
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=5
-
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-				companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-
-if(num ==5){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-   console.log(document.getElementById('title1').value,'99')
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=6
-
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-				companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-if(num ==6){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=7
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-			companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-
-if(num ==7){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=8
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-				companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-if(num ==8){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=9
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-			companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-if(num ==9){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=10
-
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-				companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-if(num ==10){
-			let title = document.getElementById('title').value
-            let quantity = document.getElementById('quantity').value
-			let price = document.getElementById('price').value
-
-
-           document.getElementById('title1').value=title
-		   document.getElementById('quantity1').value=quantity
-		   document.getElementById('price1').value=price
-
-		   document.getElementById('title').value=""
-		   document.getElementById('quantity').value=""
-		   document.getElementById('price').value=""
-		   document.getElementById('num').value=11
-
-		   		
-  $.ajax({
-      
-   url: '/clerk/invoiceQ/',
-    type: 'GET',
-    contentType: "application/json",
-	data:{
-			companyName:itemX4,itemId:itemXX,item:item,qty:itemX,price:itemX3,companyEmail:companyEmail,companyClerk:companyClerk,  clientName:itemX5,invoiceDescription:invoiceDescription,date:date,dueDate:dueDate,clientEmail:itemX6
-
-	},
-
-      success: function(data) {
-    
-       console.log(data)
-  
-
-      
-    }
-
-
-  });
-}
-
-
-
-		}
-
-
-	</script>
+	
 																			
 														<!--end::Table-->
 														<!--begin::Item template-->
 														<table class="table d-none" data-kt-element="item-template">
 															<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
 																<td class="pe-7" id="flint">
-																	<input type="text" class="form-control" name="name[]" id="title1"  value=""  data-kt-element="title"  />
+																	<input type="text" class="form-control" name="name[]" id="item1"  value=""  data-kt-element="title"  />
 															
 																<!--	<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />-->
 																</td>
@@ -1759,7 +1334,7 @@ if(num ==10){
 
 <script>
 
-	$("#title1").on('click', '.form-control form-control-solid mb-2',function () {
+	$("#item1").on('click', '.form-control form-control-solid mb-2',function () {
 		console.log('hameno')
     alert("Changed");
 });
@@ -1775,7 +1350,7 @@ if(num ==10){
      {
 
 
-          $('#title1').autocomplete({
+          $('#item1').autocomplete({
              source: function(req,res){
          
                $.ajax({
@@ -1809,7 +1384,7 @@ if(num ==10){
                         
                          
                          
-                          $("#title1").val(data.name)
+                          $("#item1").val(data.name)
                           $("#price1").val(data.price)
                             $("#total2").textContent=data.price
                          $("#xid").val(data._id)
@@ -1930,7 +1505,7 @@ if(num ==10){
 		
     <script>
       $(function(){
-    $('#title1').autocomplete({
+    $('#item1').autocomplete({
     source: function(req,res){
 
       $.ajax({
@@ -1964,7 +1539,7 @@ if(num ==10){
                
                 
                 
-                 $("#title").val(data.name)
+                 $("#item").val(data.name)
                  $("#price").val(data.price)
 				   $("#total2").textContent=data.price
 				$("#xid").val(data._id)
@@ -1995,7 +1570,7 @@ if(num ==10){
 		
     <script>
       $(function(){
-    $('#title').autocomplete({
+    $('#item').autocomplete({
     source: function(req,res){
 
       $.ajax({
@@ -2029,7 +1604,7 @@ if(num ==10){
                
                 
                 
-                 $("#title").val(data.name)
+                 $("#item").val(data.item)
                  $("#price").val(data.price)
 				   $("#total2").textContent=data.price
 				$("#xid").val(data._id)
@@ -2103,11 +1678,11 @@ if(num ==10){
                
                 
                 
-                 $("#clientName").val(data.clientName)
-                 $("#clientEmail").val(data.clientEmail)
-				 $("#clientAddress").val(data.clientAddress)
-				$("#clientCity").val(data.city)
-				$("#country").val(data.country)
+                 $("#fuulname").val(data.fullname)
+                 $("#email").val(data.clientEmail)
+				 $("#address1").val(data.clientAddress)
+				$("#class1").val(data.class1)
+				$("#grad").val(data.country)
 				  $("#mobile").val(data.mobile)
 				  
               

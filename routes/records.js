@@ -3755,7 +3755,7 @@ req.body.password = record.password
             
               req.check('uid','Enter uid').notEmpty();
               //req.check('name','Enter Name').notEmpty();
-              req.check('surname','Enter Surname').notEmpty();
+              //req.check('surname','Enter Surname').notEmpty();
               req.check('email','Enter email').notEmpty();
               req.check('email','Enter valid email').notEmpty().isEmail();
              // req.check('dob','Enter Date Of Birth').notEmpty();
@@ -3805,7 +3805,7 @@ var user = new User();
 user.uid = uid;
 user.name = name;
 user.fullname = fullname;
-user.surname = surname;
+//user.surname = surname;
 user.role = role;
 user.gender = 'null';
 user.dob = "null";

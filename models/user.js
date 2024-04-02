@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt-nodejs');
 
 var userSchema = new mongoose.Schema({
     name:{type:String,required:true},
-    surname:{type:String, required:true},
+    surname:{type:String,},
     role:{type:String,required:true},
     role1:{type:String},
     hostel:{type:String},
@@ -13,6 +13,10 @@ var userSchema = new mongoose.Schema({
     hostelType:{type:String},
     hostelHead:{type:String},
     questNo:{type:Number},
+    studentEmail:{type:String},
+    studentName:{type:String},
+   studentId:{type:String},
+   
     gender:{type:String,required:true},
     fullname:{type:String,required:true},
     dob:{type:String,required:true},

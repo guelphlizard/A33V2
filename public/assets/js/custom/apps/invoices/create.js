@@ -61,88 +61,7 @@ var KTAppInvoicesCreate = function ()
 
 
 
-/*
-               function Auto()
-               {
-                    $('#title1').autocomplete({
-                       source: function(req,res){
-                   
-                         $.ajax({
-                           url:"/clerk/autocompleteXN/",
-                           dataType:"jsonp",
-                           type:"GET",
-                           data:req,
-                           success: function(data){
-                             res(data)
-                           
-                   
-                           },
-                           error: function(err){
-                             console.log(err.status);
-                           }
-                         });
-                       },
-                   
-                       minLength:1,
-                       select: function(event,ui){
-                   
-                     $.ajax({
-                                   dataType: 'json',
-                                   data: {
-                                       code: ui.item.label,
-                                       
-                                   },
-                                   type: 'POST',
-                                   url: "/clerk/autoXN",
-                                   success: function(data) {
-                                  
-                                   
-                                   
-                                    $("#title1").val(data.title)
-                                    $("#price1").val(data.price)
-                                      $("#total2").textContent=data.price
-                                   $("#xid").val(data._id)
-                                 
-                               
-                                    
-                             
-                                   }
-                                  
-                               });
-                    
-                   
-                   
-                   
-                     
-                       }
-                   
-                   
-                   
-                       });
-                   
-                         
-               
-               
-                         `
-                         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-                     <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
-                      <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-                       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-                       <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-                       <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-                       <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-                       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
-                         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-                       <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-                       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
-               
-               }
-               
-
-*/
-
-
-               $('body').on('click','#title1', function (e) {
+               $('body').on('click','#item1', function (e) {
 
                 console.log('8888888888')
 
@@ -182,7 +101,7 @@ var KTAppInvoicesCreate = function ()
                                
                                 
                                 
-                                 $("#title1").val(data.name)
+                                 $("#item1").val(data.item)
                                $("#price1").val(data.price)  
                                /*  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').innerText= data.price
                                  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').textContent= data.price
@@ -274,7 +193,7 @@ var KTAppInvoicesCreate = function ()
                                
                                 
                                 
-                                 $("#title2").val(data.name)
+                                 $("#item2").val(data.item)
                                $("#price2").val(data.price)  
                                /*  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').innerText= data.price
                                  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').textContent= data.price
@@ -331,7 +250,7 @@ var KTAppInvoicesCreate = function ()
 
 
 
-            $('body').on('click','#title3', function (e) {
+            $('body').on('click','#item3', function (e) {
 
                 console.log('1000000000000')
 
@@ -371,7 +290,7 @@ var KTAppInvoicesCreate = function ()
                                
                                 
                                 
-                                 $("#title3").val(data.name)
+                                 $("#item3").val(data.item)
                                $("#price3").val(data.price)  
                                /*  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').innerText= data.price
                                  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').textContent= data.price
@@ -435,7 +354,7 @@ var KTAppInvoicesCreate = function ()
                 {
            
            
-                     $('#title1').autocomplete({
+                     $('#item1').autocomplete({
                         source: function(req,res){
                     
                           $.ajax({
@@ -469,7 +388,7 @@ var KTAppInvoicesCreate = function ()
                                    
                                     
                                     
-                                     $("#title1").val(data.name)
+                                     $("#item1").val(data.item)
                                      $("#price1").val(data.price)
                                        $("#total2").textContent=data.price
                                     $("#xid").val(data._id)
@@ -510,7 +429,7 @@ var KTAppInvoicesCreate = function ()
                 }
                 
 
-                $('body').on('click','#title4', function (e) {
+                $('body').on('click','#item4', function (e) {
 
                     console.log('444444444')
 
@@ -552,6 +471,7 @@ var KTAppInvoicesCreate = function ()
                                     
                                    //  $("#title2").val(data.title)
                                    $("#price4").val(data.price)  
+                                   $("#item4").val(data.item) 
                                      document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').innerText= data.price
                                      console.log(document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]' ),'555555')
 //$("#price2").val(data.price)   
@@ -598,7 +518,7 @@ var KTAppInvoicesCreate = function ()
 
 
 
-                $('body').on('click','#title5', function (e) {
+                $('body').on('click','#item5', function (e) {
 
                     console.log('555555555555')
 
@@ -638,7 +558,7 @@ var KTAppInvoicesCreate = function ()
                                    
                                     
                                     
-                                     $("#title5").val(data.name)
+                                     $("#item5").val(data.item)
                                      $("#price5").val(data.price)
                                        $("#total2").textContent=data.price
                                     $("#xid").val(data._id)

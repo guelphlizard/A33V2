@@ -3188,7 +3188,7 @@ var chunk = count * 20
 var id = req.user._id
 
  
-  User.find({role:'student'}).sort({studentNumber:1}).then(docs=>{
+  User.find({role:'student',teacherId:"sent"}).sort({studentNumber:1}).then(docs=>{
     if(count2>docs.length){
       let newCount = count2 - docs.length
 for(var i = n; i<docs.length;i++ ){
@@ -3259,7 +3259,7 @@ router.get('/invoiceNumberUpdate2',isLoggedIn,function(req,res){
       let invoId = doc[0]._id
  
         console.log('yessssssss')
-      User.find({role:'student'}).sort({studentNumber:1}).then(rocs=>{
+      User.find({role:'student',teacherId:"sent"}).sort({studentNumber:1}).then(rocs=>{
 
         if(count2 > rocs.length){
 //count2 = rocs.length
@@ -3333,7 +3333,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   
   //TestX.find({year:year,uid:uid},function(err,vocs) {
     
-      User.find({role:'student'}).lean().sort({studentNumber:1}).then(vocs=>{
+      User.find({role:'student',teacherId:"sent"}).lean().sort({studentNumber:1}).then(vocs=>{
         if(count2 > vocs.length){
           let newCount = count2 - vocs.length
   for(var x = n;x<vocs.length;x++){
@@ -3410,7 +3410,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
 
 
   router.get('/invoGeneration2',isLoggedIn,function(req,res){
-
+    var idX  =req.user._id
     var count = req.user.countN - 1
     var count2 = count * 10
     var n = count2 - 10
@@ -3422,11 +3422,11 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
     var month = m.format('MMMM')
     var year = m.format('YYYY')
     var term = req.user.term
-      
+      var xId = req.user._id
     
   /*console.log(arr,'iiii')*/
   
-    User.find({role:'student'}).lean().sort({studentNumber:1}).then(locs=>{
+    User.find({role:'student',teacherId:"sent"}).lean().sort({studentNumber:1}).then(locs=>{
 
       if(count2>locs.length){
        
@@ -3519,6 +3519,10 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
       repo.datePaid = "null"
       repo.save().then(poll =>{
       console.log("Done creating pdf",)
+
+
+
+
       })
   
   
@@ -3546,6 +3550,11 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   
 
 }
+
+
+User.findByIdAndUpdate(xId,{$set:{countN:1}},function(err,focs){
+
+})
       }
       else{
 
@@ -3676,7 +3685,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
 
 
 
-
+/*
   router.get('/genEmailInvo',isLoggedIn,function(req,res){
     var m = moment()
     var mformat = m.format('L')
@@ -3746,15 +3755,218 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
    })
    
    })
+*/
+
+
+
+   router.get('/genEmailInvo',isLoggedIn,function(req,res){
+    var m = moment()
+    var mformat = m.format('L')
+    var month = m.format('MMMM')
+    var year = m.format('YYYY')
+    var id= req.user._id
+    var term = req.user.term
+    /*var count = req.user.countN
+    count + 1
+    let email = 'kratosmusasa@gmail.com'
+    let uid = req.user.studentId
+    let name = req.user.studentName
+    let invoNumber = 3490*/
+  
+     const transporter = nodemailer.createTransport({
+       host: 'mail.steuritinternationalschool.org',
+       port:465,
+       secureConnection:true,
+       logger:true,
+       debug:true,
+       secureConnection:false,
+       auth: {
+           user: "admin@steuritinternationalschool.org",
+           pass: "steurit2024",
+       },
+       tls:{
+         rejectUnAuthorized:true
+       }
+       //host:'smtp.gmail.com'
+     });
+     
+   
+
+             
+  
+  (async function(){
+  
+
+    
+    try{   
+
+       User.find({role:"student",grade:6},async function(err,docs){
+   
+      for(var i = 0;i<14;i++){
+        let email = docs[i].email
+        let uid = docs[i].uid
+        let name = docs[i].fullname
+        let invoNumber = docs[i].invoNumber 
+     let mailOptions ={
+       from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
+                   to:email, // list of receivers
+                   subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
+       attachments: [
+         {
+           filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
+           path:`./invoiceReports/${year}/${term}/${uid}_${name}.pdf`
+         }
+       ]
+     };
+   await  transporter.sendMail(mailOptions, function (error,info){
+       if(error){
+         //console.log(error)
+        /* req.flash('danger', 'Reports Not Emailed!');
+    
+  res.redirect('/clerk/dashX')*/
+       }else{
+      /*   console.log('Email sent successfully')
+         req.flash('success', 'Reports Emailed Successfully!');
+    
+  res.redirect('/clerk/dashX')*/
+       }
+          
+   console.log(email,'email')
+     })
+
+    }
+  })
+    }catch(e) {
+    
+      console.log(e)
+    
+    
+    }
+  
+    
+    }) ()
+  
+   
+    
+   
+   })
+
+
+router.get('/emailRoute2',function(req,res){
+  res.redirect('/clerk/emailRoute' )
+
+  
+  
+  (async function(){
+  
+    try{
+    //const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote",
+      ],
+      executablePath:
+        process.env.NODE_ENV === "production"
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath(),
+    });
+    
+    const page = await browser.newPage()
+    
+    
+    
+     //const content = await compile('report3',arr[uid])
+     const content = await compile('euritInvoice',arr9[uid])
+    
+  
+    await page.setContent(content, { waitUntil: 'networkidle2'});
+     //await page.setContent(content)
+    //create a pdf document
+    await page.emulateMediaType('screen')
+    let height = await page.evaluate(() => document.documentElement.offsetHeight);
+    await page.evaluate(() => matchMedia('screen').matches);
+    await page.setContent(content, { waitUntil: 'networkidle0'});
+    //console.log(await page.pdf(),'7777')
+    
+    await page.pdf({
+      //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
+      path:(`./invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
+      //format:"A4",
+      /*width:'30cm',
+    height:'21cm',*/
+    height: height + 'px',
+      printBackground:true
+    })
+    
+    
+    var repo = new InvoiceFile();
+        
+        repo.studentName =name
+        repo.month = month;
+        repo.code = uid;
+        repo.term = term;
+        repo.type = 'Invoice';
+        repo.filename = uid+'_'+name+'.pdf';
+        repo.year = year;
+        repo.date = mformat
+        repo.invoiceNumber = invoNum
+        repo.status = "unpaid"
+        repo.amountPaid = 0
+        repo.amountDue= fees
+        repo.datePaid = "null"
+        repo.save().then(poll =>{
+        console.log("Done creating pdf",)
+  
+  
+  
+  
+        })
+    
+    
+    /*await browser.close()
+    
+    process.exit()*/
+  
+    
+    
+    /*req.flash('success', 'Report Generation Success');
+   
+    res.redirect('/clerk/dash');*/
+    
+    }catch(e) {
+    
+      console.log(e)
+    
+    
+    }
+  
+    
+    }) ()
+  
+})
 
 
 
 
 
+router.get('/send',function(req,res){
+  var mail = require("nodemailer").mail;
 
-
-
-
+  mail({
+      from: "Fred Foo ✔ <kratosmusasa@gmail>", // sender address
+      to: "kratosmusasa94@gmail.com", // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: "Hello world ✔", // plaintext body
+      html: "<b>Hello world ✔</b>" // html body
+  });
+})
 
 
 
@@ -4148,8 +4360,549 @@ InvoNum.findByIdAndUpdate(invoId,{$set:{num:invoNum}},function(err,tocs){
 
 
   router.get('/euritInvoice',function(req,res){
-    res.render('acc2/euritInvoice')
+    res.render('acc2/receiptNum')
   })
+
+
+
+
+
+
+  router.get('/import',isLoggedIn,function(req,res){
+    var pro = req.user
+    var errorMsg = req.flash('danger')[0];
+    var successMsg = req.flash('success')[0];
+    res.render('imports/products',{pro:pro,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+  })
+  
+
+  
+  
+
+  
+  router.post('/import',isLoggedIn,uploadX.single('file'),  (req,res)=>{
+    var count = req.user.actualCount
+    var m = moment()
+ 
+    
+    
+    var pro = req.user
+    var id =   req.user._id
+   
+  
+  /*  if(!req.file){
+        req.session.message = {
+          type:'errors',
+          message:'Select File!'
+        }     
+          res.render('imports/students', {message:req.session.message,pro:pro}) */
+     if (!req.file || req.file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+            req.session.message = {
+                type:'errors',
+                message:'Upload Excel File'
+              }     
+                res.render('imports/products', {message:req.session.message,pro:pro
+                     
+                 }) 
+  
+  
+  
+        }
+          
+        else{
+     
+
+        
+           const file = req.file.filename;
+    
+            
+                var wb =  xlsx.readFile('./public/uploads/' + file)
+
+             
+         
+                 var sheets = wb.Sheets;
+                 var sheetNames = wb.SheetNames;
+     
+                 var sheetName = wb.SheetNames[0];
+     var sheet = wb.Sheets[sheetName ];
+     
+        for (var i = 0; i < wb.SheetNames.length; ++i) {
+         var sheet = wb.Sheets[wb.SheetNames[i]];
+     
+         console.log(wb.SheetNames.length)
+         var data =xlsx.utils.sheet_to_json(sheet)
+             
+         var newData = data.map(function (record){
+     
+        
+       
+      
+          
+         
+        
+           
+            let status = record.status
+            let type = record.type;
+            let item = record.item
+            let code = record.code;
+            let account = record.account;
+            let cogs = record.cogs
+            let assetAccount = record.assetAccount;
+            let accumulatedDepreciation= record.accumulatedDepreciation
+            let purchaseDescription = record.purchaseDescription
+            let qty = record.qty
+            let cost = record.cost
+            let price = record.price
+            let grossPrice = record.grossPrice
+            let amountsIncludeVat = record.amountsIncludeVat;
+          
+            let purchasedForResale = record.purchasedForResale
+          
+          
+
+req.body.type = record.type  
+req.body.status = record.status 
+req.body.item = record.item
+req.body.code = record.code
+req.body.price= record.price
+
+//req.body.photo = record.photo          
+
+            
+        
+            
+              req.check('type','Enter Type').notEmpty();
+              //req.check('name','Enter Name').notEmpty();
+              req.check('status','Enter Status').notEmpty();
+              req.check('item','Enter Item').notEmpty();
+              req.check('code','Enter Code').notEmpty()
+             // req.check('dob','Enter Date Of Birth').notEmpty();
+              //req.check('address','Enter Address').notEmpty();
+              req.check('price','Enter Price').notEmpty();
+             
+
+              var errors = req.validationErrors();
+  
+              if (errors) {
+                
+                req.session.errors = errors;
+                req.session.success = false;
+                req.flash('danger', req.session.errors[0].msg);
+       
+        
+                res.redirect('/clerk/import');
+              
+          }
+else
+
+
+{
+  Product.findOne({'item':item})
+  .then(user =>{
+      if(user){ 
+    // req.session.errors = errors
+      //req.success.user = false;
+
+
+
+      req.flash('danger', 'Itemalready in the system');
+  
+      res.redirect('/clerk/import')
+}
+else{
+
+
+
+          
+var product = new Product();
+product.status = status;
+product.type = type;
+product.item = item;
+product.code= code;
+product.account = account;
+product.cogs = cogs;
+product.qty = 0;
+product.cost = cost;
+product.price = price;
+product.assetAccount= assetAccount;
+product.accumulatedDepreciation = accumulatedDepreciation;
+product.amountsIncludeVat = amountsIncludeVat;
+product.purchasedForResale = purchasedForResale;
+
+product.save()
+  .then(user =>{
+   
+   
+ 
+
+  })
+}
+  
+  })
+
+
+
+
+}     
+                 
+                     
+   
+                    // .catch(err => console.log(err))
+             
+                 
+                    })
+                  
+                    req.flash('success', 'File Successfully!');
+  
+                    res.redirect('/clerk/import')  
+         
+                  }
+                  
+                  
+                    
+                    
+        
+                   
+        
+                    
+             
+                }
+      
+        
+  
+  
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  router.get('/invoice', isLoggedIn,function(req,res){
+    var pro = req.user
+    var companyAddress = req.user.companyAddress
+    var companyCity = req.user.companyCity
+    var companyMobile = req.user.companyMobile
+    var companyCountry = req.user.companyCountry
+    var companyEmail = req.user.companyEmail
+    var companyName = req.user.companyName
+    var successMsg = req.flash('success')[0];
+    res.render('abc/create',{successMsg: successMsg, noMessages: !successMsg,pro:pro,companyAddress:companyAddress,
+    companyCity:companyCity,companyCountry:companyCountry,companyEmail:companyEmail,companyName:companyName,companyMobile:companyMobile})
+  })
+  
+  /* router.post('/invoice',function(req,res){
+  console.log(req.body['name[]'],req.body['quantity[]'],req.body['price[]'])
+  
+  })*/
+  
+  
+  
+  
+  
+  router.post('/invoice',isLoggedIn,function(req,res){
+  
+   
+  
+    
+    var id = req.user._id
+    var code = req.user.invoCode
+    var m2 = moment()
+    var year = m2.format('YYYY')
+    var month = m2.format('MMMM')
+    var date = req.body.invoice_date
+    var dueDate = req.body.invoice_due_date
+    var itemId = req.body.itemId
+    var companyName = req.body.businessName
+    var companyEmail = req.body.companyEmail
+    var companyCity = req.body.companyCity
+    var companyAddress = req.body.companyAddress
+    var companyMobile = req.body.companyMobile
+    var companyClerk = "Munashe"
+    let c = -1
+    //var notes = req.query.notes
+    var clientName= req.body.clientName
+    var clientEmail = req.body.clientEmail
+    var clientAddress = req.body.clientAddress
+    var clientMobile = req.body.mobile
+    var clientCity = req.body.clientCity
+    var invoiceDescription = 'cables'
+    ar = req.body['name[]']
+    ar1 = req.body['quantity[]']
+    ar2=req.body['price[]']
+  console.log(ar,ar1,ar2,'000000')
+  req.check('clientName','Enter Client Name').notEmpty();            
+  req.check('clientEmail','Enter Client Email').notEmpty();
+  req.check('invoice_due_date','Enter Due Date').notEmpty();
+  req.check('invoice_date', 'Enter Date').notEmpty();
+  
+  
+  
+  
+  
+  
+  
+  var errors = req.validationErrors();
+     
+  if (errors) {
+  
+    req.session.errors = errors;
+    req.session.success = false;
+    req.flash('danger', req.session.errors[0].msg);
+           
+            
+    res.redirect('/clerk/invoice');
+  }
+  
+  
+  else{
+  /*for(let a in ar){
+    if(ar[a]=== ''){
+      delete ar[a]
+    }
+  }*/
+  
+  ar = ar.filter(v=>v!='')
+  
+  console.log(ar,'iwee')
+  for(var i = 0; i<ar.length;i++){
+    console.log(ar[i])
+    let item = ar[i]
+    
+  
+  
+  var book = new InvoiceSub();
+    book.item = item
+    book.itemId = 'cccc'
+    book.qty = 0
+    book.price = 0
+    book.total = 0
+    book.companyName = companyName
+    book.companyEmail = companyEmail
+    book.companyCity = companyCity
+    book.companyAddress = companyAddress
+    book.companyMobile = companyMobile
+    book.date = date
+    book.clientName = clientName
+    book.clientEmail = clientEmail
+    book.clientAddress = clientAddress
+    book.clientCity = clientCity
+    book.clientMobile = clientMobile
+    book.invoiceDescription = invoiceDescription
+    book.status = 'not saved'
+    book.code = code
+    book.type = "Invoice"
+    book.month = month
+    book.year = year
+    book.size = i
+    book.subtotal = 0
+   
+  
+  
+        
+         
+          book.save()
+            .then(title =>{
+  let client = title.clientName
+  console.log(client,'client')
+  let pId = title._id
+  console.log(pId,"idd")
+  
+  let size = title.size
+  
+  console.log(size,'size')
+  let qty = ar1[size]
+  let price = ar2[size]
+  let total = qty * price
+        InvoiceSub.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total}},function(err,ocs){
+        
+        })
+        
+              
+          
+                
+  
+  
+             
+            })
+          }
+  
+  res.redirect('/clerk/invoiceProcess')
+        }
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+router.get('/autocompleteXN/', function(req, res, next) {
+  var code
+
+    var regex= new RegExp(req.query["term"],'i');
+   
+    var bookFilter =Product.find({},{'item':1}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
+  
+    
+    bookFilter.exec(function(err,data){
+   
+ 
+  console.log('data',data)
+  
+  var result=[];
+  
+  if(!err){
+     if(data && data.length && data.length>0){
+       data.forEach(book=>{
+ 
+        
+     
+  
+          
+         let obj={
+           id:book._id,
+           label: book.item
+
+       
+     
+       
+         
+          
+  
+           
+         };
+        
+         result.push(obj);
+      
+     
+       });
+  
+     }
+   
+     res.jsonp(result);
+
+    }
+  
+  })
+ 
+  });
+
+//role admin
+//this route autopopulates info of the title selected from the autompleteX route
+  router.post('/autoXN',function(req,res){
+      var code = req.body.code
+
+  
+      
+     
+      Product.find({item:code},function(err,docs){
+     if(docs == undefined){
+       res.redirect('/')
+     }else
+    
+        res.send(docs[0])
+      })
+    
+    
+    })
+
+    
+
+
+    
+    
+
+router.get('/autocompleteClient/', function(req, res, next) {
+  var code
+
+    var regex= new RegExp(req.query["term"],'i');
+   
+    var bookFilter =User.find({role:"student"},{'fullname':1}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
+  
+    
+    bookFilter.exec(function(err,data){
+   
+ 
+  console.log('data',data)
+  
+  var result=[];
+  
+  if(!err){
+     if(data && data.length && data.length>0){
+       data.forEach(book=>{
+ 
+        
+     
+  
+          
+         let obj={
+           id:book._id,
+           label: book.fullname
+
+       
+     
+       
+         
+          
+  
+           
+         };
+        
+         result.push(obj);
+      
+     
+       });
+  
+     }
+   
+     res.jsonp(result);
+
+    }
+  
+  })
+ 
+  });
+
+//role admin
+//this route autopopulates info of the title selected from the autompleteX route
+  router.post('/autoClient',function(req,res){
+      var code = req.body.code
+
+  
+      
+     
+      User.find({fullame:code},function(err,docs){
+     if(docs == undefined){
+       res.redirect('/')
+     }else
+    
+        res.send(docs[0])
+      })
+    
+    
+    })
+
+   
+
+
+
 module.exports = router;
 
 

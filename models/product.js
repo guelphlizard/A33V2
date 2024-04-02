@@ -2,17 +2,22 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    barcodeNumber:{type:String, required:true},
-    name: {type: String, required:true },
-    category: { type: String, required:true },
-    quantity: {type: Number, required: true},
-    description: {type: String, required: true},
-    photo: {type: String},
-    size: {type: Number},
-    rate: {type: Number, required: true},
-    zwl: {type: Number, required: true},
+    status:{type:String, required:true},
+    type: {type: String, required:true },
+    item: { type: String, required:true },
+    code: {type: String, required: true},
+    account: {type: String, required: true},
+    cogs: {type: String},
+    assetAccount: {type: String},
+    accumulatedDepreciation: {type: Number},
+    purchaseDescription: {type:String,},
+    qty: {type: Number, required: true},
+    cost: {type: Number, required: true},
     price: {type: Number, required: true},
-    vatPrice: {type: Number, required: true},
+    grossPrice: {type: Number},
+    amountsIncludeVat: {type: String},
+    purchasedForResale: {type: String},
+ 
 });
 
 module.exports = mongoose.model('Product', schema);
