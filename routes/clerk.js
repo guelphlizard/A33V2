@@ -2619,6 +2619,8 @@ router.get('/viewTermlyInvoiceFile/:id',isLoggedIn,function(req,res){
   var id = req.params.id
   var pro = req.user
 
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
   var year = req.user.hostelYear
   
 
@@ -2631,7 +2633,7 @@ router.get('/viewTermlyInvoiceFile/:id',isLoggedIn,function(req,res){
 
 
 
-res.render('invoiceFolderReg/filesTerm',{listX:docs,pro:pro,id:id,year:year})
+res.render('invoiceFolderReg/filesTerm',{listX:docs,pro:pro,id:id,year:year,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg}) 
 }
 })
     
@@ -2661,6 +2663,85 @@ router.get('/downloadTermlyInvoiceReport/:id',isLoggedIn,function(req,res){
 
         
   
+//email invoice
+
+
+
+router.get('/emailInvoiceFile/:id',isLoggedIn,function(req,res){
+  var code = req.params.id
+
+  InvoiceFile.findById(req.params.id,function(err,doc){
+ 
+if(doc){
+  let term = doc.term
+  let year = doc.year
+  let invoNumber = doc.invoiceNumber
+
+  User.find({uid:doc.code},function(err,docs){
+
+  
+     let email = docs[0].email
+     let name = docs[0].fullname
+     let uid = docs[0].uid
+   
+     
+ 
+ 
+ 
+ 
+     const transporter = nodemailer.createTransport({
+      host: 'mail.steuritinternationalschool.org',
+      port:465,
+      secureConnection:true,
+      logger:true,
+      debug:true,
+      secureConnection:false,
+      auth: {
+          user: "admin@steuritinternationalschool.org",
+          pass: "steurit2024",
+      },
+      tls:{
+        rejectUnAuthorized:true
+      }
+      //host:'smtp.gmail.com'
+    });
+    
+  
+   let mailOptions ={
+    from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
+                   to:email, // list of receivers
+                   subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
+       attachments: [
+         {
+           filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
+           path:`./invoiceReports/${year}/${term}/${uid}_${name}.pdf`
+         }
+       ]
+     };
+   transporter.sendMail(mailOptions, function (error,info){
+     if(error){
+       console.log(error)
+       req.flash('danger', 'Invoice Not Emailed!');
+  
+res.redirect('/clerk/viewTermlyInvoiceFile/'+term)
+     }else{
+       console.log('Email sent successfully')
+       req.flash('success', 'Email sent successfully');
+  
+res.redirect('/clerk/viewTermlyInvoiceFile/'+term)
+     }
+   })
+  })
+ }
+
+ })
+ 
+ })
+
+
 
 
 
@@ -3801,9 +3882,9 @@ User.findByIdAndUpdate(xId,{$set:{countN:1}},function(err,focs){
     
     try{   
 
-       User.find({role:"student",grade:6},async function(err,docs){
+       User.find({role:"student",class:"ECD-B "},async function(err,docs){
    
-      for(var i = 0;i<14;i++){
+      for(var i = 50;i<56;i++){
         let email = docs[i].email
         let uid = docs[i].uid
         let name = docs[i].fullname
