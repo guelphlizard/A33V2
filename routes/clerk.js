@@ -4792,7 +4792,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
       let receiptNumber = 4567
      let mailOptions ={
        from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
-                   to:'kratosmusasa@gmail.com', // list of receivers
+                   to:email, // list of receivers
                    subject: `Your Payment  Receipt from ST. EURIT INTERNATIONAL SCHOOL `,
        html:`Dear ${name}: <br> <br> Your Payment  Receipt ${receiptNumber} for 225.00 is attached 
        at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
