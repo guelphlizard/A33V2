@@ -98,6 +98,7 @@ const arr = {}
 const arr2 = {}
 const arr9 ={}
 const arrInvoice = {}
+const arrReceipt = {}
 //const data = require('../data.json')
 
 var storageX = multer.diskStorage({
@@ -4599,6 +4600,243 @@ product.save()
     res.render('abc/create',{successMsg: successMsg, noMessages: !successMsg,pro:pro,companyAddress:companyAddress,
     companyCity:companyCity,companyCountry:companyCountry,companyEmail:companyEmail,companyName:companyName,companyMobile:companyMobile})
   })
+
+  router.post('/invoice',isLoggedIn,function(req,res){
+    res.redirect('/clerk/printReceipt')
+  })
+
+
+  router.get('/printReceipt',function(req,res){
+    res.render('accounts/euritReceipt')
+  })
+
+
+  
+
+router.get('/arrReceipt',isLoggedIn,function(req,res){
+  var code = req.user.invoCode
+  
+ User.find({uid:"ST3105"},function(err,docs){
+  for(var i=0;i<docs.length;i++){
+  let code= docs[i].uid
+   arrReceipt[code]=[]
+  }
+  })
+  
+  res.redirect('/clerk/receiptGeneration')
+  
+  })
+  
+  
+  
+  
+router.get('/receiptGeneration',isLoggedIn,function(req,res){
+
+  var m = moment()
+  var mformat = m.format('L')
+  var month = m.format('MMMM')
+  var year = m.format('YYYY')
+  var code = req.user.invoCode
+  var clientName = req.user.clientName
+  /*console.log(arr,'iiii')*/
+  
+  
+  //console.log(docs,'docs')
+  
+  const compile = async function (templateName, arrReceipt){
+  const filePath = path.join(process.cwd(),'templates',`${templateName}.hbs`)
+  
+  const html = await fs.readFile(filePath, 'utf8')
+  
+  return hbs.compile(html)(arr)
+  
+  };
+  
+  
+  
+  
+  (async function(){
+  
+  try{
+  //const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+  headless: true,
+  args: [
+  "--disable-setuid-sandbox",
+  "--no-sandbox",
+  "--single-process",
+  "--no-zygote",
+  ],
+  executablePath:
+  process.env.NODE_ENV === "production"
+    ? process.env.PUPPETEER_EXECUTABLE_PATH
+    : puppeteer.executablePath(),
+  });
+  
+  const page = await browser.newPage()
+  
+  
+  
+  //const content = await compile('report3',arr[uid])
+  const content = await compile('euritReceipt',arrReceipt[code])
+  
+  //const content = await compile('index',arr[code])
+  
+  await page.setContent(content, { waitUntil: 'networkidle2'});
+  //await page.setContent(content)
+  //create a pdf document
+  
+           
+  await page.emulateMediaType('screen')
+  let height = await page.evaluate(() => document.documentElement.offsetHeight);
+  await page.evaluate(() => matchMedia('screen').matches);
+  await page.setContent(content, { waitUntil: 'networkidle0'});
+  //console.log(await page.pdf(),'7777')
+  
+  await page.pdf({
+  //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
+  path:(`./invoiceReports/${year}/receipt_${code}`+'.pdf'),
+  /*format:"A4",
+  width:'30cm',
+  height:'21cm',*/
+  height: height + 'px',
+    printBackground:true
+  
+  })
+  
+  console.log('pdf successful')
+  
+ 
+  
+  /*await browser.close()
+  
+  process.exit()*/
+ 
+  
+  
+  }catch(e) {
+  
+  console.log(e)
+  
+  
+  }
+  
+  
+  }) ()
+  
+  
+  
+  
+  res.redirect('/hostel/emailReceipt')
+  
+  
+  
+  
+  
+  
+  
+  })
+  
+
+
+  
+  router.get('/genEmailReceipt',isLoggedIn,function(req,res){
+    var m = moment()
+    var mformat = m.format('L')
+    var month = m.format('MMMM')
+    var year = m.format('YYYY')
+    var id= req.user._id
+    var term = req.user.term
+    var uid = "ST3104"
+    /*var count = req.user.countN
+    count + 1
+    let email = 'kratosmusasa@gmail.com'
+    let uid = req.user.studentId
+    let name = req.user.studentName
+    let invoNumber = 3490*/
+  
+     const transporter = nodemailer.createTransport({
+       host: 'mail.steuritinternationalschool.org',
+       port:465,
+       secureConnection:true,
+       logger:true,
+       debug:true,
+       secureConnection:false,
+       auth: {
+           user: "admin@steuritinternationalschool.org",
+           pass: "steurit2024",
+       },
+       tls:{
+         rejectUnAuthorized:true
+       }
+       //host:'smtp.gmail.com'
+     });
+     
+   
+
+             
+  
+  (async function(){
+  
+
+    
+    try{   
+
+       User.find({uid:"ST3104"},async function(err,docs){
+   
+      for(var i = 0;i<14;i++){
+        let email = docs[i].email
+        let uid = docs[i].uid
+        let name = docs[i].fullname
+        let invoNumber = docs[i].invoNumber 
+     let mailOptions ={
+       from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
+                   to:email, // list of receivers
+                   subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
+       attachments: [
+         {
+           filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
+           path:`./invoiceReports/${year}/receipt_${uid}.pdf`
+         }
+       ]
+     };
+   await  transporter.sendMail(mailOptions, function (error,info){
+       if(error){
+         //console.log(error)
+        /* req.flash('danger', 'Reports Not Emailed!');
+    
+  res.redirect('/clerk/dashX')*/
+       }else{
+      /*   console.log('Email sent successfully')
+         req.flash('success', 'Reports Emailed Successfully!');
+    
+  res.redirect('/clerk/dashX')*/
+       }
+          
+   console.log(email,'email')
+     })
+
+    }
+  })
+    }catch(e) {
+    
+      console.log(e)
+    
+    
+    }
+  
+    
+    }) ()
+  
+   
+    
+   
+   })
+
+  
   
   /* router.post('/invoice',function(req,res){
   console.log(req.body['name[]'],req.body['quantity[]'],req.body['price[]'])
@@ -4608,7 +4846,7 @@ product.save()
   
   
   
-  
+  /*
   router.post('/invoice',isLoggedIn,function(req,res){
   
    
@@ -4670,6 +4908,7 @@ product.save()
       delete ar[a]
     }
   }*/
+  /*
   
   ar = ar.filter(v=>v!='')
   
@@ -4739,7 +4978,7 @@ product.save()
   res.redirect('/clerk/invoiceProcess')
         }
   })
-
+*/
 
 
 
@@ -4888,7 +5127,7 @@ router.get('/autocompleteClient/', function(req, res, next) {
   
       
      
-      User.find({fullame:code},function(err,docs){
+      User.find({fullname:code},function(err,docs){
      if(docs == undefined){
        res.redirect('/')
      }else
