@@ -4616,7 +4616,7 @@ product.save()
 router.get('/arrReceipt',isLoggedIn,function(req,res){
   var code = req.user.invoCode
   
- User.find({uid:"ST3105"},function(err,docs){
+ User.find({uid:"ST3104"},function(err,docs){
   for(var i=0;i<docs.length;i++){
   let code= docs[i].uid
    arrReceipt[code]=[]
@@ -4636,7 +4636,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
   var mformat = m.format('L')
   var month = m.format('MMMM')
   var year = m.format('YYYY')
-  var code = req.user.invoCode
+  var code = "ST3104"
   var clientName = req.user.clientName
   /*console.log(arr,'iiii')*/
   
@@ -4727,7 +4727,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
   
   
   
-  res.redirect('/hostel/emailReceipt')
+  res.redirect('/clerk/genEmailReceipt')
   
   
   
@@ -4784,16 +4784,17 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
 
        User.find({uid:"ST3104"},async function(err,docs){
    
-      for(var i = 0;i<14;i++){
+      for(var i = 0;i<docs.length;i++){
         let email = docs[i].email
         let uid = docs[i].uid
         let name = docs[i].fullname
-        let invoNumber = docs[i].invoNumber 
+      //  let invoNumber = docs[i].invoNumber 
+      let receiptNumber = 4567
      let mailOptions ={
        from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
-                   to:email, // list of receivers
-                   subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
-       html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+                   to:'kratosmusasa@gmail.com', // list of receivers
+                   subject: `Your Payment  Receipt from ST. EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${name}: <br> <br> Your Payment  Receipt ${receiptNumber} for 225.00 is attached 
        at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
        Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
        attachments: [
