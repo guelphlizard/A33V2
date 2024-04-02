@@ -2365,7 +2365,7 @@
 		
     <script>
       $(function(){
-    $('#clientName').autocomplete({
+    $('#fullname').autocomplete({
     source: function(req,res){
 
       $.ajax({
@@ -2400,8 +2400,8 @@
                 
                 
                  $("#fullname").val(data.fullname)
-                 $("#email").val(data.clientEmail)
-				 $("#address1").val(data.clientAddress)
+                 $("#email").val(data.email)
+				 $("#address1").val(data.address1)
 				$("#class1").val(data.class1)
 				$("#grade").val(data.grade)
 				  $("#mobile").val(data.mobile)
