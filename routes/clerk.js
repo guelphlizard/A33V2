@@ -4692,7 +4692,9 @@ product.save()
   })
 
 
-  
+  router.get('/dynamic',function(req,res){
+    res.render('abc/dynamic')
+  })
 
 router.get('/arrReceipt',isLoggedIn,function(req,res){
   var code = req.user.invoCode
@@ -5210,6 +5212,26 @@ router.get('/autocompleteClient/', function(req, res, next) {
       
      
       User.find({fullname:code},function(err,docs){
+     if(docs == undefined){
+       res.redirect('/')
+     }else
+    
+        res.send(docs[0])
+      })
+    
+    
+    })
+
+
+
+
+    router.post('/autoInvo',function(req,res){
+      var code = req.body.term
+
+  
+      
+     
+    InvoiceFile.find({term:code},function(err,docs){
      if(docs == undefined){
        res.redirect('/')
      }else

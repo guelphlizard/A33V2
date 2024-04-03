@@ -1723,7 +1723,7 @@
 											<!--begin::Card body-->
 											<div class="card-body p-12">
 												<!--begin::Form-->
-												<form action="/clerk/invoice" method="POST" id="kt_invoice_form">
+												<forms  id="kt_invoice_form">
 													<!--begin::Wrapper-->
 													<div class="d-flex flex-column align-items-start flex-xxl-row">
 														<!--begin::Input group-->
@@ -1874,7 +1874,7 @@
 																		<td class="pe-7">
 																			<input type="text" class="form-control form-control-solid mb-2" name="name[]" id="item"  />
 																		
-																	<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
+																			<!--<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />-->
 																		</td>
 																		<td class="ps-0">
 																			<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" id="quantity" placeholder="1" value="1" data-kt-element="quantity" />
@@ -1936,7 +1936,7 @@
 														<table class="table d-none" data-kt-element="item-template">
 															<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
 																<td class="pe-7" id="flint">
-																	<input type="text" class="form-control" name="name[]" id="item1"  value=""  data-kt-element="title"  />
+																	<input type="text" class="form-control" name="name[]" id="item1"  value=""  data-kt-element="item"  />
 															
 																<!--	<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />-->
 																</td>
@@ -2040,7 +2040,7 @@
 		<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
 		<!--end::Page Vendors Javascript-->
 		<!--begin::Page Custom Javascript(used by this page)-->
-		<script src="assets/js/custom/apps/invoices/create.js"></script>
+		<script src="assets/js/custom/apps/invoices/create2.js"></script>
 		<script src="assets/js/widgets.bundle.js"></script>
 		<script src="assets/js/custom/widgets.js"></script>
 		<script src="assets/js/custom/apps/chat/chat.js"></script>
@@ -2049,6 +2049,8 @@
 		<script src="assets/js/custom/utilities/modals/users-search.js"></script>
 		<!--end::Page Custom Javascript-->
 		<!--end::Javascript-->
+
+
 
 
 

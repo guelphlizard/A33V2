@@ -3,54 +3,35 @@ let p = 2
 
 function loadItems(){
 
-  $.ajax({
-    dataType: 'json',
-    data: {
-     term:1,
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo",
-    success: function(data) {
-   
-    
 
-      for(var i=0;i<2;i++){
-  
-        console.log(i)
-             var l = document.querySelector('[data-kt-element="item-template"] tr').cloneNode(!0); 
-      
-                    
-             var yt = document.querySelectorAll(' [data-kt-element="item"]').length;
-    
-             let c = 0
-             let v = c + yt
-             console.log(v,'777')
-             document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+v
-     
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+v
-           
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data.type
-           document.querySelector('[data-kt-element="items"] tbody').appendChild(l)
-          }
-            
+/*
+for(var i=0;i<2;i++){
 
-    console.log(data,'data999')
-  
+  console.log(i)
+       var l = document.querySelector('[data-kt-element="item-template"] tr').cloneNode(!0); 
 
-     
+              
+      // var yt = document.querySelectorAll(' [data-kt-element="item"]').length;
 
+       let c = 0
+       //let v = c + yt
+       v =i + 1
+       console.log(v,'777')
+       document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+i
+
+       document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="item"] ').id= 'item'+i
+
+     document.querySelector('[data-kt-element="items"] tbody').appendChild(l)
     }
-   
-});
-
+      */
   
-    
-    }    
+  }    
+
 
 "use strict"; 
 var KTAppInvoicesCreate = function ()
  { 
+  
      var e, t = function ()
       { 
           var t = [].slice.call(e.querySelectorAll('[data-kt-element="items"] [data-kt-element="item"]')),
@@ -64,37 +45,48 @@ var KTAppInvoicesCreate = function ()
                  t.value = i, e.querySelector('[data-kt-element="total"]').innerText = n.to(r * i ), a += r * i  })),
                   e.querySelector('[data-kt-element="sub-total"]').innerText = n.to(a),
                    e.querySelector('[data-kt-element="grand-total"]').innerText = n.to(a) },
+
+                    
+
+    
                     a = function () { 
                         if (0 === e.querySelectorAll('[data-kt-element="items"] [data-kt-element="item"]').length) 
                     { 
-                        var t = e.querySelector('[data-kt-element="empty-template"] tr').cloneNode(!0); 
-                        e.querySelector('[data-kt-element="items"] tbody').appendChild(t)
+
+        
+
+   
+        
+ 
+                        /*var t = e.querySelector('[data-kt-element="empty-template"] tr').cloneNode(!0); 
+                        e.querySelector('[data-kt-element="items"] tbody').appendChild(t)*/
+     
                      } else
                       KTUtil.remove(e.querySelector('[data-kt-element="items"] [data-kt-element="empty"]')) }; 
                       return {
                            init: function (n) 
                            { 
+
+
     (e = document.querySelector("#kt_invoice_form")).querySelector('[data-kt-element="items"] [data-kt-element="add-item"]').addEventListener("click",
      (function (n) 
      { n.preventDefault();
-        
-
-
+  
        
-        var l = e.querySelector('[data-kt-element="item-template"] tr').cloneNode(!0);
+      var l = e.querySelector('[data-kt-element="item-template"] tr').cloneNode(!0);
                
-        var yt = e.querySelectorAll(' [data-kt-element="item"]').length;
+      var yt = e.querySelectorAll(' [data-kt-element="item"]').length;
 
-        let c = 0
-        let v = c + yt
-        console.log(v,'777')
-        document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+v
+      let c = 0
+      let v = c + yt
+      console.log(v,'777')
+      document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+v
 
-        document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+v
-        //console.log(l,'lllllll',yt)
-       
-        
-      e.querySelector('[data-kt-element="items"] tbody').appendChild(l), a(), t() })),console.log( e.querySelector('[data-kt-element="items"] tbody')),
+      document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="item"] ').id= 'item'+v
+      //console.log(l,'lllllll',yt)
+     
+      
+    e.querySelector('[data-kt-element="items"] tbody').appendChild(l), a(), t() })),console.log( e.querySelector('[data-kt-element="items"] tbody')),
        KTUtil.on(e, '[data-kt-element="items"] [data-kt-element="remove-item"]', "click",
         (function (e) { e.preventDefault(), KTUtil.remove(this.closest('[data-kt-element="item"]')), 
         a(), t() })), KTUtil.on(e, '[data-kt-element="items"] [data-kt-element="quantity"], [data-kt-element="items"] [data-kt-element="price"]', "change", 
