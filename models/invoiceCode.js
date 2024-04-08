@@ -7,6 +7,8 @@ var invoiceCodeSchema = new Schema({
 
    code: {type: String, required: true},
    mformat: {type: String, required: true},
+   term: {type: Number},
+   year: {type: Number}
 
    
 

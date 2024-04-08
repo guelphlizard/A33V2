@@ -11,6 +11,7 @@ const CV =require('../models/cv');
 const JobAd =require('../models/jobAd');
 let pdf = require('html-pdf');
 var InvoNum = require('../models/invoNum');
+var RecNum = require('../models/recNum');
 const Report2 = require('../models/reportsT');
 const Enroll = require('../models/enroll');
 var Learn = require('../models/learn');
@@ -902,6 +903,87 @@ router.post('/addNum',  function(req,res){
 })
 
 
+/**************** */
+
+router.get('/addInvoiceNum', function(req,res){
+  
+  res.render('acc2/invoNum')
+})
+
+router.post('/addInvoiceNum',  function(req,res){
+
+  var receiptNumber = req.body.receiptNumber;
+  //var idNumber = req.body.idNumber;
+  
+ 
+      req.check('receiptNumber','Enter Receipt Number').notEmpty().isNumeric();
+      //req.check('idNumber','Enter ID Number').notEmpty().isNumeric();
+
+    
+      
+      var errors = req.validationErrors();
+           
+      if (errors) {
+      
+        req.session.errors = errors;
+        req.session.success = false;
+        res.render('acc2/invoNum',{ errors:req.session.errors,})
+      
+    }
+    else{
+      
+        InvoNum.findOne({'num':receiptNumber})
+        .then(dept =>{
+            if(dept){ 
+  
+           req.session.message = {
+            type:'errors',
+             message:'Number already exists'
+           }     
+              res.render('acc2/invoNum', {
+                 message:req.session.message ,
+              })
+            }else{
+
+          
+    
+      var num = new InvoNum();
+    
+      num.num = receiptNumber;
+     
+     
+   
+    
+    
+      num.save()
+        .then(dep =>{
+         
+          req.session.message = {
+            type:'success',
+            message:'Number added'
+          }  
+          res.render('acc2/invoNum',{message:req.session.message,});
+      
+    
+      })
+    
+     }
+      
+      
+      })
+    }
+    
+    
+})
+
+
+
+
+
+
+
+
+///////////////////////////////////
 
 
 router.get('/addReceiptNum', function(req,res){
@@ -931,7 +1013,7 @@ router.post('/addReceiptNum',  function(req,res){
     }
     else{
       
-        InvoNum.findOne({'num':receiptNumber})
+        RecNum.findOne({'num':receiptNumber})
         .then(dept =>{
             if(dept){ 
   
@@ -946,7 +1028,7 @@ router.post('/addReceiptNum',  function(req,res){
 
           
     
-      var num = new InvoNum();
+      var num = new RecNum();
     
       num.num = receiptNumber;
      
@@ -978,9 +1060,26 @@ router.post('/addReceiptNum',  function(req,res){
 
 
 
+router.get('/profileUpdate',isLoggedIn,function(req,res){
+let companyName = "St Eurit International School";
+let companyEmail = "admin@steuritinternationalschool.org";
+let companyAddress = "Avondale, Harare, Zimbabwe";
+let companyMobile = "+263718081322";
+var id = req.user._id
+
+User.findByIdAndUpdate(id,{$set:{companyName:companyName,companyEmail:companyEmail,companyAddress:companyAddress,companyMobile:companyMobile}},function(err,docs){
+
+})
 
 
 
+
+
+
+
+
+
+})
 
 
 

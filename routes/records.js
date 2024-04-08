@@ -3716,6 +3716,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
             let balance2  = record.totalBalance
             let address1 = record.address1
             let address2 = record.address2
+            let portalBalance = record.portalBalance
             let mobile = record.mobile;
            // let gender = record.gender;
            // let dob = record.dob;
@@ -3732,6 +3733,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
             let num = record.num
             let expdate = req.user.expdate
             let expStr = req.user.expStr
+            let parentId = record.parentId
        
           //  let photo = record.photo
 
@@ -3831,6 +3833,7 @@ user.year = year;
 user.prefix = prefix
 user.possibleMark = 0;
 user.balance =balance;
+user.portalBalance= portalBalance
 user.balance2 = balance2
 user.balanceCarriedOver = 0;
 user.status = 'owing';
@@ -3886,7 +3889,7 @@ user.industry = 'null'
 user.text = password
 user.address1 = address1
 user.address2 = address2
-user.parentId = 'null'
+user.parentId = parentId
 user.countN =1
 user.studentNumber = record.num
 user.save()
@@ -6111,7 +6114,7 @@ for(var n = 0 ; n<locs.length;n++){
  
 
     
-  router.post('/importParents',isLoggedIn,records, upload.single('file'),function(req,res){
+  router.post('/importParents',isLoggedIn,records, uploadX.single('file'),function(req,res){
     var term = req.user.term;
     var m = moment()
     var year = m.format('YYYY')
@@ -6206,7 +6209,7 @@ var prefix = req.user.prefix
 req.check('surname','Enter Surname').notEmpty();
 req.check('dob','Enter Date Of Birth').notEmpty();
 req.check('email','Enter email').notEmpty().isEmail();
-req.check('uid','Enter Teacher ID').notEmpty();
+req.check('uid','Enter Parent ID').notEmpty();
 req.check('address','Enter Address').notEmpty();
 req.check('gender','Enter Gender').notEmpty();
 req.check('photo','Enter Photo').notEmpty();
@@ -6583,7 +6586,8 @@ router.get('/teacherProfile/:id',isLoggedIn,function(req,res){
                     user.paymentId = 'null';
                     user.prefix = prefix;
                     user.photo = "propic.jpg";
-                    user.level = 'null';
+                    user.level = 0;
+                    user.portalBalance = 0
                     user.pollUrl ='null';
                     user.annual = 0;
                     user.fees = 0

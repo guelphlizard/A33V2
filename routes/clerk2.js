@@ -4418,12 +4418,6 @@ console.log(e)
 
 //res.redirect('/hostel/discList')
 
-
-
-
-
-
-
 })
 
 

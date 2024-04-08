@@ -1,52 +1,6 @@
 let p = 2
 
 
-function loadItems(){
-
-  $.ajax({
-    dataType: 'json',
-    data: {
-     term:1,
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo",
-    success: function(data) {
-   
-    
-
-      for(var i=0;i<2;i++){
-  
-        console.log(i)
-             var l = document.querySelector('[data-kt-element="item-template"] tr').cloneNode(!0); 
-      
-                    
-             var yt = document.querySelectorAll(' [data-kt-element="item"]').length;
-    
-             let c = 0
-             let v = c + yt
-             console.log(v,'777')
-             document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+v
-     
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+v
-           
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data.type
-           document.querySelector('[data-kt-element="items"] tbody').appendChild(l)
-          }
-            
-
-    console.log(data,'data999')
-  
-
-     
-
-    }
-   
-});
-
-  
-    
-    }    
 
 "use strict"; 
 var KTAppInvoicesCreate = function ()
@@ -67,8 +21,8 @@ var KTAppInvoicesCreate = function ()
                     a = function () { 
                         if (0 === e.querySelectorAll('[data-kt-element="items"] [data-kt-element="item"]').length) 
                     { 
-                        var t = e.querySelector('[data-kt-element="empty-template"] tr').cloneNode(!0); 
-                        e.querySelector('[data-kt-element="items"] tbody').appendChild(t)
+                        /*var t = e.querySelector('[data-kt-element="empty-template"] tr').cloneNode(!0); 
+                        e.querySelector('[data-kt-element="items"] tbody').appendChild(t)*/
                      } else
                       KTUtil.remove(e.querySelector('[data-kt-element="items"] [data-kt-element="empty"]')) }; 
                       return {
@@ -89,8 +43,15 @@ var KTAppInvoicesCreate = function ()
         let v = c + yt
         console.log(v,'777')
         document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+v
-
+        document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').id = 'invoiceNo'+v
         document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+v
+        document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').id= 'amountDue'+v
+        document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').id= 'xid'+v
+
+console.log(v - 1,'vv')
+   document.getElementById(`item${v}`).value=''
+   document.getElementById(`invoiceNo${v}`).value=''
+
         //console.log(l,'lllllll',yt)
        
         

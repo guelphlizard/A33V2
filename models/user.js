@@ -10,13 +10,14 @@ var userSchema = new mongoose.Schema({
     hostelId:{type:String},
     hostelType:{type:String},
     hostelCapacity:{type:String},
-    hostelType:{type:String},
+    hostelCode:{type:String},
     hostelHead:{type:String},
     questNo:{type:Number},
     studentEmail:{type:String},
     studentName:{type:String},
    studentId:{type:String},
-   
+   invoiceId:{type:String},
+   invoUrl:{type:String},
     gender:{type:String,required:true},
     fullname:{type:String,required:true},
     dob:{type:String,required:true},
@@ -39,6 +40,7 @@ var userSchema = new mongoose.Schema({
     feesUpdate:{type:String, required:true},
     year:{type:Number, required:true},
     balance:{type:Number, required:true},
+   portalBalance:{type:Number, required:true},
     balance2:{type:Number},
     balanceCarriedOver:{type:Number, required:true},
     status:{type:String, required:true},
@@ -132,6 +134,7 @@ var userSchema = new mongoose.Schema({
     companyCountry:{type:String},
     countN:{type:Number},
     studentNumber:{type:Number},
+    invoiceGrade:{type:String},
 });
 
 // Custom validation for email

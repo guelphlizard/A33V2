@@ -1296,7 +1296,7 @@ router.get('/passRateX',isLoggedIn,parent,function(req,res){
             
               }
              // res.redirect('/student/dash')
-             res.redirect('/parent/dash')
+             res.redirect('/parent/profile')
             })
                
                
