@@ -6628,6 +6628,7 @@ router.get('/teacherProfile/:id',isLoggedIn,function(req,res){
                     user.testId = 'null'
                     user.industry = 'null'
                     user.children = 0
+                    user.parentId = "null"
                     user.text = password
                     user.password = user.encryptPassword(password)   
                    
