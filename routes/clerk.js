@@ -5235,13 +5235,12 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
         let uid = docs[i].uid
         let name = docs[i].fullname
       //  let invoNumber = docs[i].invoNumber 
-      let receiptNumber = 4567
+      
      let mailOptions ={
        from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
                    to:email, // list of receivers
                    subject: `Your Payment  Receipt from ST. EURIT INTERNATIONAL SCHOOL `,
-       html:`Dear ${name}: <br> <br> Your Payment  Receipt ${receiptNumber} for ${amount} is attached 
-       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       html:`Dear ${name}: <br> <br> Your Payment  Receipt ${receiptNumber} for ${amount} is attached . <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
        Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
        attachments: [
          {
@@ -5257,10 +5256,10 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     
   res.redirect('/clerk/dashX')*/
        }else{
-      /*   console.log('Email sent successfully')
-         req.flash('success', 'Reports Emailed Successfully!');
+      /*   console.log('Email sent successfully')*/
+         req.flash('success', 'Receipt Emailed Successfully!');
     
-  res.redirect('/clerk/dashX')*/
+  res.redirect('/clerk//receiptNumberUpdate')
        }
           
    console.log(email,'email')
