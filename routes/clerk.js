@@ -3149,7 +3149,7 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
         let id = docs[i]._id
         let balance = docs[i].balance
 
-        if(balance >0){
+        if(balance <= 0){
           User.findByIdAndUpdate(id,{set:{status:"paid"}},function(err,locs){
 
           })
