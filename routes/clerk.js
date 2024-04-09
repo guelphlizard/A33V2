@@ -2776,9 +2776,7 @@ res.redirect('/clerk/viewTermlyInvoiceFile/'+term)*/
 
 router.get('/folderMonthlyInvoiceReg/',isLoggedIn,function(req,res){
   var pro = req.user
-  var id = req.params.id
-  var uid = req.user._id
-  var arr = []
+
 
  /* User.findByIdAndUpdate(uid,{$set:{hostelFolder:'annual'}},function(err,locs){
 
@@ -2935,6 +2933,187 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
  
  })
 
+///receipts repo
+
+
+router.get('/folderMonthlyReceiptReg/',isLoggedIn,function(req,res){
+  var pro = req.user
+
+
+ /* User.findByIdAndUpdate(uid,{$set:{hostelFolder:'annual'}},function(err,locs){
+
+  })*/
+
+
+  Year.find({}).sort({year:1}).then(docs=>{
+     
+          res.render('receiptMonthlyFolderReg/fileMonthly',{listX:docs,pro:pro})
+
+        
+  })
+})
+
+
+////
+router.get('/receiptSelectMonthFolderReg/:id',isLoggedIn,function(req,res){
+  var pro = req.user
+  var id = req.params.id
+  var uid = req.user._id
+  var arr = []
+  User.findByIdAndUpdate(uid,{$set:{hostelYear:id}},function(err,locs){
+
+  })
+
+  Month.find({}).sort({num:1}).then(docs=>{
+     
+          res.render('receiptMonthlyFolderReg/month',{pro:pro,listX:docs,id:id})
+
+  })
+  
+})
+
+router.get('/viewMonthlyReceiptFile/:id',isLoggedIn,function(req,res){
+  var id = req.params.id
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  var pro = req.user
+  var year = req.user.hostelYear
+  var month = req.user.hostelMonth
+  
+
+  
+
+  Receipt.find({year:year,month:id},function(err,docs){
+     if(docs){
+
+   
+
+
+
+res.render('receiptMonthlyFolderReg/filesMonth',{listX:docs,pro:pro,id:id,year:year,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+}
+})
+    
+
+
+})
+
+
+
+router.get('/downloadMonthlyReceiptReport/:id',isLoggedIn,function(req,res){
+  var m = moment()
+  var month = m.format('MMMM')
+
+  var mformat = m.format('L')
+  Receipt.findById(req.params.id,function(err,doc){
+    var name = doc.filename;
+    var year = doc.year
+    var term = doc.term
+    //res.download( './public/uploads/'+name, name)
+ 
+    res.download( './receiptReports/'+year+'/'+term+'/'+name, name)
+  })  
+
+})
+
+
+
+
+router.get('/emailMonthlyReceiptFile/:id',isLoggedIn,function(req,res){
+  var code = req.params.id
+  
+  Receipt.findById(req.params.id,function(err,doc){
+ /*
+if(doc){
+  let term = doc.term
+  let year = doc.year
+  let invoNumber = doc.invoiceNumber
+
+  User.find({uid:doc.code},function(err,docs){
+*/
+  
+     let email = doc.studentEmail
+     let name = doc.studentName
+     let uid = doc.studentId
+     let receiptNumber = doc.receiptNumber
+     let year = doc.year
+     let term = doc.term
+     let month = doc.month
+   
+     
+ 
+ 
+ 
+ 
+     const transporter = nodemailer.createTransport({
+      host: 'mail.steuritinternationalschool.org',
+      port:465,
+      secureConnection:true,
+      logger:true,
+      debug:true,
+      secureConnection:false,
+      auth: {
+          user: "admin@steuritinternationalschool.org",
+          pass: "steurit2024",
+      },
+      tls:{
+        rejectUnAuthorized:true
+      }
+      //host:'smtp.gmail.com'
+    });
+    
+  
+   let mailOptions ={
+    from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
+                   to:email, // list of receivers
+                   subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
+       attachments: [
+         {
+           filename:uid+'_'+name+'_'+'Receipt'+'.pdf',
+           path:`./receiptReports/${year}/${term}/${invoNumber}_${name}.pdf`
+         }
+       ]
+     };
+   transporter.sendMail(mailOptions, function (error,info){
+     if(error){
+       console.log(error)
+       req.flash('danger', 'Receipt Not Emailed!');
+  
+res.redirect('/clerk/viewMonthlyReceiptFile/'+month)
+     }else{
+       console.log('Email sent successfully',uid)
+       req.flash('success', 'Email sent successfully');
+  
+res.redirect('/clerk/viewMonthlyReceiptFile/'+month)
+     }
+   })
+  })
+ 
+ 
+ })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //role admin
     //Autocomplete for student details when recording school fees
@@ -3084,7 +3263,7 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
 
    router.get('/creditors',isLoggedIn,(req, res) => {
     var pro = req.user
-    var hostel = req.user.hostel
+
     
      User.find({role:"student",status:"paid"},(err, docs) => {
          if (!err) {
@@ -3129,15 +3308,15 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
    
   })
   
-  router.get('/studentPayments/:id',isLoggedIn,function(req,res){
+  router.get('/studentInvoices/:id',isLoggedIn,function(req,res){
     var id = req.params.id
     console.log(id,'idd')
     var pro = req.user
     User.findById(id,function(err,doc){
       let uid = doc.uid
   
-      User.find({role:"parent",studentId:uid},function(err,locs){
-        res.render('acc2/parents',{listX:locs,pro:pro,doc:doc,id:id})
+      InvoiceFile.find({studentId:uid},function(err,locs){
+        res.render('acc2/invoices',{listX:locs,pro:pro,doc:doc,id:id})
       })
     })
    
@@ -3148,9 +3327,9 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
       for(var i =0;i<docs.length;i++){
         let id = docs[i]._id
         let balance = docs[i].balance
-
+       console.log(balance,'balance')
         if(balance <= 0){
-          User.findByIdAndUpdate(id,{set:{status:"paid"}},function(err,locs){
+          User.findByIdAndUpdate(id,{$set:{status:"paid"}},function(err,locs){
 
           })
         }else{
@@ -3163,6 +3342,98 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
   })
   
 
+  router.get('/downloadStudentInvoiceReport/:id',isLoggedIn,function(req,res){
+    var m = moment()
+    var month = m.format('MMMM')
+  
+    var mformat = m.format('L')
+    InvoiceFile.findById(req.params.id,function(err,doc){
+      var name = doc.filename;
+      var year = doc.year
+      var term = doc.term
+      //res.download( './public/uploads/'+name, name)
+   
+      res.download( './invoiceReports/'+year+'/'+term+'/'+name, name)
+    })  
+  
+  })
+
+
+  router.get('/studentEmailInvoiceFile/:id',isLoggedIn,function(req,res){
+    var code = req.params.id
+  
+    InvoiceFile.findById(req.params.id,function(err,doc){
+   /*
+  if(doc){
+    let term = doc.term
+    let year = doc.year
+    let invoNumber = doc.invoiceNumber
+  
+    User.find({uid:doc.code},function(err,docs){
+  */
+    
+       let email = doc.studentEmail
+       let name = doc.studentName
+       let uid = doc.studentId
+       let invoNumber = doc.invoiceNumber
+       let year = doc.year
+       let term = doc.term
+       let id2 = doc.studentId2
+     
+       
+   
+   
+   
+   
+       const transporter = nodemailer.createTransport({
+        host: 'mail.steuritinternationalschool.org',
+        port:465,
+        secureConnection:true,
+        logger:true,
+        debug:true,
+        secureConnection:false,
+        auth: {
+            user: "admin@steuritinternationalschool.org",
+            pass: "steurit2024",
+        },
+        tls:{
+          rejectUnAuthorized:true
+        }
+        //host:'smtp.gmail.com'
+      });
+      
+    
+     let mailOptions ={
+      from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
+                     to:email, // list of receivers
+                     subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+         html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+         at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+         Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
+         attachments: [
+           {
+             filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
+             path:`./invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
+           }
+         ]
+       };
+     transporter.sendMail(mailOptions, function (error,info){
+       if(error){
+         console.log(error)
+         req.flash('danger', 'Invoice Not Emailed!');
+    
+  res.redirect('/clerk/studentInvoices/'+id2)
+       }else{
+         console.log('Email sent successfully',uid)
+        /* req.flash('success', 'Email sent successfully');
+    
+  res.redirect('/clerk/viewTermlyInvoiceFile/'+term)*/
+       }
+     })
+    })
+   
+   
+   })
   
   //role admin
   //adding expenses
@@ -4933,7 +5204,7 @@ for(var i = 0; i<ar.length;i++){
        status = 'paid'
       balance = 0
 
-      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amountDue,amountDue:0,status:'paid',receiptNumber:receiptNumber}},function(err,docs){
+      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amountDue,amountDue:0,status:'paid',receiptNumber:receiptNumber,css:"success"}},function(err,docs){
 
       })
      // amount = amount - amountDue
@@ -4967,7 +5238,7 @@ receipt.studentAddress = studentAddress;
 receipt.studentMobile = studentMobile;
 receipt.clerk = clerk1;
 receipt.month= month;
-receipt.filename = 'null';
+receipt.filename = receiptNumber+'_'+studentName;
 receipt.year = year;
 receipt.date = date;
 receipt.type = type;
@@ -4993,14 +5264,7 @@ receipt.save()
   })
 
 
-  router.get('/printReceipt',function(req,res){
-    res.render('accounts/euritReceipt')
-  })
 
-
-  router.get('/dynamic',function(req,res){
-    res.render('abc/dynamic')
-  })
 
 router.get('/arrReceipt',isLoggedIn,function(req,res){
   var code = req.user.recNumber
@@ -5259,7 +5523,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
       /*   console.log('Email sent successfully')*/
          req.flash('success', 'Receipt Emailed Successfully!');
     
-  res.redirect('/clerk//receiptNumberUpdate')
+  res.redirect('/clerk/printReceipt')
        }
           
    console.log(email,'email')
@@ -5281,6 +5545,28 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     
    
    })
+
+
+
+   
+  router.get('/printReceipt',isLoggedIn,function(req,res){
+    var code = req.user.recNumber
+    var pro = req.user
+Receipt.find({receiptNumber:code},function(err,docs){
+if(docs){
+  let receiptNumber = docs[0].receiptNumber
+  let studentName = docs[0].studentName
+  let studentAddress = docs[0].studentAddress
+  let date = docs[0].date
+  let amountPaid = docs[0].amountPaid
+  let amountDue = docs[0].remainingBalance
+  
+  let list = arrReceipt[code]
+    res.render('accounts/euritReceipt',{listX:list,amountPaid:amountPaid,amountDue:amountDue,date:date,pro:pro,receiptNumber:receiptNumber,studentName:studentName,studentAddress:studentAddress})
+}
+  })
+
+})
 
   
   
@@ -5792,7 +6078,7 @@ var year  = 2024
             let invoId = doc[0]._id
        
               console.log('yessssssss')
-            User.find({role:'student',class1:invoiceGrade}).sort({studentNumber:1}).then(rocs=>{
+            User.find({role:'student',grade:invoiceGrade}).sort({studentNumber:1}).then(rocs=>{
       
            
       for(var i = 0;i<rocs.length;i++){
@@ -6034,6 +6320,7 @@ InvoiceSubBatch.find({invoiceCode:invoiceCode},function(err,docs){
     let qty = docs[i].qty
     let price = docs[i].price
     let total = docs[i].total
+   
     let month = docs[i].month
     let year = docs[i].year
     let date = docs[i].date
@@ -6054,11 +6341,13 @@ InvoiceSubBatch.find({invoiceCode:invoiceCode},function(err,docs){
         let studentMobile = locs[x].mobile
         let class1 = locs[x].class1
         let grade = locs[x].grade
+        let id2 = locs[i]._id
         let invoiceNumber = locs[x].invoNumber
 
         var invo = new InvoiceSubFile();
         invo.studentName = studentName
         invo.studentId = studentId
+        invo.studentId2 = id2
         invo.studentAddress = studentAddress
         invo.studentEmail = studentEmail
         invo.studentMobile = studentMobile
@@ -6193,7 +6482,7 @@ var grade = req.user.invoiceGrade
       let studentMobile = arrSub[uid][0].studentMobile
       let studentId = arrSub[uid][0].studentId
       let class1 = docs[i].class1
-      let grade1 = docs[i].grade1
+      let grade = docs[i].grade
       let invoiceNumber = docs[i].invoNumber
       let type = 'Invoice'
       let amountPaid = 0
@@ -6280,12 +6569,13 @@ var grade = req.user.invoiceGrade
   repo.studentAddress = studentAddress
   repo.studentMobile = studentMobile
   repo.class1 = class1
-  repo.grade = grade1;
+  repo.grade = grade;
   repo.filename = invoiceNumber+'_'+studentName+'.pdf';
   repo.year = year;
   repo.term = term
   repo.date = date
   repo.type = type
+  repo.css = 'danger'
   repo.type1 = 'batch'
   repo.amountPaid= amountPaid
   repo.amountDue = amountDue
@@ -6368,10 +6658,12 @@ var grade = req.user.invoiceGrade
     var companyCountry = req.user.companyCountry
     var companyEmail = req.user.companyEmail
     var companyName = req.user.companyName
+    var m = moment()
+    var mformat = m.format('L')
     var errorMsg = req.flash('danger')[0];
     var successMsg = req.flash('success')[0];
     res.render('acc2/singleInvoice',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,pro:pro,companyAddress:companyAddress,
-    companyCity:companyCity,companyCountry:companyCountry,companyEmail:companyEmail,companyName:companyName,companyMobile:companyMobile})
+    companyCity:companyCity,companyCountry:companyCountry,companyEmail:companyEmail,companyName:companyName,companyMobile:companyMobile,mformat:mformat})
   })
   
   /* router.post('/invoice',function(req,res){
@@ -6411,12 +6703,13 @@ var grade = req.user.invoiceGrade
     var studentAddress = req.body.clientAddress
     var studentMobile = req.body.mobile
     var studentId = req.body.uid
+    var studentId2 = req.body.studentId2
     var description = req.body.description2
     var grade = req.body.grade
     var class1 = req.body.class1
     var term = req.user.term
-   
-    ar = req.body['code[]']
+    let balance = req.body.balance
+  ar = req.body['code[]']
   ar1 = req.body['quantity[]']
   ar2=req.body['price[]']
   ar3=req.body['description[]']
@@ -6481,7 +6774,9 @@ var book = new InvoiceSubBatch();
   book.studentAddress =studentAddress
   book.studentMobile = studentMobile
   book.studentId = studentId
+  book.studentId2 = studentId2
   book.date = date
+  book.balance = balance
   book.invoiceDescription = description
   book.status = 'not saved'
   book.invoiceCode = invoNumber
@@ -6557,6 +6852,7 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
    var number1 = 0
    var arr7= []
     var code =req.user.invoNumber
+    let balance 
     InvoiceSubBatch.find({invoNumber:code},function(err,hods){
   
       for(var q = 0;q<hods.length; q++){
@@ -6567,11 +6863,16 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
            number1=0;
           for(var z in arr7) { number1 += arr7[z]; }
           for(var i = 0;i<hods.length;i++){
-  
+            let id2 = hods[i].studentId2
+  balance=hods[i].balance + number
         let id = hods[i]._id
   console.log(id,'333')
           InvoiceSubBatch.findByIdAndUpdate(id,{$set:{subtotal:number1}},function(err,locs){
   
+          })
+
+          User.findByIdAndUpdate(id2,{$set:{balance:balance}},function(err,docs){
+
           })
         }
   
@@ -6672,8 +6973,9 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   let amountDue = arrSingle[uid][0].subtotal
   let term = arrSingle[uid][0].term
   let description = arrSingle[uid][0].invoiceDescription
-  let class1 = 'nursery'
-  let grade1 = 0
+  let id2 = arrSingle[uid][0].studentId2
+  let class1 =arrSingle[uid][0].class1
+  let grade =arrSingle[uid][0].grade
   let invoiceNumber =code
   let date = arrSingle[uid][0].date
   let invoiceId = code
@@ -6749,11 +7051,12 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
    
   repo.studentName = studentName;
   repo.studentId =studentId
+  repo.studentId2 =id2
   repo.studentEmail = studentEmail
   repo.studentAddress = studentAddress
   repo.studentMobile = studentMobile
   repo.class1 = class1
-  repo.grade = grade1;
+  repo.grade = grade;
   repo.filename = invoiceNumber+'_'+studentName+'.pdf';
   repo.year = year;
   repo.term = term

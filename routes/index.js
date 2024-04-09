@@ -778,7 +778,7 @@ console.log(e)
 router.get('/', function (req, res, next) {
     var messages = req.flash('error');
     
-    res.render('users/login', { messages: messages, hasErrors: messages.length > 0});
+    res.render('users/login99', { messages: messages, hasErrors: messages.length > 0});
   });
   router.post('/', passport.authenticate('local.signin', {
     failureRedirect: '/',
