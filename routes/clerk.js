@@ -5504,10 +5504,10 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     var code = req.user.recNumber
    // var term = req.user.term
     //var uid = "ST3104"
-    let studentName = arrReceipt[code][0].studentName
+    /*let studentName = arrReceipt[code][0].studentName
     let studentEmail = arrReceipt[code][0].studentEmail
     let studentId = arrReceipt[code][0].studentId
-    let receiptNumber = arrReceipt[code][0].receiptNumber
+    let receiptNumber = arrReceipt[code][0].receiptNumber*/
     let year = arrReceipt[code][0].year
     let term = arrReceipt[code][0].term
     let amount = arrReceipt[code][0].amountPaid
@@ -5545,12 +5545,13 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     
     try{   
 
-       User.find({uid:studentId},async function(err,docs){
-   
+       InvoiceFile.find({type:"receipt",receiptNumber:recNumber},async function(err,docs){
+   let size = docs.length - 1
       for(var i = 0;i<docs.length;i++){
-        let email = docs[i].email
-        let uid = docs[i].uid
-        let name = docs[i].fullname
+        let email = docs[size].studentEmail
+        let uid = docs[size].studentId
+        let name = docs[size].studentName
+        let receiptNumber = docs[size].receiptNumber
       //  let invoNumber = docs[i].invoNumber 
       
      let mailOptions ={
