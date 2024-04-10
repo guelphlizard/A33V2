@@ -5508,9 +5508,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     let studentEmail = arrReceipt[code][0].studentEmail
     let studentId = arrReceipt[code][0].studentId
     let receiptNumber = arrReceipt[code][0].receiptNumber*/
-    let year = arrReceipt[code][0].year
-    let term = arrReceipt[code][0].term
-    let amount = arrReceipt[code][0].amountPaid
+  
     /*var count = req.user.countN
     count + 1
     let email = 'kratosmusasa@gmail.com'
@@ -5545,24 +5543,27 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     
     try{   
 
-       InvoiceFile.find({type:"Receipt",receiptNumber:recNumber},async function(err,docs){
+       InvoiceFile.find({type:"Receipt",receiptNumber:code},async function(err,docs){
    let size = docs.length - 1
       for(var i = 0;i<docs.length;i++){
         let email = docs[size].studentEmail
         let uid = docs[size].studentId
-        let name = docs[size].studentName
+        let studentName = docs[size].studentName
         let receiptNumber = docs[size].receiptNumber
+        let year = docs[size].year
+        let term = docs[size].term
+        let amount = docs[size].amountPaid
       //  let invoNumber = docs[i].invoNumber 
       
      let mailOptions ={
        from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
                    to:email, // list of receivers
                    subject: `Your Payment  Receipt from ST. EURIT INTERNATIONAL SCHOOL `,
-       html:`Dear ${name}: <br> <br> Your Payment  Receipt ${receiptNumber} for ${amount} is attached . <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       html:`Dear ${studentName}: <br> <br> Your Payment  Receipt ${receiptNumber} for ${amount} is attached . <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
        Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
        attachments: [
          {
-           filename:uid+'_'+name+'_'+'Receipt'+'.pdf',
+           filename:uid+'_'+studentName+'_'+'Receipt'+'.pdf',
            path:`./receiptReports/${year}/${term}/${receiptNumber}_${studentName}.pdf`
          }
        ]
@@ -7127,7 +7128,7 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   repo.invoiceId = invoiceId
   repo.invoiceCode = invoiceCode
   repo.invoiceNumber = invoiceNumber
-  repo.receiptNumber = "null"
+  repo.receiptNumber = 0
   repo.status = "unpaid"
   repo.datePaid = "null"
   repo.save().then(poll =>{
