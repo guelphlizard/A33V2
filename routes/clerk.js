@@ -5545,7 +5545,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     
     try{   
 
-       InvoiceFile.find({type:"receipt",receiptNumber:recNumber},async function(err,docs){
+       InvoiceFile.find({type:"Receipt",receiptNumber:recNumber},async function(err,docs){
    let size = docs.length - 1
       for(var i = 0;i<docs.length;i++){
         let email = docs[size].studentEmail
