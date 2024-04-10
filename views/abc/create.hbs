@@ -1270,30 +1270,39 @@
 																<!--end::Input group-->
 																<!--begin::Input group-->
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Email" name="clientEmail" id="email" />
+																	<input type="text" class="form-control form-control-solid" placeholder="Email" name="clientEmail" id="email" readonly />
 																</div>
 																<!--end::Input group-->
 
 																										<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Mobile" name="mobile" id="mobile" />
+																	<input type="text" class="form-control form-control-solid" placeholder="Mobile" name="mobile" id="mobile" readonly />
 																</div>
 
 																										<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Address" name="clientAddress" id="class1" />
+																	<input type="text" class="form-control form-control-solid" placeholder="Address" name="class1" id="class1" readonly />
 																</div>
 																<!--end::Input group-->
 																<!--begin::Input group-->
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="City" name="clientCity" id="address1" />
+																	<input type="text" class="form-control form-control-solid" placeholder="City" name="clientCity" id="address1" readonly />
 																</div>
 
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Student ID" name="uid" id="uid" />
+																	<input type="text" class="form-control form-control-solid" placeholder="Student ID" name="uid" id="uid"  readonly/>
+																</div>
+
+																<div class="mb-5">
+																	<input type="number" class="form-control form-control-solid" placeholder="Student Balance" name="balance" id="balance" readonly />
 																</div>
 
 																	<div class="mb-5">
 																	<input type="number" class="form-control form-control-solid" placeholder="Enter Amount" name="amountX" id="amountX" />
 																</div>
+
+																
+																	<input type="hidden" class="form-control form-control-solid" placeholder="Student ID" name="studentId2" id="studentId2" />
+															
+
 																<!--begin::Input group--
 																<div class="mb-5">
 																	<textarea  class="form-control form-control-solid" rows="3" placeholder="What is this invoice for?" name="invoiceDescription" id="invoiceDescription"></textarea>
@@ -1858,9 +1867,11 @@
 				 $("#address1").val(data.address1)
 				$("#class1").val(data.class1)
 				$("#grade").val(data.grade)
-				  $("#mobile").val(data.mobile)
-				    $("#amountDue").val(data.amountDue)
-				   $("#uid").val(data.uid)
+				$("#mobile").val(data.mobile)
+				$("#amountDue").val(data.amountDue)
+				$("#uid").val(data.uid)
+				$("#studentId2").val(data._id)
+				$("#balance").val(data.balance)
               
 			loadItems(data.uid)
                  

@@ -2821,7 +2821,7 @@ router.get('/viewMonthlyInvoiceFile/:id',isLoggedIn,function(req,res){
 
   
 
-  InvoiceFile.find({year:year,month:id,type1:"single",type:"Invoice"},function(err,docs){
+  InvoiceFile.find({year:year,month:id,type1:"single"},function(err,docs){
      if(docs){
 
    
@@ -2983,7 +2983,7 @@ router.get('/viewMonthlyReceiptFile/:id',isLoggedIn,function(req,res){
 
   
 
- InvoiceFile.find({year:year,month:id,type:"Receipt"},function(err,docs){
+  Receipt.find({year:year,month:id},function(err,docs){
      if(docs){
 
    
@@ -3005,7 +3005,7 @@ router.get('/downloadMonthlyReceiptReport/:id',isLoggedIn,function(req,res){
   var month = m.format('MMMM')
 
   var mformat = m.format('L')
-  InvoiceFile.findById(req.params.id,function(err,doc){
+  Receipt.findById(req.params.id,function(err,doc){
     var name = doc.filename;
     var year = doc.year
     var term = doc.term
@@ -3022,7 +3022,7 @@ router.get('/downloadMonthlyReceiptReport/:id',isLoggedIn,function(req,res){
 router.get('/emailMonthlyReceiptFile/:id',isLoggedIn,function(req,res){
   var code = req.params.id
   
-  InvoiceFile.findById(req.params.id,function(err,doc){
+  Receipt.findById(req.params.id,function(err,doc){
  /*
 if(doc){
   let term = doc.term
@@ -3039,7 +3039,6 @@ if(doc){
      let year = doc.year
      let term = doc.term
      let month = doc.month
-     let amount = doc.invoiceAmountPaid
    
      
  
@@ -3067,8 +3066,9 @@ if(doc){
    let mailOptions ={
     from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
                    to:email, // list of receivers
-                   subject: `  Payment Receipt ${receiptNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
-       html:`Dear ${name}: <br> <br> Your payment receipt-${receiptNumber} for ${amount} is attached. <br> Thank you for your business - we appreciate it very much. <br> <br>
+                   subject: `  Invoice ${invoNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${name}: <br> <br> Your invoice-${invoNumber} for 690.00 is attached.Please remit payment
+       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
        Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
        attachments: [
          {
@@ -3094,6 +3094,19 @@ res.redirect('/clerk/viewMonthlyReceiptFile/'+month)
  
  
  })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5201,12 +5214,30 @@ for(var i = 0; i<ar.length;i++){
       InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amountDue,amountDue:0,status:'paid',receiptNumber:receiptNumber,css:"success"}},function(err,docs){
 
       })
+     // amount = amount - amountDue
+    }else{
+      status = 'unpaid'
+      balance = amountDue - amount
+    
 
-      User.findByIdAndUpdate(id2,{$set:{balance:newBalance}},function(err,docs){
+      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amount,amountDue:balance,status:'unpaid',receiptNumber:receiptNumber}},function(err,docs){
 
       })
-     // amount = amount - amountDue
-     var receipt = new InvoiceFile();
+      
+
+    }
+    amount = amount - amountDue
+    if(amount < 0 ){
+      amount = 0
+    }
+
+   
+
+
+
+  
+          
+var receipt = new InvoiceFile();
 receipt.studentName = studentName;
 receipt.studentId = studentId;
 receipt.studentId2 = id2;
@@ -5229,12 +5260,9 @@ receipt.amountDue= amountDue;
 receipt.receiptNumber = receiptNumber;
 receipt.status = 'paid';
 receipt.studentBalance = newBalance;
-receipt.amountPaid = amountX2;
+receipt.amountPaid = amountX3;
 receipt.remainingBalance = amount;
 receipt.datePaid = date;
-receipt.invoiceAmountPaid=amountDue;
-receipt.invoiceAmountDue= 0;
-
 
 
 receipt.save()
@@ -5244,72 +5272,6 @@ receipt.save()
  
 
   })
-    }else{
-      status = 'unpaid'
-      balance = amountDue - amount
-    
-
-      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amount,amountDue:balance,status:'unpaid',receiptNumber:receiptNumber}},function(err,docs){
-
-      })
-      
-
-      User.findByIdAndUpdate(id2,{$set:{balance:newBalance}},function(err,docs){
-        
-      })
-      
-      var receipt = new InvoiceFile();
-      receipt.studentName = studentName;
-      receipt.studentId = studentId;
-      receipt.studentId2 = id2;
-      receipt.studentEmail = studentEmail;
-      receipt.studentAddress = studentAddress;
-      receipt.studentMobile = studentMobile;
-      receipt.clerk = clerk1;
-      receipt.class1 = class1;
-      receipt.grade = grade;
-      receipt.month= month;
-      receipt.filename = receiptNumber+'_'+studentName+'.pdf';
-      receipt.year = year;
-      receipt.date = date;
-      receipt.type = type;
-      receipt.type1 = 'single';
-      receipt.name = "PMT";
-      receipt.term= term;
-      receipt.invoiceNumber= invoiceNumber;
-      receipt.amountDue= amountDue;
-      receipt.receiptNumber = receiptNumber;
-      receipt.status = 'paid';
-      receipt.studentBalance = newBalance;
-      receipt.amountPaid = amountX2;
-      receipt.remainingBalance = amount;
-      receipt.datePaid = date;
-      receipt.invoiceAmountPaid=amount;
-      receipt.invoiceAmountDue= balance;
-
-      
-      
-      receipt.save()
-        .then(user =>{
-         
-         
-       
-      
-        })
-      
-
-    }
-    amount = amount - amountDue
-    if(amount < 0 ){
-      amount = 0
-    }
-
-   
-
-
-
-  
-    
    // InvoiceFile.findByIdAndUpdate(id,{$set:{}})
   })
 }
@@ -5614,7 +5576,7 @@ if(docs){
   let studentAddress = docs[size].studentAddress
   let date = docs[size].date
   let amountPaid = docs[size].amountPaid
-  let amountDue = docs[size].invoiceAmountDue
+  let amountDue = docs[size].remainingBalance
   
   let list = arrReceipt[code]
     res.render('accounts/euritReceipt',{listX:list,amountPaid:amountPaid,amountDue:amountDue,date:date,pro:pro,receiptNumber:receiptNumber,studentName:studentName,studentAddress:studentAddress})

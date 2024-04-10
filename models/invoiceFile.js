@@ -14,25 +14,25 @@ invoiceCode:{type:String},
 class1:{type:String},
 grade:{type:Number},
 css:{type:String},
-receiptNumber:{type:String, required:true},
-month:{type:String, required:true},
-filename:{type:String, required:true},
-year:{type:Number, required:true},
-date:{type:String, required:true},
-type:{type:String, required:true},
+receiptNumber:{type:String},
+month:{type:String},
+filename:{type:String},
+year:{type:Number},
+date:{type:String},
+type:{type:String},
 type1:{type:String},
-term:{type:Number, required:true},
-invoiceNumber:{type:Number, required:true},
-status:{type:String, required:true},
-description:{type:String, required:true},
-amountPaid:{type:Number, required:true},
-amountDue:{type:Number, required:true},
-datePaid:{type:String, required:true},
-
-
-
-
-
+term:{type:Number, },
+invoiceNumber:{type:Number},
+status:{type:String },
+name:{type:String },
+description:{type:String },
+amountPaid:{type:Number },
+amountDue:{type:Number },
+invoiceAmountPaid:{type:Number },
+invoiceAmountDue:{type:Number },
+studentBalance:{type:Number },
+remainingBalance:{type:Number, },
+datePaid:{type:String}
 })
 
 module.exports = mongoose.model('invoiceFile1', invoiceFile1Schema );

@@ -74,12 +74,12 @@
      </tr>
      <tr>
         <td colspan="3" style=" height: 50px;"> {{this.0.studentName}} <br>
-        6297 Westlea, Harare</td>
+        {{this.0.studentAddress}}</td>
       
     </tr>
     <tr>
         <td>Date</td>
-        <td style="text-align: end;">28/3/2024</td>
+        <td style="text-align: end;">{{this.0.date}}</td>
      
     </tr>
 
@@ -106,12 +106,12 @@
     margin-right: auto;">
         <tr>
             <td >Payment Amount</td>
-            <td >$55</td>
+            <td >${{this.0.amountPaid}}</td>
          
         </tr>
         <tr>
             <td >Total Amount Due</td>
-            <td >$322.00</td>
+            <td >${{this.0.invoiceAmountDue}}</td>
          
        </tr>
     
@@ -163,7 +163,7 @@ margin-right: auto;   border-collapse: collapse;" >
             <td style="border:1px solid black;
     border-top: none;
     border-bottom: none;">
-                13-Feb-2024
+        {{this.date}}
             </td>
            
             <td style="border:1px solid black;
