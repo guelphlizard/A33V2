@@ -5936,7 +5936,7 @@ var c = {type:" ",invoiceNumber:"",_id:"",amountDue:"0.00"}
       
      
    // InvoiceFile.find({term:code,/*code:uid*/datePaid:"now"},function(err,docs){
-      InvoiceFile.find({studentId:code,term:term}).lean().sort({code:1}).then(docs=>{
+      InvoiceFile.find({studentId:code,term:term,status:"unpaid"}).lean().sort({code:1}).then(docs=>{
         docs.push(c)
      if(docs == undefined){
        res.redirect('/')
