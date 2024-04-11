@@ -7082,13 +7082,10 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   
   await page.setContent(content, { waitUntil: 'networkidle2'});
   //await page.setContent(content)
-  //create a pdf document
-  
-           
-  await page.emulateMediaType('screen')
-  let height = await page.evaluate(() => document.documentElement.offsetHeight);
-  await page.evaluate(() => matchMedia('screen').matches);
-  await page.setContent(content, { waitUntil: 'networkidle0'});
+ //create a pdf document
+ await page.emulateMediaType('screen')
+ await page.evaluate(() => matchMedia('screen').matches);
+ await page.setContent(content, { waitUntil: 'networkidle0'});
   //console.log(await page.pdf(),'7777')
   
   await page.pdf({
@@ -7096,8 +7093,8 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   path:(`./invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
   format:"A4",
   /*width:'30cm',
-  height:'21cm',*/
-  height: height + 'px',
+height:'21cm',*/
+  //height: height + 'px',
     printBackground:true
   
   })

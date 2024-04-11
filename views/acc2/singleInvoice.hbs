@@ -1602,6 +1602,74 @@
 
 
 
+
+
+
+
+
+	
+    <script>
+      $(function(){
+    $('#code2').autocomplete({
+    source: function(req,res){
+
+      $.ajax({
+        url:"/clerk/autocompleteXN/",
+        dataType:"jsonp",
+        type:"GET",
+        data:req,
+        success: function(data){
+          res(data)
+        
+
+        },
+        error: function(err){
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength:1,
+    select: function(event,ui){
+
+  $.ajax({
+                dataType: 'json',
+                data: {
+                    code: ui.item.label,
+                    
+                },
+                type: 'POST',
+                url: "/clerk/autoXN",
+                success: function(data) {
+               
+                let price = data.price * 1
+                 $("#code2").val(data.code)
+				  $("#description2").val(data.item)
+                 $("#price2").val(data.price)
+				   
+				$("#xid").val(data._id)
+             
+
+	 document.querySelector('[data-kt-element="total"] [id="total2"]').innerText  = data.price
+			
+                 
+          
+                }
+               
+            });
+ 
+
+
+
+  
+    }
+
+
+
+    });
+
+      });
+      </script> 
 	
 		
     <script>

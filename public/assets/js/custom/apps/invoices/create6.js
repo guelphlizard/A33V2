@@ -40,8 +40,11 @@ var KTAppInvoicesCreate = function ()
         var yt = e.querySelectorAll(' [data-kt-element="item"]').length;
 
         let c = 0
-        let v = c + yt
-        console.log(v,'777')
+        let v = c + yt + 1
+       if( v ==2){
+         v = v + 1
+         yt = yt + 1
+       }
         document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+v
    
         document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'code'+v
@@ -208,13 +211,16 @@ console.log(v - 1,'vv')
                                   $("#code2").val(data.code)
                                   $("#description2").val(data.item)
                                $("#price2").val(data.price)  
+                          
                                /*  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').innerText= data.price
                                  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').textContent= data.price
                                  console.log(document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]' ),'555555')*/
 //$("#price2").val(data.price)   
+console.log(data._id,'riya riya')
+                          
 document.querySelector(' [id="total2"]').innerText  = data.price
-$("#description2").val(data.item)
-                              
+document.querySelector(' [id="description2"]').textContent = data.item
+document.querySelector(' [id="description2"]').innerText = data.item
                             
                                  
                           
@@ -611,4 +617,472 @@ $("#description3").val(data.item)
                         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
                 })
 
+
+
+
+
                 
+                $('body').on('click','#code6', function (e) {
+
+                  console.log('6666666666666')
+
+
+                  
+                  $('.form-control').autocomplete({
+                      source: function(req,res){
+                  
+                        $.ajax({
+                          url:"/clerk/autocompleteXN/",
+                          dataType:"jsonp",
+                          type:"GET",
+                          data:req,
+                          success: function(data){
+                            res(data)
+                          
+                  
+                          },
+                          error: function(err){
+                            console.log(err.status);
+                          }
+                        });
+                      },
+                  
+                      minLength:2,
+                      select: function(event,ui){
+                  
+                    $.ajax({
+                                  dataType: 'json',
+                                  data: {
+                                      code: ui.item.label,
+                                      
+                                  },
+                                  type: 'POST',
+                                  url: "/clerk/autoXN",
+                                  success: function(data) {
+                                 
+                                  
+                                  
+                                    $("#code6").val(data.code)
+                                    $("#description6").val(data.item)
+                                   $("#price6").val(data.price)
+                                     $("#total6").textContent=data.price
+                                  $("#xid").val(data._id)
+                                  document.querySelector(' [id="total6"]').innerText  = data.price
+                                
+                              
+                                   
+                            
+                                  }
+                                 
+                              });
+                   
+                  
+                  
+                  
+                    
+                      }
+                  
+                  
+                  
+                      });
+                  
+                        
+              
+              
+                        `
+                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+                    <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+                     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+                      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+                      <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+                      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+                        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
+              })
+
+              
+                
+
+              
+              $('body').on('click','#code7', function (e) {
+
+                console.log('7777777777')
+
+
+                
+                $('.form-control').autocomplete({
+                    source: function(req,res){
+                
+                      $.ajax({
+                        url:"/clerk/autocompleteXN/",
+                        dataType:"jsonp",
+                        type:"GET",
+                        data:req,
+                        success: function(data){
+                          res(data)
+                        
+                
+                        },
+                        error: function(err){
+                          console.log(err.status);
+                        }
+                      });
+                    },
+                
+                    minLength:2,
+                    select: function(event,ui){
+                
+                  $.ajax({
+                                dataType: 'json',
+                                data: {
+                                    code: ui.item.label,
+                                    
+                                },
+                                type: 'POST',
+                                url: "/clerk/autoXN",
+                                success: function(data) {
+                               
+                                
+                                
+                                  $("#code7").val(data.code)
+                                  $("#description7").val(data.item)
+                                 $("#price7").val(data.price)
+                                   $("#total7").textContent=data.price
+                                $("#xid").val(data._id)
+                                document.querySelector(' [id="total7"]').innerText  = data.price
+                              
+                            
+                                 
+                          
+                                }
+                               
+                            });
+                 
+                
+                
+                
+                  
+                    }
+                
+                
+                
+                    });
+                
+                      
+            
+            
+                      `
+                      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+                  <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+                   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+                    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+                    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+                      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
+            })
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            $('body').on('click','#code8', function (e) {
+
+              console.log('555555555555')
+
+
+              
+              $('.form-control').autocomplete({
+                  source: function(req,res){
+              
+                    $.ajax({
+                      url:"/clerk/autocompleteXN/",
+                      dataType:"jsonp",
+                      type:"GET",
+                      data:req,
+                      success: function(data){
+                        res(data)
+                      
+              
+                      },
+                      error: function(err){
+                        console.log(err.status);
+                      }
+                    });
+                  },
+              
+                  minLength:2,
+                  select: function(event,ui){
+              
+                $.ajax({
+                              dataType: 'json',
+                              data: {
+                                  code: ui.item.label,
+                                  
+                              },
+                              type: 'POST',
+                              url: "/clerk/autoXN",
+                              success: function(data) {
+                             
+                              
+                              
+                                $("#code8").val(data.code)
+                                $("#description8").val(data.item)
+                               $("#price8").val(data.price)
+                                 $("#total8").textContent=data.price
+                              $("#xid").val(data._id)
+                              document.querySelector(' [id="total8"]').innerText  = data.price
+                            
+                          
+                               
+                        
+                              }
+                             
+                          });
+               
+              
+              
+              
+                
+                  }
+              
+              
+              
+                  });
+              
+                    
+          
+          
+                    `
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+                <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+                 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+                  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+                  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+                  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+                    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
+          })
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          $('body').on('click','#code9', function (e) {
+
+            console.log('999999999')
+
+
+            
+            $('.form-control').autocomplete({
+                source: function(req,res){
+            
+                  $.ajax({
+                    url:"/clerk/autocompleteXN/",
+                    dataType:"jsonp",
+                    type:"GET",
+                    data:req,
+                    success: function(data){
+                      res(data)
+                    
+            
+                    },
+                    error: function(err){
+                      console.log(err.status);
+                    }
+                  });
+                },
+            
+                minLength:2,
+                select: function(event,ui){
+            
+              $.ajax({
+                            dataType: 'json',
+                            data: {
+                                code: ui.item.label,
+                                
+                            },
+                            type: 'POST',
+                            url: "/clerk/autoXN",
+                            success: function(data) {
+                           
+                            
+                            
+                              $("#code9").val(data.code)
+                              $("#description9").val(data.item)
+                             $("#price9").val(data.price)
+                               $("#total9").textContent=data.price
+                            $("#xid").val(data._id)
+                            document.querySelector(' [id="total9"]').innerText  = data.price
+                          
+                        
+                             
+                      
+                            }
+                           
+                        });
+             
+            
+            
+            
+              
+                }
+            
+            
+            
+                });
+            
+                  
+        
+        
+                  `
+                  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+              <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+               <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+                <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+                <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+                  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
+        })
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        $('body').on('click','#code10', function (e) {
+
+          console.log('555555555555')
+
+
+          
+          $('.form-control').autocomplete({
+              source: function(req,res){
+          
+                $.ajax({
+                  url:"/clerk/autocompleteXN/",
+                  dataType:"jsonp",
+                  type:"GET",
+                  data:req,
+                  success: function(data){
+                    res(data)
+                  
+          
+                  },
+                  error: function(err){
+                    console.log(err.status);
+                  }
+                });
+              },
+          
+              minLength:2,
+              select: function(event,ui){
+          
+            $.ajax({
+                          dataType: 'json',
+                          data: {
+                              code: ui.item.label,
+                              
+                          },
+                          type: 'POST',
+                          url: "/clerk/autoXN",
+                          success: function(data) {
+                         
+                          
+                          
+                            $("#code10").val(data.code)
+                            $("#description10").val(data.item)
+                           $("#price10").val(data.price)
+                             $("#total10").textContent=data.price
+                          $("#xid").val(data._id)
+                          document.querySelector(' [id="total10"]').innerText  = data.price
+                        
+                      
+                           
+                    
+                          }
+                         
+                      });
+           
+          
+          
+          
+            
+              }
+          
+          
+          
+              });
+          
+                
+      
+      
+                `
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+             <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+              <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+              <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+              <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+              <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+              <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+                <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+              <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+              <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
+      })
+
+      
