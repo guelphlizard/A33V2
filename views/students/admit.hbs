@@ -1822,7 +1822,7 @@
 																	<span class="required">DOB</span>
 																</label>
 																<!--end::Label-->
-																<input type="date" class="form-control form-control-solid" name="dob" id="dob" value=""  {{readonly}} />
+																<input type="date" class="form-control form-control-solid" name="dob" id="dob" value=""  />
 															</div>
 															<!--end::Input group-->
 														</div>
@@ -1867,11 +1867,22 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<select id="grade" name="grade"  class="form-select form-select-solid fw-bolder"  {{readonly}}>
+																<select id="grade" name="grade"  class="form-select form-select-solid fw-bolder">
 																	
-																	   {{#each arr}}
+
+
+																		<option></option>
+																		<option value="0" >0</option>
+																		<option value="1" >1</option>
+																		<option value="2" >2</option>
+																		<option value="3" >3</option>
+																		<option value="4" >4</option>
+																		<option value="5" >5</option>
+																		<option value="6" >6</option>
+																	
+																	 <!--  {{#each arr}}
                                                                <option value="{{this.grade}}">{{this.grade}}</option>
-                                                                     {{/each}}
+                                                                     {{/each}}-->
 																	
 																</select>
 																<!--end::Input-->

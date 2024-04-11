@@ -3408,7 +3408,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
             req.flash('danger', req.session.errors[0].msg);
          
           
-            res.redirect('/addStudent');
+            res.redirect('/records/addStudent');
     
           
         }
@@ -3423,7 +3423,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
                 
         req.flash('danger', 'Email/User already in use');
    
-        res.redirect('/addStudent');
+        res.redirect('/records/addStudent');
         }
         
                       else  {   
@@ -3463,7 +3463,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
                         user.paymentId = 'null';
                         user.suffix = suffix;
                         user.photo = "propic.jpg";
-                        user.level = 'null';
+                        user.level = 0;
                         user.levelX = 'normal';
                         user.pollUrl ='null';
                         user.annual = 0;
@@ -3571,7 +3571,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
                             User.findByIdAndUpdate(id,{$set:{idNumber:idNumber}},function(err,locs){
                             
                               req.flash('success', 'Student Registered Successfully');
-                            res.redirect('/addStudent')
+                            res.redirect('/records/addStudent')
                             })
                          
                         

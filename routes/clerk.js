@@ -7094,8 +7094,8 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   await page.pdf({
   //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
   path:(`./invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
-  /*format:"A4",
-  width:'30cm',
+  format:"A4",
+  /*width:'30cm',
   height:'21cm',*/
   height: height + 'px',
     printBackground:true
@@ -7139,9 +7139,9 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   /*await browser.close()
   
   /*process.exit()*/
-req.flash('success', 'Invoice Generation Successful');
+//req.flash('success', 'Invoice Generation Successful');
   
-  res.redirect('/clerk/invoiceSingleCode');
+  res.redirect('/clerk/genEmailInvoice');
   
   
   }catch(e) {
@@ -7166,6 +7166,115 @@ req.flash('success', 'Invoice Generation Successful');
 
 
 
+
+  
+  router.get('/genEmailInvoice',isLoggedIn,function(req,res){
+    var m = moment()
+    var mformat = m.format('L')
+    var month = m.format('MMMM')
+   // var year = m.format('YYYY')
+    var id= req.user._id
+    var code = req.user.invoNumber
+   // var term = req.user.term
+    //var uid = "ST3104"
+    /*let studentName = arrReceipt[code][0].studentName
+    let studentEmail = arrReceipt[code][0].studentEmail
+    let studentId = arrReceipt[code][0].studentId
+    let receiptNumber = arrReceipt[code][0].receiptNumber*/
+  
+    /*var count = req.user.countN
+    count + 1
+    let email = 'kratosmusasa@gmail.com'
+    let uid = req.user.studentId
+    let name = req.user.studentName
+    let invoNumber = 3490*/
+  
+     const transporter = nodemailer.createTransport({
+       host: 'mail.steuritinternationalschool.org',
+       port:465,
+       secureConnection:true,
+       logger:true,
+       debug:true,
+       secureConnection:false,
+       auth: {
+           user: "admin@steuritinternationalschool.org",
+           pass: "steurit2024",
+       },
+       tls:{
+         rejectUnAuthorized:true
+       }
+       //host:'smtp.gmail.com'
+     });
+     
+   
+
+             
+  
+  (async function(){
+  
+
+    
+    try{   
+
+       InvoiceFile.find({type:"Invoice",invoiceNumber:code},async function(err,docs){
+  if(docs){
+    let email = docs[0].studentEmail
+    let uid = docs[0].studentId
+    let studentName = docs[0].studentName
+    let invoiceNumber = docs[0].invoiceNumber
+    let amount = docs[0].amountDue
+    let year = docs[0].year
+    let term = docs[0].term
+
+      //  let invoNumber = docs[i].invoNumber 
+      
+     let mailOptions ={
+      from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
+                     to:email, // list of receivers
+                     subject: `  Invoice ${invoiceNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+         html:`Dear ${studentName}: <br> <br> Your invoice-${invoiceNumber} for ${amount} is attached.Please remit payment
+         at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+         Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
+         attachments: [
+          {
+            filename:uid+'_'+studentName+'_'+'Invoice'+'.pdf',
+            path:`./invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}.pdf`
+          }
+        ]
+     };
+   await  transporter.sendMail(mailOptions, function (error,info){
+       if(error){
+         //console.log(error)
+         req.flash('danger', 'Reports Not Emailed!');
+    
+  /*res.redirect('/clerk/dashX')*/
+  res.redirect('/clerk/invoiceSingleCode')
+       }else{
+      /*   console.log('Email sent successfully')*/
+         req.flash('success', 'Invoice Emailed Successfully!');
+    
+  res.redirect('/clerk/invoiceSingleCode')
+       }
+          
+   console.log(email,'email')
+     })
+
+    }
+  })
+    }catch(e) {
+    
+      console.log(e)
+    
+    
+    }
+  
+    
+    }) ()
+  
+   
+    
+   
+   })
 
 
 

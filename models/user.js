@@ -40,7 +40,7 @@ var userSchema = new mongoose.Schema({
     feesUpdate:{type:String, required:true},
     year:{type:Number, required:true},
     balance:{type:Number, required:true},
-   portalBalance:{type:Number, required:true},
+   portalBalance:{type:Number},
     balance2:{type:Number},
     balanceCarriedOver:{type:Number, required:true},
     status:{type:String, required:true},

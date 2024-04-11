@@ -1522,7 +1522,17 @@
 
 
 
+<script>
+	(function () {
+    var date = new Date().toISOString().substring(0, 10),
+        field = document.querySelector('#invoice_date');
+		field2 = document.querySelector('#invoice_due_date');
+    field.value = date;
+	field2.value = date;
+    console.log(field.value);
 
+})()
+</script>
 
 
 	
