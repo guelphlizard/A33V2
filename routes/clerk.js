@@ -5161,14 +5161,18 @@ var type = 'Receipt'
   console.log(ar)
   ar = ar.filter(v=>v!='')
 let amount = req.body.amountX
-let amountX2 = req.body.amountX
+let amountX9 = req.body.amountX
 let amountX3 = 0 - amountX2
 let amountX4 = req.body.amountX
 let class1 = req.body.class1
 let grade = req.body.grade
 let status, balance
 var receiptNumber = req.user.recNumber
+let totalAmountOwing
 console.log(ar,'iwee')
+let reg = /\d+\.*\d*/g;  
+let result = amountX9.match(reg)
+let amountX2= Number(result)
 
 
 req.check('amountX','Enter Amount').notEmpty();
@@ -5187,6 +5191,13 @@ if (errors) {
 
 }
 let newBalance = studentBalance - amountX4
+if(newBalance > 0){
+
+totalAmountOwing = newBalance
+
+}else{
+  totalAmountOwing = 0
+}
 for(var i = 0; i<ar.length;i++){
   console.log(ar[i])
   let id = ar[i]
@@ -5194,11 +5205,12 @@ for(var i = 0; i<ar.length;i++){
   InvoiceFile.findById(id,function(err,doc){
     let amountDue = doc.amountDue 
     let invoiceNumber = doc.invoiceNumber
+    let studentBal = doc.studentBalance + amountX2
     if(amount >= amountDue){
        status = 'paid'
       balance = 0
 
-      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amountDue,amountDue:0,status:'paid',receiptNumber:receiptNumber,css:"success"}},function(err,docs){
+      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amountDue,amountDue:0,status:'paid',receiptNumber:receiptNumber,css:"success",remainingBalance:totalAmountOwing}},function(err,docs){
 
       })
 
@@ -5228,9 +5240,9 @@ receipt.invoiceNumber= invoiceNumber;
 receipt.amountDue= amountDue;
 receipt.receiptNumber = receiptNumber;
 receipt.status = 'paid';
-receipt.studentBalance = newBalance;
+receipt.studentBalance = studentBal;
 receipt.amountPaid = amountX2;
-receipt.remainingBalance = amount;
+receipt.remainingBalance = totalAmountOwing;
 receipt.datePaid = date;
 receipt.invoiceAmountPaid=amountDue;
 receipt.invoiceAmountDue= 0;
@@ -5249,7 +5261,7 @@ receipt.save()
       balance = amountDue - amount
     
 
-      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amount,amountDue:balance,status:'unpaid',receiptNumber:receiptNumber}},function(err,docs){
+      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amount,amountDue:balance,status:'unpaid',receiptNumber:receiptNumber,remainingBalance:totalAmountOwing}},function(err,docs){
 
       })
       
@@ -5280,9 +5292,9 @@ receipt.save()
       receipt.amountDue= amountDue;
       receipt.receiptNumber = receiptNumber;
       receipt.status = 'paid';
-      receipt.studentBalance = newBalance;
+      receipt.studentBalance = studentBal;
       receipt.amountPaid = amountX2;
-      receipt.remainingBalance = amount;
+      receipt.remainingBalance = totalAmountOwing;
       receipt.datePaid = date;
       receipt.invoiceAmountPaid=amount;
       receipt.invoiceAmountDue= balance;
@@ -5545,7 +5557,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
 
        InvoiceFile.find({type:"Receipt",receiptNumber:code},async function(err,docs){
    let size = docs.length - 1
-      for(var i = 0;i<docs.length;i++){
+ 
         let email = docs[size].studentEmail
         let uid = docs[size].studentId
         let studentName = docs[size].studentName
@@ -5585,7 +5597,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
    console.log(email,'email')
      })
 
-    }
+    
   })
     }catch(e) {
     
@@ -5616,7 +5628,7 @@ if(docs){
   let studentAddress = docs[size].studentAddress
   let date = docs[size].date
   let amountPaid = docs[size].amountPaid
-  let amountDue = docs[size].invoiceAmountDue
+  let amountDue = docs[size].remainingBalance
   
   let list = arrReceipt[code]
     res.render('accounts/euritReceipt',{listX:list,amountPaid:amountPaid,amountDue:amountDue,date:date,pro:pro,receiptNumber:receiptNumber,studentName:studentName,studentAddress:studentAddress})
@@ -7028,6 +7040,8 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   let studentMobile = arrSingle[uid][0].studentMobile
   let studentId = arrSingle[uid][0].studentId
   let amountDue = arrSingle[uid][0].subtotal
+  let balance = arrSingle[uid][0].balance
+  let bf = balance + amountDue
   let term = arrSingle[uid][0].term
   let description = arrSingle[uid][0].invoiceDescription
   let id2 = arrSingle[uid][0].studentId2
@@ -7117,10 +7131,12 @@ height:'21cm',*/
   repo.term = term
   repo.description = description
   repo.date = date
+  repo.studentBalance = bf
   repo.type = type
   repo.type1 = "single"
   repo.amountPaid= amountPaid
   repo.amountDue = amountDue
+  repo.invoiceTotal = amountDue
   repo.month = month
   repo.invoiceId = invoiceId
   repo.invoiceCode = invoiceCode

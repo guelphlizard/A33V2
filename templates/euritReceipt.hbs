@@ -111,7 +111,7 @@
         </tr>
         <tr>
             <td >Total Amount Due</td>
-            <td >${{this.0.invoiceAmountDue}}</td>
+            <td >${{this.0.remainingBalance}}</td>
          
        </tr>
     
@@ -144,11 +144,11 @@ margin-right: auto;   border-collapse: collapse;" >
 
             
             <th style="text-align:center;">
-               Amount Paid
+               AMT DUE <br>($)
                </th>
 
                <th style="text-align:center; ">
-                Amount Due
+                AMT PAID <br> ($)
                 </th>
         
         </tr>
@@ -181,17 +181,27 @@ margin-right: auto;   border-collapse: collapse;" >
             <td style="border:1px solid black;
     border-top: none;
     border-bottom: none;text-align:end;">
-               {{this.amountDue}}
+               {{this.invoiceTotal}}
              </td>
         </tr>
      
+ {{/each}}
 
+    <tr style="border: 1px; height: 400px;">
+                            
+                        <td></td>
+                         <td></td>
+                          <td></td>
+                            <td></td>
+                              <td></td>
+                                    
+                                </tr>
 
              
        
      
     </tbody>
-     {{/each}}
+    
  
 </table>
 </body>
