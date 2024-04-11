@@ -5162,7 +5162,7 @@ var type = 'Receipt'
   ar = ar.filter(v=>v!='')
 let amount = req.body.amountX
 let amountX9 = req.body.amountX
-let amountX3 = 0 - amountX2
+let amountX3 = 0 - amountX9
 let amountX4 = req.body.amountX
 let class1 = req.body.class1
 let grade = req.body.grade
@@ -5240,7 +5240,7 @@ receipt.invoiceNumber= invoiceNumber;
 receipt.amountDue= amountDue;
 receipt.receiptNumber = receiptNumber;
 receipt.status = 'paid';
-receipt.studentBalance = studentBal;
+receipt.studentBalance = newBalance;
 receipt.amountPaid = amountX2;
 receipt.remainingBalance = totalAmountOwing;
 receipt.datePaid = date;
@@ -5292,7 +5292,7 @@ receipt.save()
       receipt.amountDue= amountDue;
       receipt.receiptNumber = receiptNumber;
       receipt.status = 'paid';
-      receipt.studentBalance = studentBal;
+      receipt.studentBalance = newBalance;
       receipt.amountPaid = amountX2;
       receipt.remainingBalance = totalAmountOwing;
       receipt.datePaid = date;
@@ -7188,6 +7188,7 @@ height:'21cm',*/
    // var year = m.format('YYYY')
     var id= req.user._id
     var code = req.user.invoNumber
+    console.log(code,'code')
    // var term = req.user.term
     //var uid = "ST3104"
     /*let studentName = arrReceipt[code][0].studentName
@@ -7223,13 +7224,10 @@ height:'21cm',*/
 
              
   
-  (async function(){
   
 
-    
-    try{   
-
-       InvoiceFile.find({type:"Invoice",invoiceNumber:code},async function(err,docs){
+       InvoiceFile.find({type:"Invoice",invoiceNumber:code}, function(err,docs){
+         console.log(docs.length,'length')
   if(docs.length > 0){
     let email = docs[0].studentEmail
     let uid = docs[0].studentId
@@ -7255,7 +7253,7 @@ height:'21cm',*/
           }
         ]
      };
-   await  transporter.sendMail(mailOptions, function (error,info){
+     transporter.sendMail(mailOptions, function (error,info){
        if(error){
          //console.log(error)
          req.flash('danger', 'Reports Not Emailed!');
@@ -7274,15 +7272,10 @@ height:'21cm',*/
 
     }
   })
-    }catch(e) {
-    
-      console.log(e)
-    
-    
-    }
+   
   
     
-    }) ()
+   
   
    
     
