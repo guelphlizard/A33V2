@@ -7214,7 +7214,7 @@ height:'21cm',*/
     try{   
 
        InvoiceFile.find({type:"Invoice",invoiceNumber:code},async function(err,docs){
-  if(docs){
+  if(docs.length > 0){
     let email = docs[0].studentEmail
     let uid = docs[0].studentId
     let studentName = docs[0].studentName
