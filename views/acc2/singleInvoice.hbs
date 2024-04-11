@@ -1349,7 +1349,7 @@
                                                                      <input type="hidden" name="id[]" id="xid" data-kt-element="xid" >
 
 																		<td class="pt-8 text-end text-nowrap">$
-																		<span data-kt-element="total" id="total2">0.00</span></td>
+																		<span data-kt-element="total" id="total">0.00</span></td>
 																		<td class="pt-5 text-end">
 																			<button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
 																				<!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
@@ -1387,7 +1387,7 @@
 																		<th></th>
 																		<th colspan="2" class="fs-4 ps-0">Total</th>
 																		<th colspan="2" class="text-end fs-4 text-nowrap">$
-																		<span data-kt-element="grand-total">0.00</span></th>
+																		<span data-kt-element="grand-total" id="grand-total">0.00</span></th>
 																	</tr>
 																</tfoot>
 																<!--end::Table foot-->
@@ -1421,7 +1421,7 @@
 															
 																<input type="hidden" name="id[]" id="xid1" data-kt-element="xid">
 																<td class="pt-8 text-end">$
-																<span data-kt-element="total">0.00</span></td>
+																<span data-kt-element="total" id="total1">0.00</span></td>
 																
 
 
@@ -1571,13 +1571,15 @@
                 url: "/clerk/autoXN",
                 success: function(data) {
                
-                
+                let price = data.price * 1
                  $("#code1").val(data.code)
 				  $("#description1").val(data.item)
                  $("#price").val(data.price)
-				   $("#total2").textContent=data.price
+				   
 				$("#xid").val(data._id)
-              
+             
+
+	 document.querySelector('[data-kt-element="total"] [id="total1"]').innerText  = data.price
 			
                  
           
@@ -1637,12 +1639,14 @@
                 success: function(data) {
                
                 
-                
+                let price = data.price * 1
                 $("#code").val(data.code)
 				  $("#description").val(data.item)
                  $("#price").val(data.price)
-				   $("#total2").textContent=data.price
+				 
+			  document.querySelector('[data-kt-element="total"]').innerText  = data.price
 				$("#xid").val(data._id)
+			
               
 			
                  

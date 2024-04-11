@@ -49,6 +49,7 @@ var KTAppInvoicesCreate = function ()
         document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').id= 'xid'+v
 
         document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="description"] ').id= 'description'+v
+        document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="total"] ').id= 'total'+v
 
 console.log(v - 1,'vv')
    document.getElementById(`code${v}`).value=''
@@ -116,9 +117,11 @@ console.log(v - 1,'vv')
                                  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').textContent= data.price
                                  console.log(document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]' ),'555555')*/
 //$("#price2").val(data.price)   
-                                   $("#total2").textContent=data.price
+                              
                                 //$("#xid").val(data._id)
                                 console.log(data._id,'dataId')
+                          
+                                document.querySelector(' [id="total1"]').innerText  = data.price
                               
                             
                                  
@@ -209,9 +212,8 @@ console.log(v - 1,'vv')
                                  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').textContent= data.price
                                  console.log(document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]' ),'555555')*/
 //$("#price2").val(data.price)   
-                                   $("#total2").textContent=data.price
-                                //$("#xid").val(data._id)
-                                console.log(data._id,'dataId')
+document.querySelector(' [id="total2"]').innerText  = data.price
+$("#description2").val(data.item)
                               
                             
                                  
@@ -307,10 +309,8 @@ console.log(v - 1,'vv')
                                  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').textContent= data.price
                                  console.log(document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]' ),'555555')*/
 //$("#price2").val(data.price)   
-                                   $("#total2").textContent=data.price
-                                //$("#xid").val(data._id)
-                                console.log(data._id,'dataId')
-                              
+document.querySelector(' [id="total3"]').innerText  = data.price
+$("#description3").val(data.item)
                             
                                  
                           
@@ -401,7 +401,7 @@ console.log(v - 1,'vv')
                                     
                                      $("#item1").val(data.item)
                                      $("#price1").val(data.price)
-                                       $("#total2").textContent=data.price
+                                     document.querySelector('[data-kt-element="total"]').innerText  = data.price
                                     $("#xid").val(data._id)
                                   
                                 
@@ -489,7 +489,7 @@ console.log(v - 1,'vv')
 //$("#price2").val(data.price)   
                                        $("#total4").textContent=data.price
                                     //$("#xid").val(data._id)
-                                    console.log(data._id,'dataId')
+                                    document.querySelector(' [id="total4"]').innerText  = data.price
                                   
                                 
                                      
@@ -575,6 +575,7 @@ console.log(v - 1,'vv')
                                      $("#price5").val(data.price)
                                        $("#total2").textContent=data.price
                                     $("#xid").val(data._id)
+                                    document.querySelector(' [id="total5"]').innerText  = data.price
                                   
                                 
                                      
