@@ -1341,14 +1341,14 @@
 																		
 																		</td>
 																		<td>
-																			<input type="text" class="form-control form-control-solid text-end mb-2" name="price[]" id="price" placeholder="0.00" value="0.00" data-kt-element="price" />
+																			<input type="number" class="form-control form-control-solid text-end mb-2" name="price[]" id="price" placeholder="0.00" value="0.00" data-kt-element="price" />
 
 																			<input type="number" class="form-control form-control-solid text-end" name="amountDue[]" id="amountDue" placeholder="0.00" value="" data-kt-element="amountDue" />
 																		</td>
                                                                      <input type="hidden" name="id[]" id="xid" data-kt-element="xid" >
 
 																		<td class="pt-8 text-end text-nowrap">$
-																		<span data-kt-element="total" id="total2">0.00</span></td>
+																		<span data-kt-element="total" id="total0">0.00</span></td>
 																		<td class="pt-5 text-end">
 																			<button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
 																				<!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
@@ -1374,19 +1374,19 @@
 																		</th>
 																		<th colspan="2" class="border-bottom border-bottom-dashed ps-0">
 																			<div class="d-flex flex-column align-items-start">
-																				<div class="fs-5">Subtotal</div>
+																				<div class="fs-5">Amount</div>
 																				<!--<button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add tax</button>
 																				<button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add discount</button>-->
 																			</div>
 																		</th>
 																		<th colspan="2" class="border-bottom border-bottom-dashed text-end">$
-																		<span data-kt-element="sub-total">0.00</span></th>
+																		<span data-kt-element="sub-total"></span></th>
 																	</tr>
 																	<tr class="align-top fw-bolder text-gray-700">
 																		<th></th>
-																		<th colspan="2" class="fs-4 ps-0">Total</th>
+																		<th colspan="2" class="fs-4 ps-0">Remaining Balance</th>
 																		<th colspan="2" class="text-end fs-4 text-nowrap">$
-																		<span data-kt-element="grand-total">0.00</span></th>
+																		<span data-kt-element="grand-total"></span></th>
 																	</tr>
 																</tfoot>
 																<!--end::Table foot-->
@@ -1409,7 +1409,7 @@
 																	<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" id="quantity1" placeholder="1" data-kt-element="quantity" />
 																</td>
 																	<td>
-																			<input type="text" class="form-control form-control-solid text-end mb-2" name="price1[]" id="price1" placeholder="0.00" value="0.00" data-kt-element="price" />
+																			<input type="number" class="form-control form-control-solid text-end mb-2" name="price1[]" id="price1" placeholder="0.00" value="0.00" data-kt-element="price" />
 
 																			<input type="number" class="form-control form-control-solid text-end" name="amountDue[]" id="amountDue1" placeholder="0.00" value="0.00" data-kt-element="amountDue" />
 																		</td>
@@ -1417,7 +1417,7 @@
 															
 																<input type="hidden" name="id[]" id="xid1" data-kt-element="xid">
 																<td class="pt-8 text-end">$
-																<span data-kt-element="total">0.00</span></td>
+																<span data-kt-element="total" id="total1">0.00</span></td>
 																
 
 
@@ -1918,6 +1918,8 @@
 
 	
 function loadItems(code){
+	let arr16 = []
+	let number1
 console.log(code,'code')
   $.ajax({
     dataType: 'json',
@@ -1929,20 +1931,44 @@ console.log(code,'code')
     url: "/clerk/autoInvo",
     success: function(data) {
    console.log(data,'xxxxxxxxAutoInvo')
-    
+    for(var i=0;i<data.length-1;i++){
+  
+        console.log(data,'datata')
+      
+    arr16.push(data[i].amountDue)
+
+	   number1=0;
+      for(var z in arr16) { number1 += arr16[z]; }
+
+	}
 
       for(var i=0;i<data.length;i++){
   
-        console.log(i,'iiiiiiiii')
+        console.log(data,'datata')
+      
+    arr16.push(data[i].amountDue)
+      
+      //adding all incomes from all lots of the same batch number & growerNumber & storing them in variable called total
+    
+	  console.log(arr16,'arr16')
 
         if(i == 0){
 
              document.getElementById("price").value= data[i].amountDue
        document.getElementById("amountDue").value= data[i].amountDue
+	   let amount =  document.getElementById("amountDue").value
              document.getElementById("quantity").value= 1
              document.getElementById("item").value= data[i].description
              document.getElementById("invoiceNo").value= data[i].invoiceNumber
 			  document.getElementById("xid").value= data[i]._id
+			  	  //let amountDue =  document.getElementById("amountDue1").value
+			  // document.querySelector('[data-kt-element="total"]').innerText  = data[1].amountDue
+			  	 document.querySelector('[data-kt-element="grand-total"]').innerText  =data[i].invoiceTotal
+			 document.querySelector('[data-kt-element="sub-total"]').innerText  = data[0].invoiceTotal
+			 		  document.querySelector('[id="total0"]').innerText  =data[i].amountDue
+					   console.log(data[i].amountDue,'amountDue')
+					   //document.querySelector('[id="total0"]').innerText=1400
+			 	 //document.querySelector('[data-kt-element="total"]').innerText  = data[0].amountDue
 
             
    
@@ -1950,11 +1976,20 @@ console.log(code,'code')
 
         else if( i == 1){
           document.getElementById("price1").value= data[i].amountDue
-       document.getElementById("amountDue1").value= data[i].amountDue
+          document.getElementById("amountDue1").value= data[i].amountDue
+
           document.getElementById("quantity1").value= 1
           document.getElementById("item1").value= data[i].description
           document.getElementById("invoiceNo1").value= data[i].invoiceNumber
-		  	  document.getElementById("xid1").value= data[i]._id
+		  document.getElementById("xid1").value= data[i]._id
+		  let amountDue1 =  document.getElementById("amountDue1").value
+		  document.querySelector('[data-kt-element="grand-total"]').innerText  = number1
+		  document.querySelector('[data-kt-element="sub-total"]').innerText  =0
+		  document.querySelector('[id="total1"]').innerText  =  data[i].amountDue
+
+
+
+			 console.log(i,'i loop')
         }
 
 		
@@ -1968,19 +2003,24 @@ console.log(code,'code')
              let c = 0
              let v = i + yt
              console.log(i,'777')
-             document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+i
-              document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').id= 'amountDue'+i
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+i
+			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="quantity"] ').id = 'quantity'+1
+            document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+i
+			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="total"] ').id= 'total'+i
+            document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').id= 'amountDue'+i
+            document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+i
 			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').id= 'xid'+i
 			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').id = 'invoiceNo'+i
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="quantity"] ').value = 1
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data[i].description
-             document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').value = data[i].invoiceNumber
+            document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="quantity"] ').value = 1
+            document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data[i].description
+            document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').value = data[i].invoiceNumber
 			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').value = data[i]._id
 			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value= data[i].amountDue
-			             document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').value= data[i].amountDue
+			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').value= data[i].amountDue
            document.querySelector('[data-kt-element="items"] tbody').appendChild(l)
 		   console.log(data[i].invoiceNumber,'redbull')
+		   	  	 document.querySelector('[data-kt-element="grand-total"]').innerText  = number1
+			 document.querySelector('[data-kt-element="sub-total"]').innerText  =0
+			 document.querySelector('[data-kt-element="total"]').innerText  = data[i].amountDue
           }
 
         }
@@ -2017,10 +2057,40 @@ console.log(code,'code')
                     console.log(document.getElementById("amountX").value,'666666666666')
 
 let amount = document.getElementById("amountX").value
- let amountRemaining, amountDue
-      
+ let amountRemaining = 0
+
+ let arr16 = []
+ let number1     
              var c = document.querySelectorAll(' [data-kt-element="item"]').length;
     
+
+	   for(var i=0;i<c-1;i++){
+  
+        //console.log(data,'datata')
+      n = i+1 
+	  console.log(i,'nnn')
+	  console.log(document.getElementById(`total${i}`).textContent,'vbn')
+	  let total = document.getElementById(`total${i}`).textContent
+   /* arr16.push(document.getElementById(`price${n}`).value)
+console.log(i,'',document.getElementById(`price${n}`).value)
+	   number1=0;
+      for(var z in arr16) { number1 += arr16[z]; }*/
+
+	    let regit = /\d+\.*\d*/g;  
+    let result2 =total.match(regit)
+    let totalX= Number(result2)
+
+	 arr16.push(totalX)
+//console.log(i,'',document.getElementById(`price${n}`).value)
+	   number1=0;
+      for(var z in arr16) { number1 += arr16[z]; }
+
+	}
+
+	let grandTotal = number1 - amount
+
+	 document.querySelector('[data-kt-element="grand-total"]').innerText  =grandTotal
+	document.querySelector('[data-kt-element="sub-total"]').innerText  =amount
              for(var i =0; i<c;i++){
 
 				  if(i == 0){
@@ -2028,14 +2098,18 @@ let amount = document.getElementById("amountX").value
            
          amountDue =  document.getElementById("amountDue").value
 		  amountRemaining =  amount - amountDue
+            
+		
 
 if(amountRemaining > 0){
  document.getElementById("amountDue").value  = 0
+ 	 
 }else if(amount == 0 || amount == " ") {
 document.getElementById("amountDue").value = amountDue
 
 }else{
 	 document.getElementById("amountDue").value  = amountRemaining
+
 }
           
             
@@ -2067,6 +2141,8 @@ console.log(amountRemaining,amountDueX,'tione')
 
 				}else{
 document.getElementById(`amountDue${i}`).value  =0
+
+
 				}
 		   }
 		 
@@ -2091,14 +2167,17 @@ document.getElementById(`amountDue${i}`).value  =0
 
 		     $('body').on('click','#amountX', function (e) {
 				 console.log('haa night wadii')
-	     var users = $('input[name="id[]"]').map(function(){ 
+	    /* var users = $('input[name="id[]"]').map(function(){ 
                     return this.value; 
-                }).get();
-				 //let code = document.getElementByName('item[]').value
+                }).get();*/
+				var uid = document.getElementById('uid').value
+			//	console.log(users,'users')
+				
 				   $.ajax({
     dataType: 'json',
    data: {
-     'username[]': users,
+     /*'username[]': users,*/
+	 code:uid
         
     },
     type: 'POST',
@@ -2106,10 +2185,13 @@ document.getElementById(`amountDue${i}`).value  =0
     success: function(data) {
    console.log(data,'xxxxxxxx')
    
-   for(var i = 0; i< data.length - 1;i++){
+   for(var i = 0; i< data.length;i++){
 
 	   if( i ==0){
 		   document.getElementById('amountDue').value = data[i].amountDue
+	   }else if(i == 1){
+		   console.log('true',i)
+		   document.getElementById('amountDue1').value = data[i].amountDue
 	   }else{
 		   document.getElementById(`amountDue${i}`).value = data[i].amountDue
 	   }

@@ -5943,14 +5943,19 @@ router.get('/autocompleteClient/', function(req, res, next) {
 
     router.post('/autoInvo',function(req,res){
       var code = req.body.code
-      var term = req.body.term
-var c = {type:" ",invoiceNumber:"",_id:"",amountDue:"0.00"} 
+      var term = 2
+
   
       
      
    // InvoiceFile.find({term:code,/*code:uid*/datePaid:"now"},function(err,docs){
       InvoiceFile.find({studentId:code,term:term,status:"unpaid"}).lean().sort({code:1}).then(docs=>{
+if(docs){
+  
+      let amount =  docs[0].amountDue 
+      var c = {type:" ",invoiceNumber:"",_id:"",amountDue:amount} 
         docs.push(c)
+}
      if(docs == undefined){
        res.redirect('/')
      }else
@@ -5998,20 +6003,32 @@ var c = {type:" ",invoiceNumber:"",_id:"",amountDue:"0.00"}
 
 
     router.post('/autoInvo2',function(req,res){
-      var code =1
+     // var ar = req.body['username[]']
       var c = {type:" ",invoiceNumber:"",_id:"",amountDue:"0.00"} 
+     code = req.body.code
+
+       InvoiceFile.find({studentId:code,status:"unpaid"},function(err,docs){
+
+
+          
+        res.send(docs)
         
-            
+
+        })
+    
+      
+
+      
            
          // InvoiceFile.find({term:code,/*code:uid*/datePaid:"now"},function(err,docs){
-            InvoiceFile.find({term:code,/*code:"ST3104",*/datePaid:"now"}).lean().sort({code:1}).then(docs=>{
+            /*InvoiceFile.find({term:code,datePaid:"now"}).lean().sort({code:1}).then(docs=>{
               docs.push(c)
            if(docs == undefined){
              res.redirect('/')
            }else
       
               res.send(docs)
-            })
+            })*/
           
     })
 
@@ -6691,7 +6708,7 @@ var grade = req.user.invoiceGrade
   })
 
 
-  router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
+  /*router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
 
         InvoNum.find(function(err,doc){
@@ -6712,11 +6729,72 @@ var grade = req.user.invoiceGrade
         })
   
   
+  })*/
+
+  
+
+  router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
+    var id = req.user._id
+    var pro = req.user
+    var errorMsg = req.flash('danger')[0];
+    var successMsg = req.flash('success')[0];
+    res.render('acc2/invoiceNumber',{pro:pro,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+  
+  
   })
   
   
 
 
+  router.post('/invoiceSingleCode',isLoggedIn,  function(req,res){
+    var id =req.user._id
+    var invoiceNumber = req.body.invoiceNumber
+    var date = req.body.date
+   
+    var m2 = moment()
+    var mformat = m2.format('L')
+    var pro = req.user
+
+      
+      
+
+ 
+    
+    req.check('invoiceNumber','Enter Invoice Number').notEmpty();
+      
+    
+      
+      var errors = req.validationErrors();
+       
+      if (errors) {
+        req.session.errors = errors;
+        req.session.success = false;
+       // res.render('product/dispatchCust',{ errors:req.session.errors,pro:pro})
+  
+       req.flash('danger', req.session.errors[0].msg);
+         
+          
+       res.redirect('/clerk/invoiceSingleCode');
+  
+  
+      
+      }
+      
+      else {
+      
+     
+        User.findByIdAndUpdate(id,{$set:{invoNumber:invoiceNumber}},function(err,docs){
+      
+        })
+
+        res.redirect('/clerk/studentInvoice')
+    }
+      
+      
+      })
+    
+  
+  
 
 
   router.get('/studentInvoice', isLoggedIn,function(req,res){
@@ -6727,11 +6805,12 @@ var grade = req.user.invoiceGrade
     var companyCountry = req.user.companyCountry
     var companyEmail = req.user.companyEmail
     var companyName = req.user.companyName
+    var invoiceNumber = req.user.invoNumber
     var m = moment()
     var mformat = m.format('L')
     var errorMsg = req.flash('danger')[0];
     var successMsg = req.flash('success')[0];
-    res.render('acc2/singleInvoice',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,pro:pro,companyAddress:companyAddress,
+    res.render('acc2/singleInvoice',{invoiceNumber:invoiceNumber,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,pro:pro,companyAddress:companyAddress,
     companyCity:companyCity,companyCountry:companyCountry,companyEmail:companyEmail,companyName:companyName,companyMobile:companyMobile,mformat:mformat})
   })
   
@@ -7042,7 +7121,8 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   let amountDue = arrSingle[uid][0].subtotal
   let balance = arrSingle[uid][0].balance
   let bf = balance + amountDue
-  let term = arrSingle[uid][0].term
+ // let term = arrSingle[uid][0].term
+  let term = 2
   let description = arrSingle[uid][0].invoiceDescription
   let id2 = arrSingle[uid][0].studentId2
   let class1 =arrSingle[uid][0].class1
@@ -7154,7 +7234,11 @@ height:'21cm',*/
   /*process.exit()*/
 //req.flash('success', 'Invoice Generation Successful');
   
-  res.redirect('/clerk/genEmailInvoice');
+  //res.redirect('/clerk/genEmailInvoice');
+
+  req.flash('success', 'Invoice Emailed Successfully!');
+    
+  res.redirect('/clerk/invoiceSingleCode')
   
   
   }catch(e) {
