@@ -2660,10 +2660,14 @@ router.get('/viewTermlyInvoiceFile/:id',isLoggedIn,function(req,res){
      if(docs){
 
    
+      let arr=[]
+      for(var i = docs.length - 1; i>=0; i--){
+  
+        arr.push(docs[i])
+      }
 
 
-
-res.render('invoiceFolderReg/filesTerm',{listX:docs,pro:pro,code:id,year:year,term:term,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg}) 
+res.render('invoiceFolderReg/filesTerm',{listX:arr,pro:pro,code:id,year:year,term:term,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg}) 
 }
 })
     
@@ -2824,11 +2828,15 @@ router.get('/viewMonthlyInvoiceFile/:id',isLoggedIn,function(req,res){
   InvoiceFile.find({year:year,month:id,type1:"single",type:"Invoice"},function(err,docs){
      if(docs){
 
-   
+      let arr=[]
+      for(var i = docs.length - 1; i>=0; i--){
+  
+        arr.push(docs[i])
+      }
 
 
 
-res.render('invoiceMonthlyFolderReg/filesMonth',{listX:docs,pro:pro,id:id,year:year,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+res.render('invoiceMonthlyFolderReg/filesMonth',{listX:arr,pro:pro,id:id,year:year,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
 }
 })
     
@@ -3017,16 +3025,67 @@ router.get('/downloadMonthlyReceiptReport/:id',isLoggedIn,function(req,res){
 })
 
 
+/*
+router.get('/openReceiptFile/:id', function (req, res) {
 
-router.get('/openReceiptPdf',function(req,res){
+  InvoiceFile.findById(req.params.id,function(err,doc){
+    var name = doc.filename;
+    var year = doc.year
+    var term = doc.term
+  var filePath = "./receiptReports/"+year+'/'+term+'/'+name;
 
-
-  res.render('acc2/openPdf')
-  
+  fs.readFile(__dirname + filePath , function (err,data){
+      res.contentType("application/pdf");
+      res.send(data);
+  });
 })
+});*/
 
 
 
+
+
+router.get('/openReceiptFile/:id', function (req, res) {
+
+  InvoiceFile.findById(req.params.id,function(err,doc){
+    var name = doc.filename;
+    var year = doc.year
+    var term = doc.term
+  var path = "./receiptReports/"+year+'/'+term+'/'+name;
+
+ // const path = './public/images/1.pdf'
+  if (fs.existsSync(path)) {
+      res.contentType("application/pdf");
+      fs.createReadStream(path).pipe(res)
+  } else {
+      res.status(500)
+      console.log('File not found')
+      res.send('File not found')
+  }
+})
+});
+
+
+
+router.get('/openInvoiceFile/:id', function (req, res) {
+
+  InvoiceFile.findById(req.params.id,function(err,doc){
+    var name = doc.filename;
+    var year = doc.year
+    var term = doc.term
+  var path = "./invoiceReports/"+year+'/'+term+'/'+name;
+
+ // const path = './public/images/1.pdf'
+  if (fs.existsSync(path)) {
+      res.contentType("application/pdf");
+      fs.createReadStream(path).pipe(res)
+  } else {
+      res.status(500)
+      console.log('File not found')
+      res.send('File not found')
+  }
+})
+});
 
 router.get('/emailMonthlyReceiptFile/:id',isLoggedIn,function(req,res){
   var code = req.params.id
@@ -5801,8 +5860,75 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
    })
 
 
+   router.get('/printReceipt',isLoggedIn, function (req, res) {
+    var code = req.user.recNumber
+    var pro = req.user
+    InvoiceFile.find({receiptNumber:code,type:'Receipt'},function(err,docs){
+      let size = docs.length - 1
+    if(docs){
+      let name = docs[size].filename
+  
+      var year = docs[size].year
+      var term = docs[size].term
+    var path = "./receiptReports/"+year+'/'+term+'/'+name;
+  
+   // const path = './public/images/1.pdf'
+    if (fs.existsSync(path)) {
+        res.contentType("application/pdf");
+        fs.createReadStream(path).pipe(res)
+    } else {
+        res.status(500)
+        console.log('File not found')
+        res.send('File not found')
+    }
+  }
+  })
+  });
 
+
+  router.get('/recentFiles',isLoggedIn,function(req,res){
    
+    var pro = req.user
+    var m = moment()
+    var month = m.format('MMMM')
+    var errorMsg = req.flash('danger')[0];
+    var successMsg = req.flash('success')[0];
+    var mformat = m.format('L')
+    var n = moment()
+    var year = n.format('YYYY')
+    InvoiceFile.find({date:mformat,type:"Receipt"},function(err,docs){
+      let arr=[]
+      for(var i = docs.length - 1; i>=0; i--){
+  
+        arr.push(docs[i])
+      }
+      res.render('receiptMonthlyFolderReg/recent',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg, listX:arr,pro:pro})
+    })
+  
+  })
+
+
+  router.get('/recentFilesInvoice',isLoggedIn,function(req,res){
+   
+    var pro = req.user
+    var m = moment()
+    var month = m.format('MMMM')
+    var errorMsg = req.flash('danger')[0];
+    var successMsg = req.flash('success')[0];
+    var mformat = m.format('L')
+    var n = moment()
+    var year = n.format('YYYY')
+    InvoiceFile.find({date:mformat,type:"Invoice"},function(err,docs){
+      let arr=[]
+      for(var i = docs.length - 1; i>=0; i--){
+  
+        arr.push(docs[i])
+      }
+      res.render('receiptMonthlyFolderReg/recentInvo',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg, listX:arr,pro:pro})
+    })
+  
+  })
+   /*
   router.get('/printReceipt',isLoggedIn,function(req,res){
     var code = req.user.recNumber
     var pro = req.user
@@ -5821,7 +5947,7 @@ if(docs){
 }
   })
 
-})
+})*/
 
   
   
