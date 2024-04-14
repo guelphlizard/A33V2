@@ -5327,6 +5327,198 @@ router.get('/downloadInvoice/:id',isLoggedIn,function(req,res){
   
 
 
+//invoice
+
+
+router.post('/invoice9',isLoggedIn,function(req,res){
+  var m = moment()
+  var month = m.format('MMMM')
+  var year = m.format('YYYY')
+  var date = m.format('L')
+  var term = req.user.term
+  var studentName= req.body.clientName
+  var studentEmail = req.body.clientEmail
+  var studentAddress = req.body.clientAddress
+  var studentMobile = req.body.mobile
+  var studentId = req.body.uid
+  var studentBalance = req.body.balance
+  var id2 = req.body.studentId2
+  var clerk1 = req.user.fullname
+var type = 'Receipt'
+  ar = req.body['id[]']  
+  console.log(ar)
+  ar = ar.filter(v=>v!='')
+let amount = req.body.amountX
+let amountX9 = req.body.amountX
+let amountX3 = 0 - amountX9
+//let amountPaid = req.body.amountX
+let amountX4 = req.body.amountX
+
+
+let class1 = req.body.class1
+let grade = req.body.grade
+let status, balance
+var receiptNumber = req.user.recNumber
+let totalAmountOwing
+console.log(ar,'iwee')
+let reg = /\d+\.*\d*/g;  
+let result = amountX9.match(reg)
+let amountX2= Number(result)
+
+
+req.check('amountX','Enter Amount').notEmpty();
+             
+
+var errors = req.validationErrors();
+
+if (errors) {
+  
+  req.session.errors = errors;
+  req.session.success = false;
+  req.flash('danger', req.session.errors[0].msg);
+
+
+  res.redirect('/clerk/invoice');
+
+}
+let newBalance = studentBalance - amountX4
+if(newBalance > 0){
+
+totalAmountOwing = newBalance
+
+}else{
+  totalAmountOwing = 0
+}
+for(var i = 0; i<ar.length;i++){
+  console.log(ar[i])
+  let id = ar[i]
+
+  InvoiceFile.findById(id,function(err,doc){
+    let amountDue = doc.amountDue 
+    let invoiceNumber = doc.invoiceNumber
+    let studentBal = doc.studentBalance + amountX2
+    if(amount >= amountDue){
+       status = 'paid'
+      balance = 0
+      
+      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amountDue,amountDue:0,status:'paid',receiptNumber:receiptNumber,css:"success",remainingBalance:totalAmountOwing}},function(err,docs){
+
+      })
+
+      User.findByIdAndUpdate(id2,{$set:{balance:newBalance}},function(err,docs){
+
+      })
+     // amount = amount - amountDue
+var receipt = new InvoiceFile();
+receipt.studentName = studentName;
+receipt.studentId = studentId;
+receipt.studentId2 = id2;
+receipt.studentEmail = studentEmail;
+receipt.studentAddress = studentAddress;
+receipt.studentMobile = studentMobile;
+receipt.clerk = clerk1;
+receipt.class1 = class1;
+receipt.grade = grade;
+receipt.month= month;
+receipt.filename = receiptNumber+'_'+studentName+'.pdf';
+receipt.year = year;
+receipt.date = date;
+receipt.type = type;
+receipt.type1 = 'single';
+receipt.name = "PMT";
+receipt.term= term;
+receipt.invoiceNumber= invoiceNumber;
+receipt.amountDue= amountDue;
+receipt.receiptNumber = receiptNumber;
+receipt.status = 'paid';
+receipt.studentBalance = newBalance;
+receipt.amountPaid = amountX2;
+receipt.remainingBalance = totalAmountOwing;
+receipt.datePaid = date;
+receipt.invoiceAmountPaid=amountDue;
+receipt.invoiceAmountDue= 0;
+
+
+
+receipt.save()
+  .then(user =>{
+   
+   
+ 
+
+  })
+    }else{
+      status = 'unpaid'
+      balance = amountDue - amount
+    
+
+      InvoiceFile.findByIdAndUpdate(id,{$set:{amountPaid:amount,amountDue:balance,status:'unpaid',receiptNumber:receiptNumber,remainingBalance:totalAmountOwing}},function(err,docs){
+
+      })
+      
+
+      User.findByIdAndUpdate(id2,{$set:{balance:newBalance}},function(err,docs){
+        
+      })
+      
+      var receipt = new InvoiceFile();
+      receipt.studentName = studentName;
+      receipt.studentId = studentId;
+      receipt.studentId2 = id2;
+      receipt.studentEmail = studentEmail;
+      receipt.studentAddress = studentAddress;
+      receipt.studentMobile = studentMobile;
+      receipt.clerk = clerk1;
+      receipt.class1 = class1;
+      receipt.grade = grade;
+      receipt.month= month;
+      receipt.filename = receiptNumber+'_'+studentName+'.pdf';
+      receipt.year = year;
+      receipt.date = date;
+      receipt.type = type;
+      receipt.type1 = 'single';
+      receipt.name = "PMT";
+      receipt.term= term;
+      receipt.invoiceNumber= invoiceNumber;
+      receipt.amountDue= amountDue;
+      receipt.receiptNumber = receiptNumber;
+      receipt.status = 'paid';
+      receipt.studentBalance = newBalance;
+      receipt.amountPaid = amountX2;
+      receipt.remainingBalance = totalAmountOwing;
+      receipt.datePaid = date;
+      receipt.invoiceAmountPaid=amount;
+      receipt.invoiceAmountDue= balance;
+
+      
+      
+      receipt.save()
+        .then(user =>{
+         
+         
+       
+      
+        })
+      
+
+    }
+    amount = amount - amountDue
+    if(amount < 0 ){
+      amount = 0
+    }
+
+   
+
+
+
+  
+    
+   // InvoiceFile.findByIdAndUpdate(id,{$set:{}})
+  })
+}
+  res.redirect('/clerk/arrReceipt')
+  })
+
 
 
 
