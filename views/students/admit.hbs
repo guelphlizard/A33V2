@@ -1708,7 +1708,7 @@
 													<!--end::Input group-->
 												
 																<!--begin::Row-->
-													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
+													<div class="row row-cols-1 row-cols-sm-3 rol-cols-md-3 row-cols-lg-3">
 														<!--begin::Col-->
 														<div class="col">
 															<!--begin::Input group-->
@@ -1737,20 +1737,14 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="name" id="name" value=""  {{readonly}} />
+																<input type="text" class="form-control form-control-solid" name="name" id="name" value="{{name}}"  {{readonly}} />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
 														</div>
 														<!--end::Col-->
-													</div>
-													<!--end::Row-->
-													<!--begin::Row-->
-													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
-														<!--begin::Col-->
-														<div class="col">
-															<!--begin::Input group-->
-															<div class="fv-row mb-7">
+
+												<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
 																	<span class="required">Surname</span>
@@ -1758,12 +1752,15 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="surname" id="surname" value=""  {{readonly}} />
+																<input type="text" class="form-control form-control-solid" name="surname" id="surname" value="{{surname}}"  {{readonly}} />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
 														</div>
-														<!--end::Col-->
+													</div>
+													<!--end::Row-->
+													<!--begin::Row-->
+													<div class="row row-cols-1 row-cols-sm-3 rol-cols-md-3 row-cols-lg-3">
 														<!--begin::Col-->
 														<div class="col">
 															<!--begin::Input group-->
@@ -1775,17 +1772,69 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="address" value=""  {{readonly}} />
+																<input type="text" class="form-control form-control-solid" name="address" value="{{address}}"  {{readonly}} />
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
+															<!--begin::Input group-->
+							
+														<!--end::Col-->
+														<!--begin::Col-->
+														<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span>Address2</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<input type="text" class="form-control form-control-solid" name="address1" value="{{address1}}"  {{readonly}} />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
 														</div>
 														<!--end::Col-->
+
+
+																										<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span>Email</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<input type="email" class="form-control form-control-solid" name="email" value="{{email}}"  {{readonly}} />
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
 													</div>
 													<!--end::Row-->
 													<!--begin::Row-->
 													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
 														<!--begin::Col-->
+
+															<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span>Email2</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<input type="email" class="form-control form-control-solid" name="email2" value="{{email2}}"  {{readonly}} />
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
 														<div class="col">
 															<!--begin::Input group-->
 															<div class="fv-row mb-7">
@@ -1827,6 +1876,7 @@
 															<!--end::Input group-->
 														</div>
 														<!--end::Col-->
+														
 													</div>
 													<!--end::Row-->
                                          
@@ -1834,27 +1884,7 @@
    								<!--begin::Row-->
 													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
 														<!--begin::Col-->
-														<div class="col">
-															<!--begin::Input group-->
-															<div class="fv-row mb-7">
-																<!--begin::Label-->
-																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Class</span>
-																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
-																</label>
-																<!--end::Label-->
-																<!--begin::Input-->
-																<select id="class1" name="class1"  class="form-select form-select-solid fw-bolder"  {{readonly}}>
-																	
-																	   {{#each arr1}}
-                                                               <option value="{{this.class1}}">{{this.class1}}</option>
-                                                                     {{/each}}
-																	
-																</select>
-																<!--end::Input-->
-															</div>
-															<!--end::Input group-->
-														</div>
+				
 														<!--end::Col-->
 														<!--begin::Col-->
 															<div class="col">
@@ -1862,7 +1892,7 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Grade</span>
+																	<span class="required">Stage</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
 																</label>
 																<!--end::Label-->
@@ -1871,14 +1901,9 @@
 																	
 
 
-																		<option></option>
-																		<option value="0" >0</option>
-																		<option value="1" >1</option>
-																		<option value="2" >2</option>
-																		<option value="3" >3</option>
-																		<option value="4" >4</option>
-																		<option value="5" >5</option>
-																		<option value="6" >6</option>
+																	  {{#each arr}}
+                                                               <option value="{{this.grade}}">{{this.name}}</option>
+                                                                     {{/each}}
 																	
 																	 <!--  {{#each arr}}
                                                                <option value="{{this.grade}}">{{this.grade}}</option>
@@ -1903,7 +1928,7 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Phone</span>
+																	<span class="required">Mobile</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
 																</label>
 																<!--end::Label-->
@@ -1920,12 +1945,12 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span>Email</span>
+																	<span>Mobile2</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="email" class="form-control form-control-solid" name="email" id="email" value=""   {{readonly}}/>
+																<input type="text" class="form-control form-control-solid" name="mobile2" id="mobile2" value=""   {{readonly}}/>
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
