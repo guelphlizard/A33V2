@@ -7019,7 +7019,7 @@ var grade = req.user.invoiceGrade
 
   })
 
-/*
+
   router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
 
@@ -7041,9 +7041,9 @@ var grade = req.user.invoiceGrade
         })
   
   
-  })*/
+  })
 
-  
+  /*
 
   router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
@@ -7106,7 +7106,7 @@ var grade = req.user.invoiceGrade
       })
     
   
-  
+  */
 
 
   router.get('/studentInvoice', isLoggedIn,function(req,res){
@@ -7544,9 +7544,9 @@ height:'21cm',*/
   /*await browser.close()
   
   /*process.exit()*/
-//req.flash('success', 'Invoice Generation Successful');
+req.flash('success', 'Invoice Generation Successful');
   
-  //res.redirect('/clerk/genEmailInvoice');
+  res.redirect('/clerk/genEmailInvoice');
 
   req.flash('success', 'Invoice Emailed Successfully!');
     
@@ -7660,7 +7660,9 @@ height:'21cm',*/
       /*   console.log('Email sent successfully')*/
          req.flash('success', 'Invoice Emailed Successfully!');
     
-  res.redirect('/clerk/invoiceSingleCode')
+  res.redirect('/clerk/printReceipt')
+
+  //res.redirect('/clerk/invoiceSingleCode')
        }
           
    console.log(email,'email')
@@ -7677,6 +7679,33 @@ height:'21cm',*/
     
    
    })
+
+
+   
+   router.get('/printReceipt',isLoggedIn, function (req, res) {
+    var code =  req.user.invoNumber
+    var pro = req.user
+    InvoiceFile.find({ivoiceNumber:code,type:'Invoice'},function(err,docs){
+      let size = docs.length - 1
+    if(docs){
+      let name = docs[size].filename
+  
+      var year = docs[size].year
+      var term = docs[size].term
+    var path = "./public/invoiceReports/"+year+'/'+term+'/'+name;
+  
+   // const path = './public/images/1.pdf'
+    if (fs.existsSync(path)) {
+        res.contentType("application/pdf");
+        fs.createReadStream(path).pipe(res)
+    } else {
+        res.status(500)
+        console.log('File not found')
+        res.send('File not found')
+    }
+  }
+  })
+  });
 
 
 
