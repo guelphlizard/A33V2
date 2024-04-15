@@ -7550,7 +7550,7 @@ req.flash('success', 'Invoice Generation Successful');
 
   req.flash('success', 'Invoice Emailed Successfully!');
     
-  res.redirect('/clerk/invoiceSingleCode')
+  //res.redirect('/clerk/invoiceSingleCode')
   
   
   }catch(e) {
