@@ -2519,7 +2519,7 @@ console.log(arrInvoice,'arrInvoice')
       
       await page.pdf({
       //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
-      path:(`./invoiceReports/${year}/${code}`+'.pdf'),
+      path:(`./public/invoiceReports/${year}/${code}`+'.pdf'),
     format:"A4",
       width:'30cm',
       height:'21cm',
@@ -2690,7 +2690,7 @@ router.get('/downloadTermlyInvoiceReport/:id',isLoggedIn,function(req,res){
     var term = doc.term
     //res.download( './public/uploads/'+name, name)
  
-    res.download( './invoiceReports/'+year+'/'+term+'/'+name, name)
+    res.download( './public/invoiceReports/'+year+'/'+term+'/'+name, name)
   })  
 
 })
@@ -2754,7 +2754,7 @@ if(doc){
        attachments: [
          {
            filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
-           path:`./invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
+           path:`./public/invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
          }
        ]
      };
@@ -2857,7 +2857,7 @@ router.get('/downloadMonthlyInvoiceReport/:id',isLoggedIn,function(req,res){
     var term = doc.term
     //res.download( './public/uploads/'+name, name)
  
-    res.download( './invoiceReports/'+year+'/'+term+'/'+name, name)
+    res.download( './public/invoiceReports/'+year+'/'+term+'/'+name, name)
   })  
 
 })
@@ -2919,7 +2919,7 @@ if(doc){
        attachments: [
          {
            filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
-           path:`./invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
+           path:`./public/invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
          }
        ]
      };
@@ -3019,7 +3019,7 @@ router.get('/downloadMonthlyReceiptReport/:id',isLoggedIn,function(req,res){
     var term = doc.term
     //res.download( './public/uploads/'+name, name)
  
-    res.download( './receiptReports/'+year+'/'+term+'/'+name, name)
+    res.download( './public/receiptReports/'+year+'/'+term+'/'+name, name)
   })  
 
 })
@@ -3051,7 +3051,7 @@ router.get('/openReceiptFile/:id', function (req, res) {
     var name = doc.filename;
     var year = doc.year
     var term = doc.term
-  var path = "./receiptReports/"+year+'/'+term+'/'+name;
+  var path = "./public/receiptReports/"+year+'/'+term+'/'+name;
 
  // const path = './public/images/1.pdf'
   if (fs.existsSync(path)) {
@@ -3073,7 +3073,7 @@ router.get('/openInvoiceFile/:id', function (req, res) {
     var name = doc.filename;
     var year = doc.year
     var term = doc.term
-  var path = "./invoiceReports/"+year+'/'+term+'/'+name;
+  var path = "./public/invoiceReports/"+year+'/'+term+'/'+name;
 
  // const path = './public/images/1.pdf'
   if (fs.existsSync(path)) {
@@ -3141,7 +3141,7 @@ if(doc){
        attachments: [
          {
            filename:uid+'_'+name+'_'+'Receipt'+'.pdf',
-           path:`./receiptReports/${year}/${term}/${invoNumber}_${name}.pdf`
+           path:`./public/receiptReports/${year}/${term}/${invoNumber}_${name}.pdf`
          }
        ]
      };
@@ -4114,7 +4114,7 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
   
   await page.pdf({
     //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
-    path:(`./invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
+    path:(`./public/invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
     //format:"A4",
     /*width:'30cm',
   height:'21cm',*/
@@ -4240,7 +4240,7 @@ User.findByIdAndUpdate(xId,{$set:{countN:1}},function(err,focs){
       
       await page.pdf({
         //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
-        path:(`./invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
+        path:(`./public/invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
         //format:"A4",
         /*width:'30cm',
       height:'21cm',*/
@@ -4439,7 +4439,7 @@ User.findByIdAndUpdate(xId,{$set:{countN:1}},function(err,focs){
        attachments: [
          {
            filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
-           path:`./invoiceReports/${year}/${term}/${uid}_${name}.pdf`
+           path:`./public/invoiceReports/${year}/${term}/${uid}_${name}.pdf`
          }
        ]
      };
@@ -4519,7 +4519,7 @@ router.get('/emailRoute2',function(req,res){
     
     await page.pdf({
       //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
-      path:(`./invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
+      path:(`./public/invoiceReports/${year}/${term}/${uid}_${name}`+'.pdf'),
       //format:"A4",
       /*width:'30cm',
     height:'21cm',*/
@@ -5705,7 +5705,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
   
   await page.pdf({
   //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
-  path:(`./receiptReports/${year}/${term}/${receiptNumber}_${studentName}`+'.pdf'),
+  path:(`./public/receiptReports/${year}/${term}/${receiptNumber}_${studentName}`+'.pdf'),
   /*format:"A4",
   width:'30cm',
   height:'21cm',*/
@@ -5821,7 +5821,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
        attachments: [
          {
            filename:uid+'_'+studentName+'_'+'Receipt'+'.pdf',
-           path:`./receiptReports/${year}/${term}/${receiptNumber}_${studentName}.pdf`
+           path:`./public/receiptReports/${year}/${term}/${receiptNumber}_${studentName}.pdf`
          }
        ]
      };
@@ -5870,7 +5870,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
   
       var year = docs[size].year
       var term = docs[size].term
-    var path = "./receiptReports/"+year+'/'+term+'/'+name;
+    var path = "./public/receiptReports/"+year+'/'+term+'/'+name;
   
    // const path = './public/images/1.pdf'
     if (fs.existsSync(path)) {
@@ -6949,7 +6949,7 @@ var grade = req.user.invoiceGrade
   
   await page.pdf({
     //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
-    path:(`./invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
+    path:(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
     /*format:"A4",
     width:'30cm',
   height:'21cm',*/
@@ -7496,7 +7496,7 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   
   await page.pdf({
   //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
-  path:(`./invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
+  path:(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
   format:"A4",
   /*width:'30cm',
 height:'21cm',*/
@@ -7645,7 +7645,7 @@ height:'21cm',*/
          attachments: [
           {
             filename:uid+'_'+studentName+'_'+'Invoice'+'.pdf',
-            path:`./invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}.pdf`
+            path:`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}.pdf`
           }
         ]
      };
