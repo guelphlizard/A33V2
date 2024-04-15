@@ -7655,12 +7655,12 @@ req.flash('success', 'Invoice Generation Successful');
          req.flash('danger', 'Reports Not Emailed!');
     
   /*res.redirect('/clerk/dashX')*/
-  res.redirect('/clerk/invoiceSingleCode')
+  res.redirect('/clerk/printInvoice')
        }else{
       /*   console.log('Email sent successfully')*/
          req.flash('success', 'Invoice Emailed Successfully!');
     
-  res.redirect('/clerk/printReceipt')
+  res.redirect('/clerk/printInvoice')
 
   //res.redirect('/clerk/invoiceSingleCode')
        }
@@ -7682,7 +7682,7 @@ req.flash('success', 'Invoice Generation Successful');
 
 
    
-   router.get('/printReceipt',isLoggedIn, function (req, res) {
+   router.get('/printInvoice',isLoggedIn, function (req, res) {
     var code =  req.user.invoNumber
     var pro = req.user
     InvoiceFile.find({ivoiceNumber:code,type:'Invoice'},function(err,docs){

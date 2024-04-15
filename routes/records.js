@@ -5036,7 +5036,7 @@ let idN = locs[i]._id
       var clas = new Level();
     
       clas.levelX = "null";
-     
+      clas.name = 'null'
       clas.grade = grade;
   
     
