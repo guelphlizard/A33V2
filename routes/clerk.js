@@ -7020,7 +7020,7 @@ var grade = req.user.invoiceGrade
   })
 
 
-  /*router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
+  router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
 
         InvoNum.find(function(err,doc){
@@ -7041,10 +7041,10 @@ var grade = req.user.invoiceGrade
         })
   
   
-  })*/
+  })
 
   
-
+/*
   router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
     var pro = req.user
@@ -7104,7 +7104,7 @@ var grade = req.user.invoiceGrade
       
       
       })
-    
+    */
   
   
 
