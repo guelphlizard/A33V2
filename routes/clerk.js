@@ -9,6 +9,7 @@ var QuoteCode = require('../models/quoteCode');
 var QuoteSub = require('../models/quoteSub');
 var QuoteFiles = require('../models/quoteFiles');
 var InvoiceSub = require('../models/invoiceSub');
+const Level =require('../models/level');
 var InvoiceSubBatch = require('../models/invoiceSubBatch');
 var InvoiceCode = require('../models/invoiceCode');
 var InvoCode = require('../models/invoCode');
@@ -7829,6 +7830,10 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
   var m = moment()
   var year = m.format('YYYY')
   var pro = req.user
+  var idNum=req.user.idNumber
+  var prefix = req.user.prefix
+  idNum++
+  var uid7 = prefix+idNum
     var adminBal = req.user.balance
     var uid = req.body.uid;
     var grade = req.body.grade
@@ -7898,7 +7903,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
   
           req.session.errors = errors;
           req.session.success = false;
-          res.render('acc2/admit',{ errors:req.session.errors,arr:arr, arr1:arr1,pro:pro, user:req.body})
+          res.render('acc2/admit',{uid1:uid7, errors:req.session.errors,arr:arr, arr1:arr1,pro:pro, user:req.body})
 
         /* req.flash('danger', req.session.errors[0].msg);
        
@@ -7930,7 +7935,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
            }     
            
               res.render('acc2/admit', {
-                   message:req.session.message ,arr:arr,arr1:arr1,pro:pro,user:req.body}) 
+                   message:req.session.message,uid1:uid7, arr:arr,arr1:arr1,pro:pro,user:req.body}) 
             })
             })
       }
