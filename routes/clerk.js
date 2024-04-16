@@ -5858,7 +5858,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     
    
    })
-
+/*
 
    router.get('/printReceipt',isLoggedIn, function (req, res) {
     var code = req.user.recNumber
@@ -5884,7 +5884,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
   }
   })
   });
-
+*/
 
   router.get('/recentFiles',isLoggedIn,function(req,res){
    
@@ -5928,7 +5928,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     })
   
   })
-   /*
+   
   router.get('/printReceipt',isLoggedIn,function(req,res){
     var code = req.user.recNumber
     var pro = req.user
@@ -5947,7 +5947,7 @@ if(docs){
 }
   })
 
-})*/
+})
 
   
   
