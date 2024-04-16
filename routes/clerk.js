@@ -5698,7 +5698,7 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
   
            
   await page.emulateMediaType('screen')
-  let height = await page.evaluate(() => document.documentElement.offsetHeight);
+  //let height = await page.evaluate(() => document.documentElement.offsetHeight);
   await page.evaluate(() => matchMedia('screen').matches);
   await page.setContent(content, { waitUntil: 'networkidle0'});
   //console.log(await page.pdf(),'7777')
@@ -5706,10 +5706,10 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
   await page.pdf({
   //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
   path:(`./public/receiptReports/${year}/${term}/${receiptNumber}_${studentName}`+'.pdf'),
-  /*format:"A4",
+  format:"A4",
   width:'30cm',
-  height:'21cm',*/
-  height: height + 'px',
+  height:'21cm',
+  //height: height + 'px',
     printBackground:true
   
   })
