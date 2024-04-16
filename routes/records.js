@@ -3324,7 +3324,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
       /*if(classes == 0){
         res.redirect('/hurlings/addClass')
       }else{*/
-      res.render('students/admit',{arr1:arr1,arr:arr,pro:pro,uid1:uid,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+      res.render('students/admit',{arr1:arr1,arr:arr,pro:pro,uid1:uid,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,user:req.query})
       
       })
     })
@@ -3414,7 +3414,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
             req.session.success = false;
             res.render('students/admit',{ errors:req.session.errors,arr:arr, arr1:arr1,pro:pro, user:req.body})
   
-           /* req.flash('danger', req.session.errors[0].msg);
+          /* req.flash('danger', req.session.errors[0].msg);
          
           
             res.redirect('/records/addStudent');*/
@@ -3587,6 +3587,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
                             
                               req.flash('success', 'Student Registered Successfully');
                             res.redirect('/records/addStudent')
+                            
                             })
                          
                         
