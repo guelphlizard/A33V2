@@ -3354,10 +3354,13 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
       var expdate = req.user.expdate
       var expStr = req.user.expStr
       var address = req.body.address
+      var address2 = req.body.address2
       var mobile = req.body.mobile;
+      var mobile2 = req.body.mobile2
       var gender = req.body.gender;
       var dob = req.body.dob;
     var email = req.body.email
+    var email2 = req.body.email2
       var class1 = req.body.class1;
     
   
@@ -3400,15 +3403,24 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
       var errors = req.validationErrors();
   
           if (errors) {
+             
+    Class1.find({},function(err,docs){
+      Level.find({},function(err,gocs){
+  
+     var arr = gocs
+      var arr1 = docs;
     
             req.session.errors = errors;
             req.session.success = false;
-            //res.render('hurlings/students/admit',{ errors:req.session.errors, arr1:arr1,pro:pro})
+            res.render('students/admit',{ errors:req.session.errors,arr:arr, arr1:arr1,pro:pro, user:req.body})
   
-            req.flash('danger', req.session.errors[0].msg);
+           /* req.flash('danger', req.session.errors[0].msg);
          
           
-            res.redirect('/records/addStudent');
+            res.redirect('/records/addStudent');*/
+
+      })
+    })
     
           
         }
@@ -3439,6 +3451,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
                         user.grade = grade;
                         user.class1 = class1;
                         user.mobile = mobile;
+                        user.mobile2 = mobile2
                         user.classLength = 0;
                         user.studentNum = 0;
                         user.uidNum = 0;
@@ -3475,7 +3488,9 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
                         user.recNumber=0
                         user.type = 'null';
                         user.address = address;
+                        user.address1 = address2
                         user.email = email
+                        user.email2 = email2
                         user.category = 'null';
                         user.subject = 0;
                         user.subjects = 'null'

@@ -1708,7 +1708,7 @@
 													<!--end::Input group-->
 												
 																<!--begin::Row-->
-													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
+													<div class="row row-cols-1 row-cols-sm-3 rol-cols-md-3 row-cols-lg-3">
 														<!--begin::Col-->
 														<div class="col">
 															<!--begin::Input group-->
@@ -1737,17 +1737,13 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="name" id="name" value=""  {{readonly}} />
+																<input type="text" class="form-control form-control-solid" name="name" id="name" value="{{user.name}}"  {{readonly}} />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
 														</div>
 														<!--end::Col-->
-													</div>
-													<!--end::Row-->
-													<!--begin::Row-->
-													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
-														<!--begin::Col-->
+
 														<div class="col">
 															<!--begin::Input group-->
 															<div class="fv-row mb-7">
@@ -1758,8 +1754,25 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="surname" id="surname" value=""  {{readonly}} />
+																<input type="text" class="form-control form-control-solid" name="surname" id="surname" value="{{user.surname}}"  {{readonly}} />
 																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
+													</div>
+													<!--end::Row-->
+													<!--begin::Row-->
+													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-3 row-cols-lg-3">
+														<!--begin::Col-->
+													<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span class="required">DOB</span>
+																</label>
+																<!--end::Label-->
+																<input type="date" class="form-control form-control-solid" name="dob" id="dob" value="{{user.dob}}"  {{readonly}} />
 															</div>
 															<!--end::Input group-->
 														</div>
@@ -1775,7 +1788,24 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="address" value=""  {{readonly}} />
+																<input type="text" class="form-control form-control-solid" name="address" value="{{user.address}}"  {{readonly}} />
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
+
+
+														<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span>Address2</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<input type="text" class="form-control form-control-solid" name="address2" value="{{user.address2}}"  {{readonly}} />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
@@ -1784,7 +1814,7 @@
 													</div>
 													<!--end::Row-->
 													<!--begin::Row-->
-													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
+													<div class="row row-cols-1 row-cols-sm-3 rol-cols-md-3 row-cols-lg-3">
 														<!--begin::Col-->
 														<div class="col">
 															<!--begin::Input group-->
@@ -1798,7 +1828,7 @@
 																<!--begin::Input-->
 															<div class="w-100">
 																	<!--begin::Select2-->
-																	<select class="form-select form-select-solid" name="gender"  {{readonly}} >
+																	<select class="form-select form-select-solid" name="gender"   {{readonly}} >
 																		<option></option>
 																		<option value="male" >Male</option>
 																		<option value="female" >Female</option>
@@ -1815,49 +1845,6 @@
 														
 														<!--begin::Col-->
 														<div class="col">
-															<!--begin::Input group-->
-															<div class="fv-row mb-7">
-																<!--begin::Label-->
-																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">DOB</span>
-																</label>
-																<!--end::Label-->
-																<input type="date" class="form-control form-control-solid" name="dob" id="dob" value=""  {{readonly}} />
-															</div>
-															<!--end::Input group-->
-														</div>
-														<!--end::Col-->
-													</div>
-													<!--end::Row-->
-                                         
-
-   								<!--begin::Row-->
-													<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
-														<!--begin::Col-->
-														<div class="col">
-															<!--begin::Input group-->
-															<div class="fv-row mb-7">
-																<!--begin::Label-->
-																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Class</span>
-																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
-																</label>
-																<!--end::Label-->
-																<!--begin::Input-->
-																<select id="class1" name="class1"  class="form-select form-select-solid fw-bolder"  {{readonly}}>
-																	
-																	   {{#each arr1}}
-                                                               <option value="{{this.class1}}">{{this.class1}}</option>
-                                                                     {{/each}}
-																	
-																</select>
-																<!--end::Input-->
-															</div>
-															<!--end::Input group-->
-														</div>
-														<!--end::Col-->
-														<!--begin::Col-->
-															<div class="col">
 															<!--begin::Input group-->
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
@@ -1879,6 +1866,70 @@
 															<!--end::Input group-->
 														</div>
 														<!--end::Col-->
+
+														<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span class="required">Class</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<select id="class1" name="class1"  class="form-select form-select-solid fw-bolder"  {{readonly}}>
+																	
+																	   {{#each arr1}}
+                                                               <option value="{{this.class1}}">{{this.class1}}</option>
+                                                                     {{/each}}
+																	
+																</select>
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
+													</div>
+													<!--end::Row-->
+                                         
+
+   								<!--begin::Row-->
+												<div class="row row-cols-1 row-cols-sm-2 rol-cols-md-1 row-cols-lg-2">
+														<!--begin::Col-->
+													<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span class="required">Mobile </span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<input type="text" class="form-control form-control-solid" name="mobile" value="{{user.mobile}}"  {{readonly}} />
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
+														<!--end::Col-->
+														<!--begin::Col-->
+															<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span class="required">Mobile 2</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<input type="text" class="form-control form-control-solid" name="mobile2" value="{{user.mobile2}}"  {{readonly}} />
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
+														<!--end::Col-->
+
+															
 													</div>
 													<!--end::Row-->
 
@@ -1892,12 +1943,12 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Phone</span>
-																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i>
+																	<span>Email</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="mobile" value=""  {{readonly}} />
+																<input type="email" class="form-control form-control-solid" name="email" id="email" value="{{user.email}}"   {{readonly}}/>
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
@@ -1909,12 +1960,12 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span>Email</span>
+																	<span>Email 2</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="email" class="form-control form-control-solid" name="email" id="email" value=""   {{readonly}}/>
+																<input type="email" class="form-control form-control-solid" name="email2" id="email2" value="{{user.email2}}"   {{readonly}}/>
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
@@ -1936,7 +1987,7 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="password" class="form-control form-control-solid" name="password" id="password" value=""  {{readonly}} />
+																<input type="password" class="form-control form-control-solid" name="password" id="password" value="{{user.password}}"  {{readonly}} />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
@@ -1953,7 +2004,7 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="password" class="form-control form-control-solid" name="confirmPassword" id="confirmPassword" value=""  {{readonly}} />
+																<input type="password" class="form-control form-control-solid" name="confirmPassword" id="confirmPassword" value="{{user.confirmPassword}}"  {{readonly}} />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
