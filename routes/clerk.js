@@ -105,6 +105,7 @@ const arr2 = {}
 const arr9 ={}
 const arrInvoice = {}
 const arrSingle = {}
+const arrSingleUpdate = {}
 const arrReceipt = {}
 const arrSub = {}
 //const data = require('../data.json')
@@ -6176,8 +6177,110 @@ router.get('/autocompleteXN/', function(req, res, next) {
     
     })
 
+
+    router.get('/autocompleteInvoiceX/', function(req, res, next) {
+      var code
+    
+        var regex= new RegExp(req.query["term"],'i');
+       
+        var bookFilter =InvoiceFile.find({invoiceNumberText:regex},{'invoiceNumber':1}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
+      
+        
+        bookFilter.exec(function(err,data){
+       
+     
+      console.log('data',data)
+      
+      var result=[];
+      
+      if(!err){
+         if(data && data.length && data.length>0){
+           data.forEach(book=>{
+     
+            
+         
+      
+              
+             let obj={
+               id:book._id,
+               label: book.invoiceNumber
+    
+           
+         
+           
+             
+              
+      
+               
+             };
+            
+             result.push(obj);
+          
+         
+           });
+      
+         }
+       
+         res.jsonp(result);
+    
+        }
+      
+      })
+     
+      });
+    
+    //role admin
+    //this route autopopulates info of the title selected from the autompleteX route
+      router.post('/autoInvoiceX',function(req,res){
+          var code = req.body.code
+    
+      
+          
+         
+          InvoiceFile.find({invoiceNumberText:code},function(err,docs){
+         if(docs == undefined){
+           res.redirect('/')
+         }else
+        
+            res.send(docs[0])
+          })
+        
+        
+        })
     
 
+
+
+
+
+
+    
+
+        router.post('/autoInvoUpdate',isLoggedIn,function(req,res){
+          var code = req.body.code
+          var term = req.user.term
+    
+      
+          
+         
+       // InvoiceFile.find({term:code,/*code:uid*/datePaid:"now"},function(err,docs){
+          InvoiceSubBatch.find({ invoiceId:code/*studentId:code,term:term,status:"unpaid"*/}).lean().sort({code:1}).then(docs=>{
+    if(docs.length > 0){
+      
+          let amount =  docs[0].amountDue 
+          var c = {type:" ",invoiceNumber:"",_id:"",amountDue:amount} 
+          //  docs.push(c)
+    }
+         if(docs == undefined){
+           res.redirect('/')
+         }else
+    
+            res.send(docs)
+          })
+        
+        
+        })
+    
 
     
     
@@ -7241,6 +7344,7 @@ var book = new InvoiceSubBatch();
   book.invoiceDescription = "null"  //description
   book.status = 'not saved'
   book.invoiceCode = invoNumber
+  book.invoiceCodeText = invoNumber
   book.invoiceId = invoNumber
   book.type = "Invoice"
   book.month = month
@@ -7534,23 +7638,26 @@ height:'21cm',*/
   repo.invoiceId = invoiceId
   repo.invoiceCode = invoiceCode
   repo.invoiceNumber = invoiceNumber
+  repo.invoiceNumberText = invoiceNumber
   repo.receiptNumber = 0
   repo.status = "unpaid"
   repo.datePaid = "null"
   repo.save().then(poll =>{
     console.log("Done creating pdf",uid)
+
+    //req.flash('success', 'Invoice Generation Successful');
+  
+  res.redirect('/clerk/genEmailInvoice');
+
+  //req.flash('success', 'Invoice Emailed Successfully!');
+  
   })
   
   
   /*await browser.close()
   
   /*process.exit()*/
-req.flash('success', 'Invoice Generation Successful');
-  
-  res.redirect('/clerk/genEmailInvoice');
 
-  req.flash('success', 'Invoice Emailed Successfully!');
-    
   //res.redirect('/clerk/invoiceSingleCode')
   
   
@@ -7658,9 +7765,8 @@ req.flash('success', 'Invoice Generation Successful');
   /*res.redirect('/clerk/dashX')*/
   res.redirect('/clerk/printInvoice')
        }else{
-      /*   console.log('Email sent successfully')*/
-         req.flash('success', 'Invoice Emailed Successfully!');
-    
+  /*console.log('Email sent successfully')*/
+  req.flash('success', 'Invoice Emailed Successfully!');    
   res.redirect('/clerk/printInvoice')
 
   //res.redirect('/clerk/invoiceSingleCode')
@@ -7670,15 +7776,7 @@ req.flash('success', 'Invoice Generation Successful');
      })
 
     }
-  })
-   
-  
-    
-   
-  
-   
-    
-   
+  }) 
    })
 
 
@@ -7708,6 +7806,670 @@ req.flash('success', 'Invoice Generation Successful');
   })
   });
 
+///////////////////invoiceUpdate
+
+
+
+router.get('/studentInvoiceUpdate', isLoggedIn,function(req,res){
+  var pro = req.user
+  var companyAddress = req.user.companyAddress
+  var companyCity = req.user.companyCity
+  var companyMobile = req.user.companyMobile
+  var companyCountry = req.user.companyCountry
+  var companyEmail = req.user.companyEmail
+  var companyName = req.user.companyName
+  var m = moment()
+  var mformat = m.format('L')
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  res.render('acc2/singleInvoUpdate',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,pro:pro,companyAddress:companyAddress,
+  companyCity:companyCity,companyCountry:companyCountry,companyEmail:companyEmail,companyName:companyName,companyMobile:companyMobile,mformat:mformat})
+})
+
+/* router.post('/invoice',function(req,res){
+console.log(req.body['name[]'],req.body['quantity[]'],req.body['price[]'])
+
+})*/
+
+
+
+
+
+router.post('/studentInvoiceUpdate',isLoggedIn,function(req,res){
+  let bal,grade,class1,amountDue
+  var invoNumber = req.body.invoNumber
+  var studentId = req.body.uid
+  var studentId2 = req.body.studentId2
+  let invoiceAmount
+  //var studentId3 =new ObjectId(studentId2)
+  InvoiceSubBatch.find({invoCodeText:invoNumber},function(err,docs){
+    if(docs.length >0){
+      for(var i = 0; i<docs.length;i++){
+      let id = docs[i]._id
+      InvoiceSubBatch.findByIdAndRemove(id,function(err,locs){
+
+      })
+    }
+    }
+  })
+
+
+  InvoiceFile.find({invoCodeText:invoNumber},function(err,docs){
+    if(docs.length >0){
+      for(var i = 0; i<docs.length;i++){
+      let invoiceAmount = docs[i].amountDue
+      console.log(invoiceAmount,'invoiceAmount')
+ 
+  }
+    }
+  })
+
+
+  InvoiceFile.find({invoCodeText:invoNumber},function(err,docs){
+    if(docs.length >0){
+      for(var i = 0; i<docs.length;i++){
+      let id = docs[i]._id
+      amountDue = docs[i].amountDue
+      InvoiceFile.findByIdAndRemove(id,function(err,locs){
+
+      })
+    }
+    }
+  })
+
+
+
+  User.find({uid:studentId},function(err,doc){
+    console.log(doc[0],'docccccc',studentId2)
+    bal = doc[0].balance - amountDue
+    console.log(bal,'bal')
+    grade = doc[0].grade
+    class1 = doc[0].class1
+    User.findByIdAndUpdate(studentId2,{$set:{balance:bal}},function(err,tocs){
+
+    })
+
+  })
+
+
+  var id = req.user._id
+
+
+  User.findByIdAndUpdate(id,{$set:{invoNumber:invoNumber}},function(err,docs){
+
+  })
+
+  var m2 = moment()
+  var year = m2.format('YYYY')
+  var month = m2.format('MMMM')
+  //var date = req.body.invoice_date
+  var dueDate = req.body.invoice_due_date
+  var date = m2.format('L')
+  var itemId = req.body.itemId
+  var companyAddress = req.user.companyAddress
+  var companyCity = req.user.companyCity
+  var companyMobile = req.user.companyMobile
+  var companyCountry = req.user.companyCountry
+  var companyEmail = req.user.companyEmail
+  var companyName = req.user.companyName
+  var companyClerk = req.user.fullname
+  
+  let c = -1
+  //var notes = req.query.notes
+  var studentName= req.body.clientName
+  var studentEmail = req.body.clientEmail
+  var studentAddress = req.body.clientAddress
+  var studentMobile = req.body.mobile
+
+  var description = req.body.description2
+ // var grade = req.body.grade
+ // var class1 = req.body.class1
+  var term = req.user.term
+  let balance = req.body.balance
+ar = req.body['code[]']
+ar1 = req.body['quantity[]']
+ar2=req.body['price[]']
+ar3=req.body['description[]']
+console.log(ar,ar1,ar2,'000000')
+req.check('clientName','Enter Client Name').notEmpty();            
+req.check('clientEmail','Enter Client Email').notEmpty();
+req.check('invoice_due_date','Enter Due Date').notEmpty();
+req.check('invoice_date', 'Enter Date').notEmpty();
+
+
+
+
+
+
+
+var errors = req.validationErrors();
+   
+if (errors) {
+
+  req.session.errors = errors;
+  req.session.success = false;
+  req.flash('danger', req.session.errors[0].msg);
+         
+          
+  res.redirect('/clerk/studentInvoiceUpdate');
+}
+
+
+else{
+
+ar = ar.filter(v=>v!='')
+ar1 = ar1.filter(v=>v!='')
+ar2 = ar2.filter(v=>v!='')
+ar3 = ar3.filter(v=>v!='')
+
+console.log(ar,'iwee')
+console.log(ar1,'iwee1')
+console.log(ar2,'iwee2')
+console.log(ar3,'iwee3')
+for(var i = 0; i<ar.length;i++){
+console.log(ar[i])
+let code = ar[i]
+console.log(bal,amountDue,'balInvo')
+
+
+var book = new InvoiceSubBatch();
+book.item = "null"
+book.code = code
+book.invoNumber = invoNumber
+book.itemId = 'cccc'
+book.qty = 0
+book.price = 0
+book.total = 0
+book.companyName = companyName
+book.companyEmail = companyEmail
+book.companyCity = companyCity
+book.companyAddress = companyAddress
+book.companyMobile = companyMobile
+book.studentName = studentName
+book.studentEmail = studentEmail
+book.studentAddress =studentAddress
+book.studentMobile = studentMobile
+book.studentId = studentId
+book.studentId2 = studentId2
+book.date = date
+book.balance = 0
+book.invoiceAmount =0
+book.invoiceDescription = "null"  //description
+book.status = 'not saved'
+book.invoiceCode = invoNumber
+book.invoiceCodeText = invoNumber
+book.invoiceId = invoNumber
+book.type = "Invoice"
+book.month = month
+book.year = year
+book.grade =  grade
+book.class = class1
+book.term = term
+book.size = i
+book.subtotal = 0
+
+
+
+    
+     
+      book.save()
+        .then(title =>{
+//let client = title.clientName
+
+let pId = title._id
+console.log(pId,"idd")
+
+let size = title.size
+
+console.log(size,'size')
+let qty = ar1[size]
+let price = ar2[size]
+let item = ar3[size]
+let total = qty * price
+
+InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,balance:bal,invoiceAmount:amountDue,price:price,total:total,item:item,invoiceDescription:item}},function(err,ocs){
+    
+    })
+      
+            
+        
+              
+
+
+           
+          })
+        }
+
+res.redirect('/clerk/invoiceSingleProcessUpdate')
+      }
+})
+
+
+
+router.get('/invoiceSingleProcessUpdate',isLoggedIn,function(req,res){
+
+var code =req.user.invoNumber
+console.log(code,'code')
+
+InvoiceSubBatch.find({invoNumber:code},function(err,docs){
+for(var i = 0;i<docs.length;i++){
+let id = docs[i]._id
+InvoiceSubBatch.findByIdAndUpdate(id,{$set:{status:"saved"}},function(err,locs){
+
+})
+
+
+}
+res.redirect('/clerk/invoiceSingleSubTotalUpdate')
+})
+
+
+})
+
+router.get('/invoiceSingleSubTotalUpdate',isLoggedIn,function(req,res){
+ var number1 = 0
+ var arr7= []
+  var code =req.user.invoNumber
+  let balance 
+  InvoiceSubBatch.find({invoNumber:code},function(err,hods){
+
+    for(var q = 0;q<hods.length; q++){
+        
+      arr7.push(hods[q].total)
+        }
+        //adding all incomes from all lots of the same batch number & growerNumber & storing them in variable called total
+         number1=0;
+        for(var z in arr7) { number1 += arr7[z]; }
+        for(var i = 0;i<hods.length;i++){
+          let id2 = hods[i].studentId2
+balance=hods[i].balance + number1
+      let id = hods[i]._id
+console.log(id,'333')
+console.log(balance,'balance')
+        InvoiceSubBatch.findByIdAndUpdate(id,{$set:{subtotal:number1}},function(err,locs){
+
+        })
+
+        User.findByIdAndUpdate(id2,{$set:{balance:balance}},function(err,docs){
+
+        })
+      }
+
+        res.redirect('/clerk/arrSingleInvoiceUpdate')
+
+      })
+
+
+})
+
+
+
+router.get('/arrSingleInvoiceUpdate',isLoggedIn,function(req,res){
+var code = req.user.invoNumber
+
+
+
+arrSingleUpdate[code]=[]
+
+
+res.redirect('/clerk/invoiceSingleGenerationUpdate')
+
+})
+
+
+
+
+router.get('/invoiceSingleGenerationUpdate',isLoggedIn,function(req,res){
+
+var code = req.user.invoNumber
+
+
+//console.log(docs[i].uid,'ccc')
+
+//let uid = "SZ125"
+
+
+//TestX.find({year:year,uid:uid},function(err,vocs) {
+InvoiceSubBatch.find({invoNumber:code}).lean().then(vocs=>{
+
+
+for(var x = 0;x<vocs.length;x++){
+
+let studentId = vocs[x].studentId
+if( arrSingleUpdate[code].length > 0 && arrSingleUpdate[code].find(value => value.studentId == studentId) ){
+
+  arrSingleUpdate[code].push(vocs[x])
+
+    }
+    
+     
+    
+    
+    else{
+      arrSingleUpdate[code].push(vocs[x])
+          
+      } 
+
+
+ 
+
+     
+
+}  
+    })
+    
+    res.redirect('/clerk/invoiceSingleGeneration2Update')
+  
+
+/*})*/
+
+})
+
+
+
+
+
+
+router.get('/invoiceSingleGeneration2Update',isLoggedIn,function(req,res){
+console.log(arrSingleUpdate,'arrSingleUpdate')
+var m = moment()
+var mformat = m.format('L')
+var month = m.format('MMMM')
+var year = m.format('YYYY')
+var code = req.user.invoNumber
+var uid = req.user.invoNumber
+/*console.log(arr,'iiii')*/
+
+
+let studentName = arrSingleUpdate[uid][0].studentName
+let studentAddress = arrSingleUpdate[uid][0].studentAddress
+let studentEmail = arrSingleUpdate[uid][0].studentEmail
+let studentMobile = arrSingleUpdate[uid][0].studentMobile
+let studentId = arrSingleUpdate[uid][0].studentId
+let amountDue = arrSingleUpdate[uid][0].subtotal
+let balance = arrSingleUpdate[uid][0].balance
+console.log(balance,amountDue,'bal-amountDue')
+let bf = balance + amountDue
+// let term = arrSingle[uid][0].term
+let term = 2
+let description = arrSingleUpdate[uid][0].invoiceDescription
+let id2 = arrSingleUpdate[uid][0].studentId2
+let class1 =arrSingleUpdate[uid][0].class1
+let grade =arrSingleUpdate[uid][0].grade
+let invoiceNumber =code
+let date = arrSingleUpdate[uid][0].date
+let invoiceId = code
+let invoiceCode= code
+let type = 'Invoice'
+let amountPaid = 0
+//console.log(docs,'docs')
+
+const compile = async function (templateName, arrSingleUpdate){
+const filePath = path.join(process.cwd(),'templates',`${templateName}.hbs`)
+
+const html = await fs.readFile(filePath, 'utf8')
+
+return hbs.compile(html)(arrSingleUpdate)
+
+};
+
+
+
+
+(async function(){
+
+try{
+//const browser = await puppeteer.launch();
+const browser = await puppeteer.launch({
+headless: true,
+args: [
+"--disable-setuid-sandbox",
+"--no-sandbox",
+"--single-process",
+"--no-zygote",
+],
+executablePath:
+process.env.NODE_ENV === "production"
+  ? process.env.PUPPETEER_EXECUTABLE_PATH
+  : puppeteer.executablePath(),
+});
+
+const page = await browser.newPage()
+
+
+
+//const content = await compile('report3',arr[uid])
+const content = await compile('euritInvoice',arrSingleUpdate[code])
+
+//const content = await compile('index',arr[code])
+
+await page.setContent(content, { waitUntil: 'networkidle2'});
+//await page.setContent(content)
+//create a pdf document
+await page.emulateMediaType('screen')
+await page.evaluate(() => matchMedia('screen').matches);
+await page.setContent(content, { waitUntil: 'networkidle0'});
+//console.log(await page.pdf(),'7777')
+
+await page.pdf({
+//path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
+path:(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
+format:"A4",
+/*width:'30cm',
+height:'21cm',*/
+//height: height + 'px',
+  printBackground:true
+
+})
+
+
+
+var repo = new InvoiceFile();
+ 
+repo.studentName = studentName;
+repo.studentId =studentId
+repo.studentId2 =id2
+repo.studentEmail = studentEmail
+repo.studentAddress = studentAddress
+repo.studentMobile = studentMobile
+repo.class1 = class1
+repo.grade = grade;
+repo.filename = invoiceNumber+'_'+studentName+'.pdf';
+repo.year = year;
+repo.css = "danger";
+repo.term = term
+repo.description = description
+repo.date = date
+repo.studentBalance = bf
+repo.type = type
+repo.type1 = "single"
+repo.amountPaid= amountPaid
+repo.amountDue = amountDue
+repo.invoiceTotal = amountDue
+repo.month = month
+repo.invoiceId = invoiceId
+repo.invoiceCode = invoiceCode
+repo.invoiceNumber = invoiceNumber
+repo.invoiceNumberText = invoiceNumber
+repo.receiptNumber = 0
+repo.status = "unpaid"
+repo.datePaid = "null"
+repo.save().then(poll =>{
+  console.log("Done creating pdf",uid)
+
+ // req.flash('success', 'Invoice Generation Successful');
+
+  res.redirect('/clerk/genEmailInvoiceUpdate');
+  
+ /* req.flash('success', 'Invoice Emailed Successfully!');
+    
+  //res.redirect('/clerk/invoiceSingleCode')*/
+})
+
+
+/*await browser.close()
+
+/*process.exit()*/
+
+
+
+}catch(e) {
+
+console.log(e)
+
+
+}
+
+
+}) ()
+
+
+
+
+//res.redirect('/hostel/discList')
+
+})
+
+
+
+
+
+
+
+
+router.get('/genEmailInvoiceUpdate',isLoggedIn,function(req,res){
+  var m = moment()
+  var mformat = m.format('L')
+  var month = m.format('MMMM')
+ // var year = m.format('YYYY')
+  var id= req.user._id
+  var code = req.user.invoNumber
+  console.log(code,'code')
+ // var term = req.user.term
+  //var uid = "ST3104"
+  /*let studentName = arrReceipt[code][0].studentName
+  let studentEmail = arrReceipt[code][0].studentEmail
+  let studentId = arrReceipt[code][0].studentId
+  let receiptNumber = arrReceipt[code][0].receiptNumber*/
+
+  /*var count = req.user.countN
+  count + 1
+  let email = 'kratosmusasa@gmail.com'
+  let uid = req.user.studentId
+  let name = req.user.studentName
+  let invoNumber = 3490*/
+
+   const transporter = nodemailer.createTransport({
+     host: 'mail.steuritinternationalschool.org',
+     port:465,
+     secureConnection:true,
+     logger:true,
+     debug:true,
+     secureConnection:false,
+     auth: {
+         user: "admin@steuritinternationalschool.org",
+         pass: "steurit2024",
+     },
+     tls:{
+       rejectUnAuthorized:true
+     }
+     //host:'smtp.gmail.com'
+   });
+   
+ 
+
+           
+
+
+
+     InvoiceFile.find({type:"Invoice",invoiceNumber:code}, function(err,docs){
+       console.log(docs.length,'length')
+if(docs.length > 0){
+  let email = docs[0].studentEmail
+  let uid = docs[0].studentId
+  let studentName = docs[0].studentName
+  let invoiceNumber = docs[0].invoiceNumber
+  let amount = docs[0].amountDue
+  let year = docs[0].year
+  let term = docs[0].term
+
+    //  let invoNumber = docs[i].invoNumber 
+    
+   let mailOptions ={
+    from: '"St Eurit International School" <admin@steuritinternationalschool.org>', // sender address
+                   to:email, // list of receivers
+                   subject: `  Invoice ${invoiceNumber} from ST.EURIT INTERNATIONAL SCHOOL `,
+       html:`Dear ${studentName}: <br> <br> Your invoice-${invoiceNumber} for ${amount} is attached.Please remit payment
+       at your earliest convenience. <br> <br> Thank you for your business - we appreciate it very much. <br> <br>
+       Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
+       attachments: [
+        {
+          filename:uid+'_'+studentName+'_'+'Invoice'+'.pdf',
+          path:`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}.pdf`
+        }
+      ]
+   };
+   transporter.sendMail(mailOptions, function (error,info){
+     if(error){
+       //console.log(error)
+       req.flash('danger', 'Reports Not Emailed!');
+  
+/*res.redirect('/clerk/dashX')*/
+res.redirect('/clerk/printInvoiceUpdate')
+     }else{
+/*console.log('Email sent successfully')*/
+req.flash('success', 'Invoice Emailed Successfully!');    
+res.redirect('/clerk/printInvoiceUpdate')
+
+//res.redirect('/clerk/invoiceSingleCode')
+     }
+        
+ console.log(email,'email')
+   })
+
+  }
+}) 
+ })
+
+
+ 
+ router.get('/printInvoiceUpdate',isLoggedIn, function (req, res) {
+  var code =  req.user.invoNumber
+  var pro = req.user
+  InvoiceFile.find({ivoiceNumber:code,type:'Invoice'},function(err,docs){
+    let size = docs.length - 1
+  if(docs){
+    let name = docs[size].filename
+
+    var year = docs[size].year
+    var term = docs[size].term
+  var path = "./public/invoiceReports/"+year+'/'+term+'/'+name;
+
+ // const path = './public/images/1.pdf'
+  if (fs.existsSync(path)) {
+      res.contentType("application/pdf");
+      fs.createReadStream(path).pipe(res)
+  } else {
+      res.status(500)
+      console.log('File not found')
+      res.send('File not found')
+  }
+}
+})
+});
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
 
 
