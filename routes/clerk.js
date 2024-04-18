@@ -7762,13 +7762,13 @@ height:'21cm',*/
        if(error){
          //console.log(error)
          req.flash('danger', 'Reports Not Emailed!');
-         res.redirect('/clerk/invoiceSingleCode')
+        // res.redirect('/clerk/invoiceSingleCode')
   /*res.redirect('/clerk/dashX')*/
- // res.redirect('/clerk/printInvoice')
+  res.redirect('/clerk/printInvoice')
        }else{
   /*console.log('Email sent successfully')*/
   req.flash('success', 'Invoice Emailed Successfully!');    
- // res.redirect('/clerk/printInvoice')
+  res.redirect('/clerk/printInvoice')
 
   //res.redirect('/clerk/invoiceSingleCode')
        }
