@@ -7595,6 +7595,7 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   //await page.setContent(content)
  //create a pdf document
  await page.emulateMediaType('screen')
+ let height = await page.evaluate(() => document.documentElement.offsetHeight);
  await page.evaluate(() => matchMedia('screen').matches);
  await page.setContent(content, { waitUntil: 'networkidle0'});
   //console.log(await page.pdf(),'7777')
@@ -7761,13 +7762,13 @@ height:'21cm',*/
        if(error){
          //console.log(error)
          req.flash('danger', 'Reports Not Emailed!');
-    
+         res.redirect('/clerk/invoiceSingleCode')
   /*res.redirect('/clerk/dashX')*/
-  res.redirect('/clerk/printInvoice')
+ // res.redirect('/clerk/printInvoice')
        }else{
   /*console.log('Email sent successfully')*/
   req.flash('success', 'Invoice Emailed Successfully!');    
-  res.redirect('/clerk/printInvoice')
+ // res.redirect('/clerk/printInvoice')
 
   //res.redirect('/clerk/invoiceSingleCode')
        }
