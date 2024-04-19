@@ -7569,6 +7569,8 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   try{
   //const browser = await puppeteer.launch();
   const browser = await puppeteer.launch({
+
+    ignoreHTTPSErrors: true,
   headless: true,
   args: [
   "--disable-setuid-sandbox",
@@ -7594,19 +7596,23 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   await page.setContent(content, { waitUntil: 'networkidle2'});
   //await page.setContent(content)
  //create a pdf document
+ await new Promise(function(resolve) {setTimeout(resolve, 2000)});
+
+ await page.emulateMediaType('print');
  await page.emulateMediaType('screen')
- let height = await page.evaluate(() => document.documentElement.offsetHeight);
+ //let height = await page.evaluate(() => document.documentElement.offsetHeight);
  await page.evaluate(() => matchMedia('screen').matches);
  await page.setContent(content, { waitUntil: 'networkidle0'});
+ 
   //console.log(await page.pdf(),'7777')
   
   await page.pdf({
   //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
   path:(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
   format:"A4",
-  /*width:'30cm',
-height:'21cm',*/
-  //height: height + 'px',
+ /* width:'30cm',
+height:'21cm',
+  //height: height + 'px',*/
     printBackground:true
   
   })
@@ -7647,10 +7653,11 @@ height:'21cm',*/
     console.log("Done creating pdf",uid)
 
     //req.flash('success', 'Invoice Generation Successful');
-  
-  res.redirect('/clerk/genEmailInvoice');
+
 
   //req.flash('success', 'Invoice Emailed Successfully!');
+
+  res.redirect('/clerk/genEmailInvoice');
   
   })
   
@@ -7660,7 +7667,8 @@ height:'21cm',*/
   /*process.exit()*/
 
   //res.redirect('/clerk/invoiceSingleCode')
-  
+    
+  //res.redirect('/clerk/genEmailInvoice');
   
   }catch(e) {
   
