@@ -1,4 +1,5 @@
 node_modules
-
+public/invoiceReports
 public/receiptReports
-
+invoiceReports
+receiptReports

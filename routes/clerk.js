@@ -72,6 +72,7 @@ var nodemailer = require('nodemailer');
 var passport = require('passport')
 var xlsx = require('xlsx')
 var multer = require('multer')
+var Axios = require('axios')
 const fs = require('fs-extra')
 var path = require('path');
 var bcrypt = require('bcrypt-nodejs');
@@ -108,6 +109,7 @@ const arrSingle = {}
 const arrSingleUpdate = {}
 const arrReceipt = {}
 const arrSub = {}
+let pdfX
 //const data = require('../data.json')
 
 var storageX = multer.diskStorage({
@@ -133,7 +135,7 @@ User.find(function(err,docs){
  }
 })*/
 
-const mongoURI = process.env.MONGO_URL ||'mongodb://0.0.0.0:27017/smsDB';
+const mongoURI = process.env.MONGO_URL ||'mongodb://0.0.0.0:27017/euritDB';
 
 const conn = mongoose.createConnection(mongoURI);
 
@@ -4150,11 +4152,12 @@ router.get('/invoProcess',isLoggedIn,function(req,res){
       })
   
   
+
   /*await browser.close()
   
   process.exit()*/
 
-  
+ 
   
   /*req.flash('success', 'Report Generation Success');
  
@@ -4381,7 +4384,10 @@ User.findByIdAndUpdate(xId,{$set:{countN:1}},function(err,focs){
    })
 */
 
+router.get('/pushPdf',isLoggedIn,function(req,res){
 
+
+})
 
    router.get('/genEmailInvo',isLoggedIn,function(req,res){
     var m = moment()
@@ -7274,6 +7280,7 @@ var grade = req.user.invoiceGrade
     var class1 = req.body.class1
     var term = req.user.term
     let balance = req.body.balance
+  
   ar = req.body['code[]']
   ar1 = req.body['quantity[]']
   ar2=req.body['price[]']
@@ -7606,19 +7613,25 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
  
   //console.log(await page.pdf(),'7777')
   
-  await page.pdf({
+ let pdf =  await page.pdf({
   //path:('../gitzoid2/reports/'+year+'/'+month+'/'+uid+'.pdf'),
   path:(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf'),
   format:"A4",
  /* width:'30cm',
 height:'21cm',
   //height: height + 'px',*/
-    printBackground:true
+    printBackground:true,
+
   
   })
-  
-  
-  
+
+ 
+
+ 
+ 
+let filename = invoiceNumber+'_'+studentName+'.pdf'
+
+    //upload.single(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf')
   var repo = new InvoiceFile();
    
   repo.studentName = studentName;
@@ -7653,22 +7666,59 @@ height:'21cm',
     console.log("Done creating pdf",uid)
 
     //req.flash('success', 'Invoice Generation Successful');
+   /* router.post('/testX',upload.single(pdf),function(req,res){
+console.log(req.file,'fileeeeeeeee')
+    })*/
+
+pdfX = pdf
+   // res.redirect(308, '/clerk/testX');
+   /* var request = require('request');
+    request.post({ headers: {  'enctype': "multipart/form-data",  'content-type' : 'application/json'}
+                   ,  json: {
+                    file:pdf,
+                  
+                      } , url: 'http://localhost:8500/clerk/testX'}
+                   , function(error, response, body){
+     //  console.log(response,body,'nothing'); 
+    }); */
+
+  
+
+  /*router.post('/testX',upload.single(pdf),function(req,res){
+    console.log(req.file,'fileeeeeeeee')
+        })*/
+//console.log(pdf,'pdf')
 
 
   //req.flash('success', 'Invoice Emailed Successfully!');
 
-  res.redirect('/clerk/genEmailInvoice');
+  //res.redirect('/clerk/genEmailInvoice');
   
   })
+//const data = await fs.readFile(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf');
+ /*const file = await fs.readFile(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf');
+  const form = new FormData();
+  form.append("file", file);
+ //const headers = form.getHeaders();
+  //Axios.defaults.headers.cookie = cookies;
+  //console.log(form)
+  await Axios({
+    method: "POST",
+    action: 'https://localhost:8500/clerk/wafaX',
+    headers: {
+      'enctype': "multipart/form-data",   'accept':".pdf",
+    },
+    data: form
+  });
   
-  
+  */
   /*await browser.close()
   
   /*process.exit()*/
 
   //res.redirect('/clerk/invoiceSingleCode')
     
-  //res.redirect('/clerk/genEmailInvoice');
+  res.redirect('/clerk/genEmailInvoice');
   
   }catch(e) {
   
@@ -7690,7 +7740,10 @@ height:'21cm',
   
 
 
-
+  router.post('/wafaX',upload.single('file'),function(req,res){
+    console.log(req.file,'fileeeeeeeee')
+    console.log(req.data,'bbb')
+        })
 
 
   
@@ -8272,7 +8325,7 @@ height:'21cm',*/
 })
 
 
-
+//upload.single('3400_Blessing_Musasa.pdf')
 var repo = new InvoiceFile();
  
 repo.studentName = studentName;
@@ -8868,7 +8921,33 @@ router.get('/idEdit',isLoggedIn,function(req,res){
 
 
 
+  router.get('/invoUpdate33',isLoggedIn,function(req,res){
 
+    User.find({role:"student"},function(err,docs){
+      for(var i = 0; i<docs.length;i++){
+        let id = docs[i]._id
+        let uid = docs[i].uid
+        let balance = docs[i].balance
+        InvoiceFile.find({studentId:uid},function(err,locs){
+          if(locs.length == 1){
+            let invoId = locs[0]._id
+            InvoiceFile.findByIdAndUpdate(invoId,{$set:{studentBalance:balance}},function(err,nocs){
+
+            })
+          }
+        })
+      }
+    })
+  })
+
+
+router.get('/importInvo',isLoggedIn,function(req,res){
+  res.render('imports/invoices')
+})
+  router.post('/importInvo',upload.single('file'),function(req,res){
+console.log(req.file,'cccc')
+console.log(req,'req')
+  })
 module.exports = router;
 
 
