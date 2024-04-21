@@ -122,7 +122,7 @@ console.log(v - 1,'vv')
                                 let total1 = price1 * quantity1
 
                                 let grandTotal = total1 + total
-console.log(total,total1,'grandTotal')
+                                console.log(total,total1,'grandTotal')
                                 
                                  $("#code1").val(data.code)
                                  $("#description1").val(data.item)

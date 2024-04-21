@@ -17,11 +17,12 @@ css:{type:String},
 receiptNumber:{type:Number},
 month:{type:String},
 filename:{type:String},
+fileId:{type:String},
 year:{type:Number},
 date:{type:String},
 type:{type:String},
 type1:{type:String},
-term:{type:Number, },
+term:{type:Number },
 invoiceNumber:{type:Number},
 invoiceNumberText:{type:String},
 status:{type:String },
@@ -34,7 +35,9 @@ invoiceAmountDue:{type:Number },
 invoiceTotal:{type:Number },
 studentBalance:{type:Number },
 remainingBalance:{type:Number, },
-datePaid:{type:String}
+discount: {type: Number },
+datePaid:{type:String},
+amountBefore:{type:Number}
 })
 
 module.exports = mongoose.model('invoiceFile1', invoiceFile1Schema );

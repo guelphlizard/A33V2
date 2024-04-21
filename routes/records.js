@@ -11092,7 +11092,7 @@ router.get('/lessonBatch',isLoggedIn,records,function(req,res){
         var rom = new Room();
       
         rom.name = room;
-        rom.companyId = companyId;
+
        
       
       

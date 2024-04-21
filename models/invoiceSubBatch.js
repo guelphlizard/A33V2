@@ -38,7 +38,9 @@ var invoiceSubBatchSchema = new Schema({
     term: {type: Number, required: true},
     subtotal: {type: Number,required:true },
     invoiceCodeText: {type: String},
-    size: {type: Number, }
+    discount: {type: Number },
+    size: {type: Number },
+    amountBefore:{type:Number},
   
 
  

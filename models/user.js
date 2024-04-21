@@ -127,6 +127,7 @@ var userSchema = new mongoose.Schema({
     invoNumber:{type:Number},
     quoteCode:{type:String},
     num:{type:Number},
+    discount:{type:Number},
     clientName:{type:String},
     companyName:{type:String},
     companyEmail:{type:String},
@@ -137,6 +138,7 @@ var userSchema = new mongoose.Schema({
     countN:{type:Number},
     studentNumber:{type:Number},
     invoiceGrade:{type:String},
+    
 });
 
 // Custom validation for email

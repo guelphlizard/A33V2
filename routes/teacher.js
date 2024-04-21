@@ -4535,7 +4535,7 @@ if(!req.file){
 
 else 
 {
-TeacherSub.findOne({'companyId':companyId,'subjectCode':subjectCode,'companyId':companyId})
+TeacherSub.findOne({'subjectCode':subjectCode,'companyId':companyId})
 .then(teach=>{
   if(teach){
   

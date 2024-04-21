@@ -80,6 +80,7 @@ var passport = require('passport')
 var moment = require('moment')
 var bcrypt = require('bcrypt-nodejs');
 const { countReset } = require('console');
+var FormData = require('form-data')
 
 var storageX = multer.diskStorage({
   destination:function(req,file,cb){
@@ -2683,7 +2684,7 @@ res.render('invoiceFolderReg/filesTerm',{listX:arr,pro:pro,code:id,year:year,ter
 
 //download voucher annual file
 
-router.get('/downloadTermlyInvoiceReport/:id',isLoggedIn,function(req,res){
+/*router.get('/downloadTermlyInvoiceReport/:id',isLoggedIn,function(req,res){
   var m = moment()
   var month = m.format('MMMM')
 
@@ -2697,9 +2698,31 @@ router.get('/downloadTermlyInvoiceReport/:id',isLoggedIn,function(req,res){
     res.download( './public/invoiceReports/'+year+'/'+term+'/'+name, name)
   })  
 
-})
+})*/
 
         
+  
+  router.get('/downloadTermlyInvoiceReport/:id',(req,res)=>{
+    var fileId = req.params.id
+    
+ 
+  
+  //const bucket = new GridFsStorage(db, { bucketName: 'uploads' });
+  const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+  gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
+  
+    console.log(files[0].filename,'files9')
+  let filename = files[0].filename
+  let contentType = files[0].contentType
+  
+
+      res.set('Content-disposition', `attachment; filename="${filename}"`);
+      res.set('Content-Type', contentType);
+      bucket.openDownloadStreamByName(filename).pipe(res);
+    })
+   //gfs.openDownloadStream(ObjectId(mongodb.ObjectId(fileId))).pipe(fs.createWriteStream('./outputFile'));
+  })
+  
   
 //email invoice
 
@@ -2849,7 +2872,7 @@ res.render('invoiceMonthlyFolderReg/filesMonth',{listX:arr,pro:pro,id:id,year:ye
 })
 
 
-
+/*
 router.get('/downloadMonthlyInvoiceReport/:id',isLoggedIn,function(req,res){
   var m = moment()
   var month = m.format('MMMM')
@@ -2864,6 +2887,30 @@ router.get('/downloadMonthlyInvoiceReport/:id',isLoggedIn,function(req,res){
     res.download( './public/invoiceReports/'+year+'/'+term+'/'+name, name)
   })  
 
+})*/
+
+
+       
+  
+router.get('/downloadMonthlyInvoiceReport/:id',(req,res)=>{
+  var fileId = req.params.id
+  
+
+
+//const bucket = new GridFsStorage(db, { bucketName: 'uploads' });
+const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
+
+  console.log(files[0].filename,'files9')
+let filename = files[0].filename
+let contentType = files[0].contentType
+
+
+    res.set('Content-disposition', `attachment; filename="${filename}"`);
+    res.set('Content-Type', contentType);
+    bucket.openDownloadStreamByName(filename).pipe(res);
+  })
+ //gfs.openDownloadStream(ObjectId(mongodb.ObjectId(fileId))).pipe(fs.createWriteStream('./outputFile'));
 })
 
 
@@ -2871,7 +2918,7 @@ router.get('/downloadMonthlyInvoiceReport/:id',isLoggedIn,function(req,res){
 
 router.get('/emailMonthlyInvoiceFile/:id',isLoggedIn,function(req,res){
   var code = req.params.id
-  
+  const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
   InvoiceFile.findById(req.params.id,function(err,doc){
  /*
 if(doc){
@@ -2881,6 +2928,7 @@ if(doc){
 
   User.find({uid:doc.code},function(err,docs){
 */
+
   
      let email = doc.studentEmail
      let name = doc.studentName
@@ -2889,12 +2937,14 @@ if(doc){
      let year = doc.year
      let term = doc.term
      let month = doc.month
-   
-     
- 
- 
- 
- 
+     let filename = doc.filename
+     let fileId = doc.fileId
+     gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
+  
+
+      const readStream = bucket.openDownloadStream(files[0]._id);
+         // readStream.pipe(res);
+  
      const transporter = nodemailer.createTransport({
       host: 'mail.steuritinternationalschool.org',
       port:465,
@@ -2922,7 +2972,7 @@ if(doc){
        Sincerely <br> ST.EURIT INTERNATIONAL SCHOOL`,
        attachments: [
          {
-           filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
+           filename:filename,
            path:`./public/invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
          }
        ]
@@ -2942,7 +2992,7 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
    })
   })
  
- 
+  })
  })
 
 ///receipts repo
@@ -3011,7 +3061,7 @@ res.render('receiptMonthlyFolderReg/filesMonth',{listX:docs,pro:pro,id:id,year:y
 })
 
 
-
+/*
 router.get('/downloadMonthlyReceiptReport/:id',isLoggedIn,function(req,res){
   var m = moment()
   var month = m.format('MMMM')
@@ -3026,7 +3076,31 @@ router.get('/downloadMonthlyReceiptReport/:id',isLoggedIn,function(req,res){
     res.download( './public/receiptReports/'+year+'/'+term+'/'+name, name)
   })  
 
+})*/
+
+
+  
+router.get('/downloadMonthlyReceiptReport/:id',(req,res)=>{
+  var fileId = req.params.id
+  
+
+
+//const bucket = new GridFsStorage(db, { bucketName: 'uploads' });
+const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
+
+  console.log(files[0].filename,'files9')
+let filename = files[0].filename
+let contentType = files[0].contentType
+
+
+    res.set('Content-disposition', `attachment; filename="${filename}"`);
+    res.set('Content-Type', contentType);
+    bucket.openDownloadStreamByName(filename).pipe(res);
+  })
+ //gfs.openDownloadStream(ObjectId(mongodb.ObjectId(fileId))).pipe(fs.createWriteStream('./outputFile'));
 })
+
 
 
 /*
@@ -3048,7 +3122,7 @@ router.get('/openReceiptFile/:id', function (req, res) {
 
 
 
-
+/*
 router.get('/openReceiptFile/:id', function (req, res) {
 
   InvoiceFile.findById(req.params.id,function(err,doc){
@@ -3067,11 +3141,90 @@ router.get('/openReceiptFile/:id', function (req, res) {
       res.send('File not found')
   }
 })
+});*/
+
+  
+
+router.get('/openReceiptFile/:id',(req,res)=>{
+  var fileId = req.params.id
+    const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+    gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
+    
+  
+      const readStream = bucket.openDownloadStream(files[0]._id);
+          readStream.pipe(res);
+  
+    })
+   //gfs.openDownloadStream(ObjectId(mongodb.ObjectId(fileId))).pipe(fs.createWriteStream('./outputFile'));
+  })
+  
+  
+router.get('/chunkUpdate',function(req,res){
+  const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+ /* gfs.files.find().toArray((err, files) => {
+for(var i =0;i<files.length;i++){
+  let fileId = files[i]._id
+  let filename = files[i].filename
+  InvoiceFile.find({filename:filename},function(err,docs){
+    let invoId = docs[0]._id
+  InvoiceFile.findByIdAndUpdate(invoId,{$set:{fileId:fileId}},function(err,locs){
+
+  })
+  })
+}
+  })*/
+
+  const cursor = bucket.find({});
+  cursor.forEach(doc => console.log(doc));
+})
+  
+router.get('/openInvoiceFile/:id',(req,res)=>{
+var fileId = req.params.id
+  const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+  gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
+  
+
+    const readStream = bucket.openDownloadStream(files[0]._id);
+        readStream.pipe(res);
+
+  })
+ //gfs.openDownloadStream(ObjectId(mongodb.ObjectId(fileId))).pipe(fs.createWriteStream('./outputFile'));
+})
+
+
+ /*
+router.get('/openInvoiceFile/:id',(req,res)=>{
+var fileId = req.params.id
+grid = require('gridfs-stream');
+const mongoURI = process.env.MONGO_URL ||'mongodb://0.0.0.0:27017/euritDB';
+
+const conn = mongoose.createConnection(mongoURI);
+let gfs, gridfsBucket; // declare one more variable with name gridfsBucket
+//const conn = mongoose.connection;
+conn.once('open', () => {
+    // Add this line in the code
+    gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
+        bucketName: 'uploads'
+    });
+    gfs = grid(conn.db, mongoose.mongo);
+    gfs.collection('uploads');
 });
+//const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
+ 
+  console.log(files,'files')
+res.set('Content-Type', files[0].contentType);
+gfs.createReadStream({
+    filename: files[0].filename+files[0]
+}).pipe(res);
+ //gfs.openDownloadStream(ObjectId(mongodb.ObjectId(fileId))).pipe(fs.createWriteStream('./outputFile'));
+})
+
+})*/
 
 
 
-router.get('/openInvoiceFile/:id', function (req, res) {
+/*router.get('/openInvoiceFile/:id', function (req, res) {
 
   InvoiceFile.findById(req.params.id,function(err,doc){
     var name = doc.filename;
@@ -3089,7 +3242,7 @@ router.get('/openInvoiceFile/:id', function (req, res) {
       res.send('File not found')
   }
 })
-});
+});*/
 
 router.get('/emailMonthlyReceiptFile/:id',isLoggedIn,function(req,res){
   var code = req.params.id
@@ -3112,6 +3265,8 @@ if(doc){
      let term = doc.term
      let month = doc.month
      let amount = doc.invoiceAmountPaid
+     let filename = doc.filename
+     let fileId = doc.fileId
    
      
  
@@ -6271,12 +6426,14 @@ router.get('/autocompleteXN/', function(req, res, next) {
          
        // InvoiceFile.find({term:code,/*code:uid*/datePaid:"now"},function(err,docs){
           InvoiceSubBatch.find({ invoiceId:code/*studentId:code,term:term,status:"unpaid"*/}).lean().sort({code:1}).then(docs=>{
-    if(docs.length > 0){
-      
-          let amount =  docs[0].amountDue 
-          var c = {type:" ",invoiceNumber:"",_id:"",amountDue:amount} 
-          //  docs.push(c)
-    }
+  
+          var c = {_id:"",code:"",item:"",description:"",invoiceNumber:"",_id:"",amountDue:0} 
+         if(docs.length > 1){
+
+          
+          docs.push(c)
+          }
+    
          if(docs == undefined){
            res.redirect('/')
          }else
@@ -6458,7 +6615,36 @@ if(docs.length > 0){
 
 
 
-
+    router.post('/autoInvo3',function(req,res){
+      // var ar = req.body['username[]']
+      
+      code = req.body.code
+ 
+        InvoiceSubBatch.findById(code,function(err,doc){
+ 
+ 
+           
+         res.send(doc)
+         
+ 
+         })
+     
+       
+ 
+       
+            
+          // InvoiceFile.find({term:code,/*code:uid*/datePaid:"now"},function(err,docs){
+             /*InvoiceFile.find({term:code,datePaid:"now"}).lean().sort({code:1}).then(docs=>{
+               docs.push(c)
+            if(docs == undefined){
+              res.redirect('/')
+            }else
+       
+               res.send(docs)
+             })*/
+           
+     })
+ 
 router.get('/invoiceGenerationX',isLoggedIn,function(req,res){
   res.render('acc2/create')
 })
@@ -7361,7 +7547,7 @@ var book = new InvoiceSubBatch();
   book.term = term
   book.size = i
   book.subtotal = 0
- 
+  book.amountBefore = 0
 
 
       
@@ -7381,9 +7567,9 @@ let price = ar2[size]
 let item = ar3[size]
 let total = qty * price
 
-InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,item:item,invoiceDescription:item}},function(err,ocs){
+InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,item:item,invoiceDescription:item,amountBefore:total}},function(err,ocs){
       
-      })
+})
         
               
           
@@ -7526,7 +7712,7 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   
   
   
-  router.get('/invoiceSingleGeneration2',isLoggedIn,function(req,res){
+  router.get('/invoiceSingleGeneration2',upload.single('file'),isLoggedIn,function(req,res){
   
   var m = moment()
   var mformat = m.format('L')
@@ -7643,6 +7829,7 @@ let filename = invoiceNumber+'_'+studentName+'.pdf'
   repo.class1 = class1
   repo.grade = grade;
   repo.filename = invoiceNumber+'_'+studentName+'.pdf';
+  repo.fileId = "null"
   repo.year = year;
   repo.css = "danger";
   repo.term = term
@@ -7696,22 +7883,22 @@ pdfX = pdf
   
   })
 //const data = await fs.readFile(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf');
- /*const file = await fs.readFile(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf');
+ const file = await fs.readFile(`./public/invoiceReports/${year}/${term}/${invoiceNumber}_${studentName}`+'.pdf');
   const form = new FormData();
-  form.append("file", file);
+  form.append("file", file,filename);
  //const headers = form.getHeaders();
   //Axios.defaults.headers.cookie = cookies;
   //console.log(form)
-  await Axios({
+await Axios({
     method: "POST",
-    action: 'https://localhost:8500/clerk/wafaX',
+    url: 'http://localhost:8500/clerk/wafaX',
     headers: {
-      'enctype': "multipart/form-data",   'accept':".pdf",
+      "Content-Type": "multipart/form-data"  
     },
     data: form
   });
   
-  */
+  
   /*await browser.close()
   
   /*process.exit()*/
@@ -7738,12 +7925,46 @@ pdfX = pdf
   })
   
   
+  router.post('/wafaX',upload.single('file'),(req,res,nxt)=>{
+    var fileId = req.file.id
+    console.log(fileId,'fileId')
+    var filename = req.file.filename
+    console.log(filename,'filename')
+InvoiceFile.find({filename:filename},function(err,docs){
+
+  //console.log(docs,'docs')
+  let id = docs[0]._id
+  InvoiceFile.findByIdAndUpdate(id,{$set:{fileId:fileId}},function(err,tocs){
+
+  })
+  res.redirect('/clerk/genEmailInvoice')
+})
+  //res.redirect('http://localhost:8500/clerk/dashX')
+
+ 
+/*try{
+if(req.file){
+
+  const promises = req.files.map(async (file)=>{
+    const fileStream = fs.createReadStream(file.path)
+
+    const gridFile = new GridFsStorage({filename:file.originalname})
+    await gridFile.upload(fileStream)
+
+    fs.unlinkSync(file.path)
+
+  })
+  await Promise.all(promises)
+}
+res.sendStatus(201)
+}catch(err){
+
+}*/
+//res.redirect('/clerk/genEmailInvoice');
+  })
 
 
-  router.post('/wafaX',upload.single('file'),function(req,res){
-    console.log(req.file,'fileeeeeeeee')
-    console.log(req.data,'bbb')
-        })
+  
 
 
   
@@ -7822,16 +8043,16 @@ pdfX = pdf
      transporter.sendMail(mailOptions, function (error,info){
        if(error){
          //console.log(error)
-         req.flash('danger', 'Reports Not Emailed!');
-        // res.redirect('/clerk/invoiceSingleCode')
+         req.flash('danger', 'Invoice Not Emailed!');
+         res.redirect('/clerk/invoiceSingleCode')
   /*res.redirect('/clerk/dashX')*/
-  res.redirect('/clerk/printInvoice')
+  //res.redirect('/clerk/printInvoice')
        }else{
   /*console.log('Email sent successfully')*/
   req.flash('success', 'Invoice Emailed Successfully!');    
-  res.redirect('/clerk/printInvoice')
+  //res.redirect('/clerk/printInvoice')
 
-  //res.redirect('/clerk/invoiceSingleCode')
+  res.redirect('/clerk/invoiceSingleCode')
        }
           
    console.log(email,'email')
@@ -7992,7 +8213,14 @@ ar = req.body['code[]']
 ar1 = req.body['quantity[]']
 ar2=req.body['price[]']
 ar3=req.body['description[]']
+ar4=req.body['discount[]']
 console.log(ar,ar1,ar2,'000000')
+
+ar = ar.filter(v=>v!='')
+ar1 = ar1.filter(v=>v!='')
+ar2 = ar2.filter(v=>v!='')
+ar3 = ar3.filter(v=>v!='')
+ar4 = ar4.filter(v=>v!='')
 req.check('clientName','Enter Client Name').notEmpty();            
 req.check('clientEmail','Enter Client Email').notEmpty();
 req.check('invoice_due_date','Enter Due Date').notEmpty();
@@ -8018,16 +8246,18 @@ if (errors) {
 
 
 else{
-
-ar = ar.filter(v=>v!='')
-ar1 = ar1.filter(v=>v!='')
-ar2 = ar2.filter(v=>v!='')
-ar3 = ar3.filter(v=>v!='')
-
+  ar = ar.filter(v=>v!='')
+  ar1 = ar1.filter(v=>v!='')
+  ar2 = ar2.filter(v=>v!='')
+  ar3 = ar3.filter(v=>v!='')
+  ar4 = ar4.filter(v=>v!='')
 console.log(ar,'iwee')
 console.log(ar1,'iwee1')
 console.log(ar2,'iwee2')
 console.log(ar3,'iwee3')
+console.log(ar4,'iwee4')
+
+console.log(ar.length,'ar.length')
 for(var i = 0; i<ar.length;i++){
 console.log(ar[i])
 let code = ar[i]
@@ -8069,6 +8299,7 @@ book.class = class1
 book.term = term
 book.size = i
 book.subtotal = 0
+book.discount = 0
 
 
 
@@ -8088,17 +8319,16 @@ let qty = ar1[size]
 let price = ar2[size]
 let item = ar3[size]
 let total = qty * price
+let discount = ar4[size]
+let percentage = discount / 100
+let discounted = total * percentage
 
-InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,balance:bal,invoiceAmount:amountDue,price:price,total:total,item:item,invoiceDescription:item}},function(err,ocs){
+total -= discounted
+
+InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,balance:bal,invoiceAmount:total,price:price,total:total,discount:discount,item:item,invoiceDescription:item}},function(err,ocs){
     
     })
-      
-            
-        
-              
-
-
-           
+         
           })
         }
 
@@ -8320,7 +8550,7 @@ format:"A4",
 /*width:'30cm',
 height:'21cm',*/
 //height: height + 'px',
-  printBackground:true
+printBackground:true
 
 })
 
@@ -8340,6 +8570,7 @@ repo.filename = invoiceNumber+'_'+studentName+'.pdf';
 repo.year = year;
 repo.css = "danger";
 repo.term = term
+repo.fileId="null"
 repo.description = description
 repo.date = date
 repo.studentBalance = bf
@@ -8361,7 +8592,9 @@ repo.save().then(poll =>{
 
  // req.flash('success', 'Invoice Generation Successful');
 
-  res.redirect('/clerk/genEmailInvoiceUpdate');
+  //res.redirect('/clerk/genEmailInvoiceUpdate');
+
+  res.redirect('/clerk/printInvoiceUpdate')
   
  /* req.flash('success', 'Invoice Emailed Successfully!');
     
