@@ -81,7 +81,7 @@ var moment = require('moment')
 var bcrypt = require('bcrypt-nodejs');
 const { countReset } = require('console');
 var FormData = require('form-data')
-
+var GridStore = require('mongoose-gridstore')
 var storageX = multer.diskStorage({
   destination:function(req,file,cb){
       cb(null,'./public/uploads/')
@@ -2748,8 +2748,36 @@ if(doc){
      let year = doc.year
      let term = doc.term
    
-     
+     var mongo = require('mongodb');
+  var Grid = require('gridfs-stream');
+  
+  // create or use an existing mongodb-native db instance
+  var db = new mongo.Db('euritDB', new mongo.Server("0.0.0.0:27017", 27017));
+  var gfs = Grid(db, mongo);
+  console.log('4444')
+  // streaming to gridfs
+  /*var writestream = gfs.createWriteStream({
+      filename: filename
+  });*/
+  
+ var rstream = gfs.createReadStream(filename);
+ var bufs = [];
+ console.log(777)
+ rstream.on('data', function (chunk) {
+     bufs.push(chunk);
+ }).on('error', function () {
+     res.send();
+ })
+ .on('end', function () { // done
  
+             var fbuf = Buffer.concat(bufs);
+ 
+             var File = (fbuf.toString('base64'));
+ 
+             //res.send(File);
+ 
+  });  
+  
  
  
  
@@ -2781,7 +2809,7 @@ if(doc){
        attachments: [
          {
            filename:uid+'_'+name+'_'+'Invoice'+'.pdf',
-           path:`./public/invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
+           path:File
          }
        ]
      };
@@ -2918,8 +2946,10 @@ let contentType = files[0].contentType
 
 router.get('/emailMonthlyInvoiceFile/:id',isLoggedIn,function(req,res){
   var code = req.params.id
+
   const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
   InvoiceFile.findById(req.params.id,function(err,doc){
+    const fs = require("fs");
  /*
 if(doc){
   let term = doc.term
@@ -2927,7 +2957,15 @@ if(doc){
   let invoNumber = doc.invoiceNumber
 
   User.find({uid:doc.code},function(err,docs){
-*/
+*/ var mongo = require('mongodb');
+var Grid = require('gridfs-stream');
+  
+// create or use an existing mongodb-native db instance
+var db = new mongo.Db('euritDB', new mongo.Server("0.0.0.0:27017", 27017));
+var gfs = Grid(db, mongo);
+console.log('4444')
+var File
+
 
   
      let email = doc.studentEmail
@@ -2939,12 +2977,25 @@ if(doc){
      let month = doc.month
      let filename = doc.filename
      let fileId = doc.fileId
-     gfs.files.find({_id: mongodb.ObjectId(fileId)}).toArray((err, files) => {
-  
+     console.log(filename,'flename')
 
-      const readStream = bucket.openDownloadStream(files[0]._id);
+
+
+
+     var rstream = gfs.createReadStream({filename:filename});
+     var bufs = []
+     rstream.on('data',function(chunk){
+       bufs.push(chunk);
+     }).on('error',function(){
+       res.send
+     })
+     .on('end',function(){
+       var fbuf = Buffer.concat(bufs);
+        File = (fbuf.toString('base64'))
+     })
          // readStream.pipe(res);
   
+
      const transporter = nodemailer.createTransport({
       host: 'mail.steuritinternationalschool.org',
       port:465,
@@ -2973,7 +3024,7 @@ if(doc){
        attachments: [
          {
            filename:filename,
-           path:`./public/invoiceReports/${year}/${term}/${invoNumber}_${name}.pdf`
+           path:File
          }
        ]
      };
@@ -2991,9 +3042,10 @@ res.redirect('/clerk/viewMonthlyInvoiceFile/'+month)
      }
    })
   })
+
+})
+  
  
-  })
- })
 
 ///receipts repo
 
@@ -3160,7 +3212,8 @@ router.get('/openReceiptFile/:id',(req,res)=>{
   
   
 router.get('/chunkUpdate',function(req,res){
-  const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
+  let filename = "10586_Blessing Musasa.pdf"
+  //const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
  /* gfs.files.find().toArray((err, files) => {
 for(var i =0;i<files.length;i++){
   let fileId = files[i]._id
@@ -3173,11 +3226,82 @@ for(var i =0;i<files.length;i++){
   })
 }
   })*/
+  var mongo = require('mongodb');
+  var Grid = require('gridfs-stream');
+  
+  // create or use an existing mongodb-native db instance
+  var db = new mongo.Db('euritDB', new mongo.Server("0.0.0.0:27017", 27017));
+  var gfs = Grid(db, mongo);
+  console.log('4444')
+  // streaming to gridfs
+  /*var writestream = gfs.createWriteStream({
+      filename: filename
+  });*/
+  
+ var rstream = gfs.createReadStream(filename);
+ var bufs = [];
+ console.log(777)
+ rstream.on('data', function (chunk) {
+     bufs.push(chunk);
+ }).on('error', function () {
+     res.send();
+ })
+ .on('end', function () { // done
+ 
+             var fbuf = Buffer.concat(bufs);
+ 
+             var File = (fbuf.toString('base64'));
+ 
+             res.send(File);
+ 
+  });
+ 
+})
 
-  const cursor = bucket.find({});
-  cursor.forEach(doc => console.log(doc));
+router.get('/chunkUpdate2',function(req,res){
+  var mongo = require('mongodb');
+  var Grid = require('gridfs-stream');
+  
+  // create or use an existing mongodb-native db instance
+  const mongoURI = process.env.MONGO_URL ||'mongodb://0.0.0.0:27017/euritDB';
+
+  const conn = mongoose.createConnection(mongoURI);
+  var fileId = mongoose.Types.ObjectId("542e684a8a1cec178a172671");
+  var gridStore = new GridStore(db, fileId, 'r');
+
+  gridStore.open(function (err, gridStore) {
+      //console.log(gridStore.currentChunk.data.buffer);
+      gridStore.read(function (error,data){
+          console.log(data, 'binary');
+          res.writeHead(200, {'Content-Type': 'image/png'});
+          var s = gridStore.stream(true);
+          console.log(s);
+      });
+  });
 })
   
+
+
+router.get('/chunkUpdateX',function(req,res){
+  let filename = "10586_Blessing Musasa.pdf"
+  const MongoClient = require('mongodb').MongoClient;
+var Grid = require('gridfs-stream');
+
+// create or use an existing mongodb-native db instance.
+// for this example we'll just create one:
+MongoClient.connect('mongodb://localhost:27017/euritDB', (err, db) => {
+  // Database returned
+
+// make sure the db instance is open before passing into `Grid`
+db.open(function (err) {
+  if (err) return handleError(err);
+  var gfs = Grid(db, mongo);
+
+  // all set!
+})
+})
+
+})
 router.get('/openInvoiceFile/:id',(req,res)=>{
 var fileId = req.params.id
   const bucket = new mongodb.GridFSBucket(conn.db,{ bucketName: 'uploads' });
