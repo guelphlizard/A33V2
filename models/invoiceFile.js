@@ -38,6 +38,7 @@ invoiceTotal:{type:Number },
 studentBalance:{type:Number },
 remainingBalance:{type:Number, },
 discount: {type: Number },
+dateValue: {type: Number },
 datePaid:{type:String},
 dueDate:{type:String},
 amountBefore:{type:Number}

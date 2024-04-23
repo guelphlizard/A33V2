@@ -9343,6 +9343,12 @@ var studentName = req.body.fullname
 var studentId = req.body.uid
 let status = req.body.status
 var date = req.body.date
+var m = moment(date)
+var dateValue = m.valueOf()
+var mformat = m.format('L')
+var year = m.format('YYYY')
+var month = m.format('MMMM')
+console.log(year,month,dateValue,mformat,'rtv')
 var invoiceTotal = req.body.invoiceTotal
 var studentBalance = req.body.studentBalance
 var amountPaid = req.body.amountPaid
@@ -9355,10 +9361,9 @@ var address = req.body.address
 var mobile = req.body.mobile
 var grade = req.body.grade
 var month = req.body.month
-var year = req.body.year
-var term = req.body.term
 var dueDate = req.body.dueDate
 var class1 = req.body.class1
+var term = req.body.term
 var type = "Invoice"
 let css
 if(status == 'paid'){
@@ -9410,7 +9415,7 @@ if(status == 'paid'){
   repo.filename = invoiceNumber+'_'+studentName+'.pdf';
   repo.year = year;
   repo.term = term
-  repo.date = date
+  repo.date = mformat
   repo.type = type
   repo.css = css
   repo.type1 = 'single'
@@ -9425,6 +9430,7 @@ if(status == 'paid'){
   repo.status = status
   repo.datePaid = datePaid
   repo.dueDate = dueDate
+  repo.dateValue = dateValue
   repo.studentBalance = studentBalance
   repo.invoiceTotal = invoiceTotal
   repo.save().then(poll =>{
@@ -9467,6 +9473,7 @@ router.get('/oldReceipts',isLoggedIn,function(req,res){
   var errorMsg = req.flash('danger')[0];
   var successMsg = req.flash('success')[0];
   var recNum = req.user.recNum
+  console.log(recNum)
   res.render('acc2/oldReceipts',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,recNum:recNum})
 })
 
@@ -9476,6 +9483,11 @@ router.post('/oldReceipts',isLoggedIn,function(req,res){
   var studentId = req.body.uid
   let status = req.body.status
   var date = req.body.date
+  var m = moment(date)
+var dateValue = m.valueOf()
+var mformat = m.format('L')
+var year = m.format('YYYY')
+var month = m.format('MMMM')
   var amountOwing = req.body.amountOwing
 
   var studentBalance = req.body.studentBalance
@@ -9488,8 +9500,7 @@ router.post('/oldReceipts',isLoggedIn,function(req,res){
   var address = req.body.address
   var mobile = req.body.mobile
   var grade = req.body.grade
-  var month = req.body.month
-  var year = req.body.year
+  
   var term = req.body.term
 
   var class1 = req.body.class1
@@ -9540,7 +9551,8 @@ router.post('/oldReceipts',isLoggedIn,function(req,res){
   repo.filename = receiptNumber+'_'+studentName+'.pdf';
   repo.year = year;
   repo.term = term
-  repo.date = date
+  repo.date = mformat
+  repo.dateValue = dateValue
   repo.type = type
   repo.css = css
   repo.name = "PMT"
