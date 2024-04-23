@@ -4438,6 +4438,14 @@ router.get('/form',function(req,res){
 
 
 router.post('/form',function(req,res){
+  ar = req.body['child[]']
+ ar1 = req.body['age[]']
+ ar2 = req.body['level[]']
+
+ console.log(ar,ar1,ar2,'arrr')
+})
+
+router.post('/form2',function(req,res){
   var salutation = req.body.q3_salutation
   var firstName = req.body.firstName
   var lastName = req.body.lastName

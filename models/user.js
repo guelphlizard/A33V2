@@ -127,6 +127,7 @@ var userSchema = new mongoose.Schema({
     invoNumber:{type:Number},
     quoteCode:{type:String},
     num:{type:Number},
+    recNum:{type:Number},
     discount:{type:Number},
     clientName:{type:String},
     companyName:{type:String},

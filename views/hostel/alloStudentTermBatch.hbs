@@ -1361,7 +1361,7 @@
     source: function(req,res){
 
       $.ajax({
-        url:"/hostel/autocompleteXMYear/",
+        url:"/clerk/autocompleteXMYear/",
         dataType:"jsonp",
         type:"GET",
         data:req,
@@ -1386,7 +1386,7 @@
                     
                 },
                 type: 'POST',
-                url: "/hostel/autoXMYear",
+                url: "/clerk/autoXMYear",
                 success: function(data) {
                
         
@@ -1421,6 +1421,70 @@
 
 
 
+
+
+    <script>
+      $(function(){
+    $('#month').autocomplete({
+    source: function(req,res){
+
+      $.ajax({
+        url:"/clerk/autocompleteXMonth/",
+        dataType:"jsonp",
+        type:"GET",
+        data:req,
+        success: function(data){
+          res(data)
+        
+
+        },
+        error: function(err){
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength:1,
+    select: function(event,ui){
+
+  $.ajax({
+                dataType: 'json',
+                data: {
+                    codeX: ui.item.label,
+                    
+                },
+                type: 'POST',
+                url: "/clerk/autoXMonth",
+                success: function(data) {
+               
+        
+               
+            
+                 $("#month").val(data.month)
+		
+        
+				
+       
+                 
+                 
+                 
+          
+                }
+               
+            });
+ 
+
+
+
+  
+    }
+
+
+
+    });
+
+      });
+      </script> 
 
 
 

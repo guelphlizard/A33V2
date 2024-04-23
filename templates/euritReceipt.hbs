@@ -144,11 +144,11 @@ margin-right: auto;   border-collapse: collapse;" >
 
             
             <th style="text-align:center;">
-               INV. AMT <br>($)
+               AMT PAID <br>($)
                </th>
 
                <th style="text-align:center; ">
-                AMT PAID <br> ($)
+                INV. AMT <br> ($)
                 </th>
         
         </tr>
@@ -174,13 +174,14 @@ margin-right: auto;   border-collapse: collapse;" >
             <td style="border:1px solid black;
    text-align:end;    border-top: none;
     border-bottom: none;">
-              {{this.amountPaid}}
+              
+              {{this.invoiceTotal}}
             </td>
 
             <td style="border:1px solid black;    border-top: none;
     border-bottom: none;
 text-align:end;">
-               {{this.invoiceTotal}}
+              {{this.amountPaid}}
              </td>
         </tr>
      

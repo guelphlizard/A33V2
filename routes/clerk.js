@@ -2982,7 +2982,7 @@ var File
 
 
 
-     var rstream = gfs.createReadStream({filename:filename});
+     var rstream = gfs.createReadStream({_id:fileId});
      var bufs = []
      rstream.on('data',function(chunk){
        bufs.push(chunk);
@@ -3284,22 +3284,41 @@ router.get('/chunkUpdate2',function(req,res){
 
 router.get('/chunkUpdateX',function(req,res){
   let filename = "10586_Blessing Musasa.pdf"
-  const MongoClient = require('mongodb').MongoClient;
-var Grid = require('gridfs-stream');
+  var mongo = require('mongodb');
+  var Grid = require('gridfs-stream');
+  
+  // create or use an existing mongodb-native db instance
+  const mongoURI = process.env.MONGO_URL ||'mongodb://0.0.0.0:27017/euritDB';
 
-// create or use an existing mongodb-native db instance.
-// for this example we'll just create one:
-MongoClient.connect('mongodb://localhost:27017/euritDB', (err, db) => {
-  // Database returned
-
-// make sure the db instance is open before passing into `Grid`
-db.open(function (err) {
-  if (err) return handleError(err);
-  var gfs = Grid(db, mongo);
-
-  // all set!
-})
-})
+  const conn = mongoose.createConnection(mongoURI);
+  
+  // Init gfs
+  let gfs;
+  
+  conn.once('open', () => {
+    // Init stream
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('uploads');
+  });
+  
+  // streaming to gridfs
+  var writestream = gfs.createWriteStream({
+      filename: '10586_Blessing Musasa.pdf'
+  });
+  fs.createReadStream('/some/path').pipe(writestream);
+  
+  // streaming from gridfs
+  var readstream = gfs.createReadStream({
+    filename: '10586_Blessing Musasa.pdf'
+  });
+  
+  //error handling, e.g. file does not exist
+  readstream.on('error', function (err) {
+    console.log('An error occurred!', err);
+    throw err;
+  });
+  
+  readstream.pipe(response);
 
 })
 router.get('/openInvoiceFile/:id',(req,res)=>{
@@ -9038,7 +9057,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
 
     var idNumber = req.user.idNumber;
     var schoolName = req.user.schoolName;
-    var password = req.body.password;
+    //var password = req.body.password;
     var term = req.user.term
     idNumber++
 
@@ -9048,7 +9067,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
     var count = req.user.count
     var actualCount = req.user.actualCount
    var uid1 = prefix+idNumber
-  
+  var password = "password"
    console.log(grade,'gradeX')
   
 
@@ -9064,7 +9083,7 @@ router.get('/addStudent',isLoggedIn,  function(req,res){
     req.check('class1','Enter Class').notEmpty();
     req.check('gender','Enter Gender').notEmpty();
     req.check('mobile', 'Enter Phone Number').notEmpty()
-    req.check('password', 'Password do not match').isLength({min: 4}).equals(req.body.confirmPassword);
+   
  
   
    
@@ -9305,6 +9324,413 @@ router.get('/importInvo',isLoggedIn,function(req,res){
 console.log(req.file,'cccc')
 console.log(req,'req')
   })
+
+
+
+
+
+
+
+router.get('/oldInvoice',isLoggedIn,function(req,res){
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  res.render('acc2/oldInvoices',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+})
+
+router.post('/oldInvoice',isLoggedIn,function(req,res){
+
+var studentName = req.body.fullname
+var studentId = req.body.uid
+let status = req.body.status
+var date = req.body.date
+var invoiceTotal = req.body.invoiceTotal
+var studentBalance = req.body.studentBalance
+var amountPaid = req.body.amountPaid
+var invoiceNumber = req.body.invoiceNumber
+var datePaid = req.body.datePaid
+var remainingBalance = req.body.remainingBalance
+var studentId2 = req.body.id2
+var email = req.body.email
+var address = req.body.address
+var mobile = req.body.mobile
+var grade = req.body.grade
+var month = req.body.month
+var year = req.body.year
+var term = req.body.term
+var dueDate = req.body.dueDate
+var class1 = req.body.class1
+var type = "Invoice"
+let css
+if(status == 'paid'){
+  css = 'success'
+}else{
+  css= 'danger'
+}
+
+  req.check('fullname','Enter StudentName').notEmpty();            
+  req.check('uid','Enter StudentId').notEmpty();
+  req.check('status','Enter Status').notEmpty();
+  req.check('date','Enter Date').notEmpty();
+  req.check('invoiceTotal','Enter Invoice Total').notEmpty();
+  req.check('studentBalance', 'Enter Student Balance').notEmpty();
+  req.check('amountPaid','Enter Amount Paid').notEmpty();
+  req.check('invoiceNumber','Enter Invoice Number').notEmpty();
+  req.check('datePaid','Enter Date Paid').notEmpty();
+  req.check('remainingBalance','Enter Remaining Balance').notEmpty();
+  
+  
+  
+  var errors = req.validationErrors();
+     
+  if (errors) {
+  
+    req.session.errors = errors;
+    req.session.success = false;
+    req.flash('danger', req.session.errors[0].msg);
+           
+            
+    res.redirect('/clerk/oldInvoice');
+  }
+
+
+  else{
+
+
+  
+  var repo = new InvoiceFile();
+   
+  repo.studentName = studentName;
+  repo.studentId = studentId
+  repo.studentEmail = email
+  repo.studentAddress = address
+  repo.studentMobile = mobile
+  repo.class1 = class1
+  repo.grade = grade;
+  repo.fileId = "null"
+  repo.filename = invoiceNumber+'_'+studentName+'.pdf';
+  repo.year = year;
+  repo.term = term
+  repo.date = date
+  repo.type = type
+  repo.css = css
+  repo.type1 = 'single'
+  repo.type2 = 'old'
+  repo.amountPaid= amountPaid
+  repo.amountDue = remainingBalance
+  repo.month = month
+  repo.invoiceId = invoiceNumber
+  repo.invoiceCode = invoiceNumber
+  repo.invoiceNumber = invoiceNumber
+  repo.receiptNumber = 0
+  repo.status = status
+  repo.datePaid = datePaid
+  repo.dueDate = dueDate
+  repo.studentBalance = studentBalance
+  repo.invoiceTotal = invoiceTotal
+  repo.save().then(poll =>{
+    //console.log("Done creating pdf",uid)
+
+    req.flash('success', 'Invoice Success');
+ 
+    res.redirect('/clerk/oldInvoice');
+  })
+
+
+}
+})
+
+
+router.get('/receiptSingleCode',isLoggedIn,function(req,res){
+  var id = req.user._id
+
+      RecNum.find(function(err,doc){
+        let invoNum = doc[0].num
+        let invoId = doc[0]._id
+    
+    
+    User.findByIdAndUpdate(id,{$set:{recNum:invoNum}},function(err,docs){
+    
+    })
+    invoNum++
+    
+    RecNum.findByIdAndUpdate(invoId,{$set:{num:invoNum}},function(err,tocs){
+    
+    })
+    res.redirect('/clerk/oldReceipts')
+    
+      })
+
+
+})
+
+router.get('/oldReceipts',isLoggedIn,function(req,res){
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  var recNum = req.user.recNum
+  res.render('acc2/oldReceipts',{successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,recNum:recNum})
+})
+
+router.post('/oldReceipts',isLoggedIn,function(req,res){
+
+  var studentName = req.body.fullname
+  var studentId = req.body.uid
+  let status = req.body.status
+  var date = req.body.date
+  var amountOwing = req.body.amountOwing
+
+  var studentBalance = req.body.studentBalance
+  var amountPaid = req.body.amountPaid
+  var amountOwing = req.body.amountOwing
+  var datePaid = req.body.date
+  var receiptNumber = req.body.receiptNumber
+  var studentId2 = req.body.id2
+  var email = req.body.email
+  var address = req.body.address
+  var mobile = req.body.mobile
+  var grade = req.body.grade
+  var month = req.body.month
+  var year = req.body.year
+  var term = req.body.term
+
+  var class1 = req.body.class1
+  var type = "Receipt"
+  let css = "success"
+ 
+
+  req.check('fullname','Enter StudentName').notEmpty();            
+  req.check('uid','Enter StudentId').notEmpty();
+  req.check('status','Enter Status').notEmpty();
+  req.check('date','Enter Date').notEmpty();
+ 
+  req.check('studentBalance', 'Enter Student Balance').notEmpty();
+  req.check('amountPaid','Enter Amount Paid').notEmpty();
+
+  
+ 
+  
+  
+  
+  var errors = req.validationErrors();
+     
+  if (errors) {
+  
+    req.session.errors = errors;
+    req.session.success = false;
+    req.flash('danger', req.session.errors[0].msg);
+           
+            
+    res.redirect('/clerk/oldReceipts');
+  }
+
+
+  else{
+
+
+  
+  var repo = new InvoiceFile();
+   
+  repo.studentName = studentName;
+  repo.studentId = studentId
+  repo.studentEmail = email
+  repo.studentAddress = address
+  repo.studentMobile = mobile
+
+  repo.grade = grade;
+  repo.fileId = "null"
+  repo.filename = receiptNumber+'_'+studentName+'.pdf';
+  repo.year = year;
+  repo.term = term
+  repo.date = date
+  repo.type = type
+  repo.css = css
+  repo.name = "PMT"
+  repo.type1 = 'single'
+  repo.type2 = 'old'
+  repo.amountPaid= amountPaid
+  repo.amountDue = amountOwing
+  repo.remainingBalance = amountOwing
+  repo.month = month
+ 
+  repo.receiptNumber = receiptNumber
+  repo.status = status
+
+
+  repo.studentBalance = studentBalance
+
+  repo.save().then(poll =>{
+    //console.log("Done creating pdf",uid)
+
+    req.flash('success', 'Receipt Success');
+ 
+    res.redirect('/clerk/oldReceipts');
+  })
+
+  }
+
+
+})
+
+
+
+
+
+  //year autocomplete
+
+  
+  router.get('/autocompleteXMYear/',isLoggedIn, function(req, res, next) {
+    
+     
+    var regex= new RegExp(req.query["term"],'i');
+    var uidFilter =Year.find({year:regex},{'year':1}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
+  
+    
+    uidFilter.exec(function(err,data){
+   
+  
+  console.log('data',data)
+  
+  var result=[];
+  
+  if(!err){
+     if(data && data.length && data.length>0){
+       data.forEach(sub=>{
+  console.log(sub,'roman')
+        
+     
+  
+          
+         let obj={
+           id:sub._id,
+           label: sub.year,
+           
+  
+       
+         /*  name:name,
+           surname:surname,
+           batch:batch*/
+          
+          
+       
+         
+          
+  
+           
+         };
+        
+         result.push(obj);
+         console.log('object',obj.id)
+       });
+  
+     }
+   
+     res.jsonp(result);
+     console.log('Result',result)
+    }
+  
+  })
+  
+  });
+  
+  // role admin
+  //this routes autopopulates teachers info from the id selected from automplet1
+  router.post('/autoXMYear',isLoggedIn,function(req,res){
+    var codeX = req.body.codeX
+  
+  
+  
+    Year.find({year:codeX},function(err,docs){
+   if(docs == undefined){
+     res.redirect('/records/lesson')
+   }else
+  
+      res.send(docs[0])
+    })
+  
+  
+  })
+  
+  //autocomplete month
+
+  /////floor autocomplete
+  
+  router.get('/autocompleteXMonth/',isLoggedIn, function(req, res, next) {
+    
+     
+    var regex= new RegExp(req.query["term"],'i');
+    var uidFilter =Month.find({month:regex},{'month':1}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
+  
+    
+    uidFilter.exec(function(err,data){
+   
+  
+  console.log('data',data)
+  
+  var result=[];
+  
+  if(!err){
+     if(data && data.length && data.length>0){
+       data.forEach(sub=>{
+  console.log(sub,'roman')
+        
+     
+  
+          
+         let obj={
+           id:sub._id,
+           label: sub.month,
+           
+  
+       
+         /*  name:name,
+           surname:surname,
+           batch:batch*/
+          
+          
+       
+         
+          
+  
+           
+         };
+        
+         result.push(obj);
+         console.log('object',obj.id)
+       });
+  
+     }
+   
+     res.jsonp(result);
+     console.log('Result',result)
+    }
+  
+  })
+  
+  });
+  
+  // role admin
+  //this routes autopopulates teachers info from the id selected from automplet1
+  router.post('/autoXMonth',isLoggedIn,function(req,res){
+    var codeX = req.body.codeX
+  
+  
+  
+    Month.find({month:codeX},function(err,docs){
+   if(docs == undefined){
+     res.redirect('/records/lesson')
+   }else
+  
+      res.send(docs[0])
+    })
+  
+  
+  })
+  
+  
+  
+
+
+
+  
 module.exports = router;
 
 

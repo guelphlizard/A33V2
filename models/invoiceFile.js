@@ -22,6 +22,8 @@ year:{type:Number},
 date:{type:String},
 type:{type:String},
 type1:{type:String},
+type2:{type:String},
+type3:{type:String},
 term:{type:Number },
 invoiceNumber:{type:Number},
 invoiceNumberText:{type:String},
@@ -37,6 +39,7 @@ studentBalance:{type:Number },
 remainingBalance:{type:Number, },
 discount: {type: Number },
 datePaid:{type:String},
+dueDate:{type:String},
 amountBefore:{type:Number}
 })
 
