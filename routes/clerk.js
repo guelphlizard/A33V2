@@ -9574,7 +9574,7 @@ var month = m.format('MMMM')
 
     req.flash('success', 'Receipt Success');
  
-    res.redirect('/clerk/oldReceipts');
+    res.redirect('/clerk/receiptSingleCode');
   })
 
   }
