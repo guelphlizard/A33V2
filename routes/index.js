@@ -4438,6 +4438,36 @@ router.get('/form',function(req,res){
 
 
 router.post('/form',function(req,res){
+  var salutation = req.body.q3_salutation
+  var firstName = req.body.firstName
+  var lastName = req.body.lastName
+  var address = req.body.address
+  var workAddress = req.body.address1
+  var city = req.body.city
+  var state = req.body.state
+  var postal = req.body.postal
+  var phoneNumber = req.body.phoneNumber
+  var phoneNumber2 = req.body.phoneNumber2
+
+  var child = req.body['child[]']
+  var age = req.body['age[]']
+  var level = req.body['level[]']
+  var languages = req.body['languages[]']
+  var allergies= req.body['allergies[]']
+  var school = req.body['school[]']
+  var syllabus = req.body['syllabus[]']
+  var stage = req.body['stage[]']
+  var term = req.body['term[]']
+  var year = req.body['year[]']
+
+  console.log(child,'child',age,'age',level,'level',languages,'languages',allergies,'allergies',
+  school,'school',syllabus,'syllabus',stage,'stage',term,'term',year,'year')
+
+
+
+})
+
+router.post('/formX',function(req,res){
   ar = req.body['child[]']
  ar1 = req.body['age[]']
  ar2 = req.body['level[]']
