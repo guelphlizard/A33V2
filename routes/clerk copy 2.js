@@ -111,7 +111,6 @@ const arrSingleUpdate = {}
 const arrReceipt = {}
 const arrSub = {}
 const arrStatement = {}
-const arrV = []
 let pdfX
 //const data = require('../data.json')
 
@@ -1916,45 +1915,12 @@ router.get('/invoice2',function(req,res){
 
 
 
-router.get('/siblings',isLoggedIn,function(req,res){
- 
-  User.find({role:"student"},function(err,docs){
-   
-for(var i = 0; i<docs.length;i++){
-
-  let surname = docs[i].surname
-  console.log(surname,'surname')
-
-  User.find({surname:surname},function(err,locs){
-    if(locs.length > 1){
-      //console.log(locs)
-      for(var i = 0; i< locs.length;i++){
-        let id = locs[i]._id
-      User.findByIdAndUpdate(id,{$set:{sibling:"true"}},function(err,pocs){
-
-      })
-      }
-      
-     // console.log(locs,'locs')
-    }
-  })
-}
-//res.redirect('/clerk/viewSurname')
-//res.render('acc2/list2',{listX:arrV})
-  })
-
-
-})
 
 
 
 
-router.get('/viewSurname',isLoggedIn,function(req,res){
- // console.log(arrV,'arrV')
- User.find({sibling:"true"},function(err,docs){
-  res.render('acc2/list2',{listX:docs})
-})
-})
+
+
 
   //profile
   router.get('/profile',isLoggedIn ,function(req,res){
@@ -4986,46 +4952,6 @@ router.get('/send',function(req,res){
 
 
 
-  
-router.get('/uploadInvoice',isLoggedIn, function(req,res){
-  var pro = req.user
-
- 
-  var errorMsg = req.flash('danger')[0];
-  var successMsg = req.flash('success')[0];
-
-
-
-  
-
-  
- res.render('imports/invoices',{pro:pro,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg}) 
-
-   })
-
-
-   
-  router.post('/uploadInvoice',upload.single('file'),(req,res,nxt)=>{
-    var fileId = req.file.id
-    console.log(fileId,'fileId')
-    var filename = req.file.filename
-    console.log(filename,'filename')
-InvoiceFile.find({filename:filename},function(err,docs){
-if(docs.length>0){
-
-
-
-  //console.log(docs,'docs')
-  let id = docs[0]._id
-  InvoiceFile.findByIdAndUpdate(id,{$set:{fileId:fileId}},function(err,tocs){
-
-  })
-
-}
-  res.redirect('/clerk/uploadInvoice')
-})
- 
-  })
 
 
 
@@ -6178,23 +6104,8 @@ router.get('/receiptGeneration',isLoggedIn,function(req,res){
     printBackground:true
   
   })
-  let filename = receiptNumber+'_'+studentName+'.pdf';
-  //console.log('pdf successful')
-
-  const file = await fs.readFile(`./public/receiptReports/${year}/${term}/${receiptNumber}_${studentName}`+'.pdf');
-  const form = new FormData();
-  form.append("file", file,filename);
- //const headers = form.getHeaders();
-  //Axios.defaults.headers.cookie = cookies;
-  //console.log(form)
-await Axios({
-    method: "POST",
-    url: 'http://localhost:8500/clerk/uploadReceipt',
-    headers: {
-      "Content-Type": "multipart/form-data"  
-    },
-    data: form
-  });
+  
+  console.log('pdf successful')
 
   res.redirect('/clerk/genEmailReceipt')
   
@@ -6229,37 +6140,6 @@ await Axios({
   
   })
   
-
-  router.post('/uploadReceipt',upload.single('file'),(req,res,nxt)=>{
-    var fileId = req.file.id
-    console.log(fileId,'Receipt fileId')
-    var filename = req.file.filename
-    console.log(filename,'filename')
-InvoiceFile.find({filename:filename},function(err,docs){
-if(docs.length>0){
-
-
-  //console.log(docs,'docs')
-  let id = docs[0]._id
-  InvoiceFile.findByIdAndUpdate(id,{$set:{fileId:fileId}},function(err,tocs){
-
-  })
-
-
-}
-  res.redirect('/clerk/genEmailReceipt')
-})
-
-  })
-
-
-
-
-
-
-
-
-
 
 
   
@@ -6880,42 +6760,6 @@ router.get('/autocompleteClient/', function(req, res, next) {
     })
 
    
-
-    router.post('/autoClientProfile',function(req,res){
-      var code = req.body.code
-
-  
-      
-  User.findById(code,function(err,doc){
-     if(doc == undefined){
-       res.redirect('/')
-     }else
-    
-        res.send(doc)
-      })
-    
-    
-    })
-
-    router.post('/autoClientInvoices',function(req,res){
-      var code = req.body.code
-
-  
-      
- InvoiceFile.find({studentId:code,statement:"true"},function(err,docs){
-     if(docs == undefined){
-       res.redirect('/')
-     }else
-    
-        res.send(docs)
-      })
-    
-    
-    })
-
-
-
-
 
     router.post('/autoInvo',isLoggedIn,function(req,res){
       var code = req.body.code
@@ -7802,13 +7646,6 @@ var grade = req.user.invoiceGrade
   */
 
 
-  router.get('/profileNew',function(req,res){
-    User.find({role:"student"},function(err,docs){
-  res.render('acc2/profile2',{listX:docs})
-
-})
-  })
-
   router.get('/studentInvoice', isLoggedIn,function(req,res){
     var pro = req.user
     var companyAddress = req.user.companyAddress
@@ -8011,7 +7848,7 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   })
   
   router.get('/invoiceSingleSubTotal',isLoggedIn,function(req,res){
-   let number1 = 0
+   var number1 = 0
    var arr7= []
     var code =req.user.invoNumber
     let balance 
@@ -8020,15 +7857,12 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
       for(var q = 0;q<hods.length; q++){
           
         arr7.push(hods[q].total)
-        console.log(arr7,'arr7')
           }
           //adding all incomes from all lots of the same batch number & growerNumber & storing them in variable called total
-           
+           number1=0;
           for(var z in arr7) { number1 += arr7[z]; }
-          console.log(number1,'number01')
           for(var i = 0;i<hods.length;i++){
             let id2 = hods[i].studentId2
-            console.log(number1,'number1')
   balance=hods[i].balance + number1
         let id = hods[i]._id
   console.log(id,'333')
@@ -8041,8 +7875,7 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
           })
         }
   
-         // res.redirect('/clerk/arrSingleInvoice')
-         res.redirect('/clerk/invoiceSingleSubTotal2')
+          res.redirect('/clerk/arrSingleInvoice')
   
         })
   
@@ -8053,49 +7886,6 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,price:price,total:total,ite
   })
   
   
-
-  router.get('/invoiceSingleSubTotal2',isLoggedIn,function(req,res){
-    let number1 = 0
-    var arr7= []
-     var code =req.user.invoNumber
-     let balance 
-     InvoiceSubBatch.find({invoNumber:code},function(err,hods){
-   console.log(hods[0].subtotal,'subtotal9')
-if(hods[0].subtotal == 0){
-
-       for(var q = 0;q<hods.length; q++){
-           
-         arr7.push(hods[q].total)
-         console.log(arr7,'arr7')
-           }
-           //adding all incomes from all lots of the same batch number & growerNumber & storing them in variable called total
-            
-           for(var z in arr7) { number1 += arr7[z]; }
-           console.log(number1,'number01')
-           for(var i = 0;i<hods.length;i++){
-             let id2 = hods[i].studentId2
-             console.log(number1,'number1')
-   balance=hods[i].balance + number1
-         let id = hods[i]._id
-   console.log(id,'333')
-           InvoiceSubBatch.findByIdAndUpdate(id,{$set:{subtotal:number1}},function(err,locs){
-   
-           })
- 
-           User.findByIdAndUpdate(id2,{$set:{balance:balance}},function(err,docs){
- 
-           })
-         }
-        }
-           res.redirect('/clerk/arrSingleInvoice')
-        
-         })
-   
-   
-   
-   
-   
-   })
   
   router.get('/arrSingleInvoice',isLoggedIn,function(req,res){
   var code = req.user.invoNumber
@@ -8389,7 +8179,6 @@ InvoiceFile.find({filename:filename},function(err,docs){
 if(docs.length>0){
 
 
-
   //console.log(docs,'docs')
   let id = docs[0]._id
   InvoiceFile.findByIdAndUpdate(id,{$set:{fileId:fileId}},function(err,tocs){
@@ -8606,7 +8395,6 @@ router.post('/studentInvoiceUpdate/:id',isLoggedIn,function(req,res){
   var invoNumberW = req.body.invoNumber
   var studentId = req.body.uid
   var studentId2 = req.body.studentId2
-  let studentObId
   let invoiceAmount
   
 	
@@ -8621,24 +8409,23 @@ router.post('/studentInvoiceUpdate/:id',isLoggedIn,function(req,res){
       InvoiceSubBatch.findByIdAndRemove(id,function(err,locs){
 
       })
-      console.log('batch deleted')
     }
     }
 
 
 
-  /*InvoiceFile.find({invoiceCode:invoNumber},function(err,docs){
+  InvoiceFile.find({invoiceCode:invoNumber},function(err,docs){
     if(docs.length >0){
       for(var i = 0; i<docs.length;i++){
       let invoiceAmount = docs[i].amountDue
       console.log(invoiceAmount,'invoiceAmount')
  
   }
-    }*/
+    }
 
 
 
-  InvoiceFile.find({invoiceNumber:invoNumber},function(err,docs){
+  InvoiceFile.find({invoiceCode:invoNumber},function(err,docs){
     if(docs.length >0){
       for(var i = 0; i<docs.length;i++){
       let id = docs[i]._id
@@ -8647,26 +8434,23 @@ router.post('/studentInvoiceUpdate/:id',isLoggedIn,function(req,res){
 
       })
     }
-    console.log('invoice deleted')
     }
 
 
 
 
   User.find({uid:studentId},function(err,doc){
-    console.log(doc[0],'docccccc',amountDue,'amountDue',studentId2)
+    console.log(doc[0],'docccccc',studentId2)
     bal = doc[0].balance - amountDue
-    let obId = doc[0]._id
-    studentObId = doc[0]._id
     console.log(bal,'bal')
     grade = doc[0].grade
     class1 = doc[0].class1
-    User.findByIdAndUpdate(obId,{$set:{balance:bal}},function(err,tocs){
+    User.findByIdAndUpdate(studentId2,{$set:{balance:bal}},function(err,tocs){
 
     })
 
- 
-console.log('balance Updated => 0')
+  })
+
 
   var id = req.user._id
 
@@ -8744,17 +8528,17 @@ else{
   ar2 = ar2.filter(v=>v!='')
   ar3 = ar3.filter(v=>v!='')
   ar4 = ar4.filter(v=>v!='')
-console.log(ar,'code')
-console.log(ar1,'quantity')
-console.log(ar2,'price')
-console.log(ar3,'description')
-console.log(ar4,'discount')
+console.log(ar,'iwee')
+console.log(ar1,'iwee1')
+console.log(ar2,'iwee2')
+console.log(ar3,'iwee3')
+console.log(ar4,'iwee4')
 
 console.log(ar.length,'ar.length')
 for(var i = 0; i<ar.length;i++){
 console.log(ar[i])
 let code = ar[i]
-console.log(code,bal,amountDue,'balInvo')
+console.log(bal,amountDue,'balInvo')
 
 
 var book = new InvoiceSubBatch();
@@ -8775,7 +8559,7 @@ book.studentEmail = studentEmail
 book.studentAddress =studentAddress
 book.studentMobile = studentMobile
 book.studentId = studentId
-book.studentId2 = studentObId
+book.studentId2 = studentId2
 book.date = date
 book.balance = 0
 book.invoiceAmount =0
@@ -8804,7 +8588,7 @@ book.discount = 0
 
 let pId = title._id
 console.log(pId,"idd")
-console.log(title.size,'size')
+
 let size = title.size
 
 console.log(size,'size')
@@ -8812,7 +8596,7 @@ let qty = ar1[size]
 let price = ar2[size]
 let item = ar3[size]
 let total = qty * price
-
+if(ar4.length > 0){
 
 
 let discount = ar4[size]
@@ -8827,8 +8611,11 @@ InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,balance:bal,invoiceAmount:t
     
     })
 
-
-  
+  }else{
+    InvoiceSubBatch.findByIdAndUpdate(pId,{$set:{qty:qty,balance:bal,invoiceAmount:total,price:price,total:total,item:item,invoiceDescription:item}},function(err,ocs){
+    
+    })
+  }
 
          
           })
@@ -8839,10 +8626,10 @@ res.redirect('/clerk/invoiceSingleProcessUpdate')
     })
     })
 
-  
+  })
 })
 
-})
+
 
 router.get('/invoiceSingleProcessUpdate',isLoggedIn,function(req,res){
 
@@ -8893,57 +8680,13 @@ console.log(balance,'balance')
         })
       }
 
-        res.redirect('/clerk/invoiceSingleSubTotalUpdate2')
+        res.redirect('/clerk/arrSingleInvoiceUpdate')
 
       })
 
 
 })
 
-
-
-router.get('/invoiceSingleSubTotalUpdate2',isLoggedIn,function(req,res){
-  let number1 = 0
-  var arr7= []
-   var code =req.user.invoNumber
-   let balance 
-   InvoiceSubBatch.find({invoNumber:code},function(err,hods){
- console.log(hods[0].subtotal,'subtotal9')
-if(hods[0].subtotal == 0){
-
-     for(var q = 0;q<hods.length; q++){
-         
-       arr7.push(hods[q].total)
-       console.log(arr7,'arr7')
-         }
-         //adding all incomes from all lots of the same batch number & growerNumber & storing them in variable called total
-          
-         for(var z in arr7) { number1 += arr7[z]; }
-         console.log(number1,'number01')
-         for(var i = 0;i<hods.length;i++){
-           let id2 = hods[i].studentId2
-           console.log(number1,'number1')
- balance=hods[i].balance + number1
-       let id = hods[i]._id
- console.log(id,'333')
-         InvoiceSubBatch.findByIdAndUpdate(id,{$set:{subtotal:number1}},function(err,locs){
- 
-         })
-
-         User.findByIdAndUpdate(id2,{$set:{balance:balance}},function(err,docs){
-
-         })
-       }
-      }
-         res.redirect('/clerk/arrSingleInvoiceUpdate')
-      
-       })
- 
- 
- 
- 
- 
- })
 
 
 router.get('/arrSingleInvoiceUpdate',isLoggedIn,function(req,res){
@@ -9136,7 +8879,6 @@ repo.invoiceCode = invoiceCode
 repo.invoiceNumber = invoiceNumber
 repo.invoiceNumberText = invoiceNumber
 repo.receiptNumber = 0
-repo.statement = "true"
 repo.name = "INV #"+invoiceNumber+" "+"Due"+" "+date;
 repo.status = "unpaid"
 repo.datePaid = "null"
@@ -9894,30 +9636,6 @@ height: height + 'px',
 })
 
 console.log('pdf successful')
-let filename = receiptNumber+'_'+studentName+'.pdf';
-  //console.log('pdf successful')
-
-  const file = await fs.readFile(`./public/receiptReports/${year}/${term}/${receiptNumber}_${studentName}`+'.pdf');
-  const form = new FormData();
-  form.append("file", file,filename);
- //const headers = form.getHeaders();
-  //Axios.defaults.headers.cookie = cookies;
-  //console.log(form)
-await Axios({
-    method: "POST",
-    url: 'http://localhost:8500/clerk/uploadReceiptDisc',
-    headers: {
-      "Content-Type": "multipart/form-data"  
-    },
-    data: form
-  });
-
-
-
-
-
-
-
 
 res.redirect('/clerk/genEmailReceiptDisc')
 
@@ -9951,36 +9669,6 @@ console.log(e)
 
 
 })
-
-
-router.post('/uploadReceiptDisc',upload.single('file'),(req,res,nxt)=>{
-  var fileId = req.file.id
-  console.log(fileId,'Receipt fileId')
-  var filename = req.file.filename
-  console.log(filename,'filename')
-InvoiceFile.find({filename:filename},function(err,docs){
-if(docs.length>0){
-
-
-//console.log(docs,'docs')
-let id = docs[0]._id
-InvoiceFile.findByIdAndUpdate(id,{$set:{fileId:fileId}},function(err,tocs){
-
-})
-
-
-}
-res.redirect('/clerk/genEmailReceiptDisc')
-})
-
-})
-
-
-
-
-
-
-
 
 
 

@@ -22,7 +22,7 @@
 	break-inside: avoid
 }
 
-   * {
+* {
   box-sizing: border-box;
 }
 
@@ -30,19 +30,34 @@
 table {
     width: 100%;
     min-width: max-content;
-    table-layout:fixed;
+        table-layout:fixed;
+
+
   }
 .row {
   margin-left:-5px;
   margin-right:-5px;
+ 
 }
   
 .column {
   float: left;
-  width: 50%;
+  width: 80%;
   padding: 5px;
+ margin-top: 0px;
+ margin: 0px;
+ /* margin-top: 5px;*/
 }
 
+
+
+.column1 {
+  float: left;
+  width: 20%;
+  padding: 5px;
+   margin-top: 0px;
+   margin: 0px;
+}
 /* Clearfix (clear floats) */
 .row::after {
   content: "";
@@ -96,7 +111,7 @@ table {
     width: 100%;
     height: 100%;
     opacity: .1;
-    margin-top: 100px;
+    margin-top: 150px;
 }
 
 .content-container .contents{
@@ -108,23 +123,26 @@ table {
   width: 100%;
   height: 100px;
   background-color: #4da6ff;
+ 
 }
 
 .leftpane {
   width: 25%;
   height: 45vh;
- 
+
 }
 
 .middlepane {
   width: 50%;
   height: 40vh;
+
   
 }
 
 .rightpane {
-  width: 20%;
-  height: 35vh;
+  width:10%;
+  height: 25vh;
+
 
 }
 
@@ -149,17 +167,18 @@ body {
     
   <div class="d-flex">
     <div class="leftpane">
-     <img src="https://lh3.googleusercontent.com/p/AF1QipM4QsTyJAvH2mqbi7nscU_rI0itolqM4uAEL9G2=s680-w680-h510 " alt="ST EURIT logo"  style="width: 200px; height:250px; display:inline-block; ">
+     <img src="https://lh3.googleusercontent.com/p/AF1QipM4QsTyJAvH2mqbi7nscU_rI0itolqM4uAEL9G2=s680-w680-h510" style="width: 254px; height:350px; display:inline-block; " alt="ST EURIT logo">
     </div>
     <div class="middlepane">
         <h1 style="text-align: center;font-family: Georgia, serif; font-size:25px;"> <b></b> ST EURIT INTERNATIONAL <br> SCHOOL <b></h1>
-         
+        
         <p style="text-align: center; ">129 Bishop Gaul Ave<br> Avondale <br>Harare,Zim <br>  </p>
         <p style="text-align: center;   "> admin@steuritinternationalschool.org</p>
+        
        
     </div>
     <div class="rightpane">
-      <h1>INVOICE</h1>
+      <h3 >STATEMENT</h3>
     </div>
   </div>
 </div>
@@ -168,20 +187,23 @@ body {
 
 
 
-<div class="row">
-    <div class="column">
+
+
+<div class="row" style="margin-bottom: 40px;">
+    <div class="column">   
 
       
 
  
 
-    <table border="1" >
+    <table border="1"   >
+    
      <tr>
-         <td colspan="2" style=" height: 30px; text-align:center">Invoice To</td>
+         <td colspan="2" style=" height: 5px; text-align:center;border: 0cm;">Statement To</td>
       
      </tr>
      <tr>
-        <td colspan="2" style=" height: 50px; text-align:center"> {{this.0.studentName}} <br>
+        <td colspan="2" style=" height: 10px; text-align:center;border: 0cm;"> {{this.0.studentName}} <br>
         {{this.0.studentAddress}}  <br>{{this.0.studentMobile}} <br> {{this.0.studentEmail}} </td>
       
     </tr>
@@ -190,18 +212,18 @@ body {
 
 </div>
 
-        <div class="column">
+        <div class="column1"  >
     
     
-    <table border="1" >
-        <tr>
-            <td style="text-align:center">Date</td>
-            <td  style="text-align:center"> {{this.0.date}}</td>
+    <table border="1"  style="height: 88px;margin-bottom:10px;">
+        <tr >
+            <td style="text-align:center;height:5px;">Date</td>
+      
          
         </tr>
         <tr>
-           <td  style="text-align:center"> Invoice No </td>
-           <td  style="text-align:center"> {{this.0.invoNumber}} </td>
+           <td id="date" name="date" style="text-align:center;height:5px;" > </td>
+          
          
        </tr>
        
@@ -212,33 +234,34 @@ body {
 
 
 
-    <table border="1" class="column-bordered-table td thead"  style="break-inside: avoid;border-bottom:1px solid black;" >
+
+<div class="column" style="width: 100%; margin-bottom:10px;">
+
+    <table border="1" class="column-bordered-table td thead"  style="border-bottom:1px solid black; margin-bottom:10px;" >
+
    
     <thead>
-     
+      
+    
         <tr >
-            <th  style="text-align:center;width: 10%;" >
-               Qty
+            <th  style="text-align:center;width: 15%;" >
+             Date
             </th>
 
-            <th style="text-align:center;width: 30%;"  >
-             Item
+            <th style="text-align:center;width: 40%;"  >
+             Transaction
             </th>
 
-            <th  style="text-align:center;width: 30%;">
-                Description
-            </th>
+           
             <th  style="text-align:center">
-              Rate <br>
+             Amount <br>
               ($)
                </th>
 
-               <th  style="text-align:center">
-              Discount <br>(%)
-               </th>
+              
 
                <th  style="text-align:center">
-                Amount <br> ($)
+                Balance <br> ($)
                 </th>
         
         </tr>
@@ -247,29 +270,25 @@ body {
 
     <tbody >
             {{#each this}}
-        <tr style="border: 0; ">
+        <tr style="border: 0cm; ">
        
-            <td>
-               
-            </td>
+          
            
-            <td style="text-align:center">
-            {{this.code}}
+            <td style="text-align:center; border:0cm;">
+            {{this.date}}
             </td>
           
-            <td style="text-align:center; width:40%;" >
-{{this.item}}
-            </td>
+       
             <td style="text-align: center; ">
-             {{this.price}}
+             {{this.name}}
             </td>
 
                <td style="text-align: center; ">
-             {{this.discount}}
+             {{this.typeAmount}}
             </td>
 
             <td style="text-align: center;">
-          {{this.total}}
+          {{this.studentBalance}}
              </td>
         </tr>
         {{/each}}
@@ -283,15 +302,7 @@ body {
         
                    
 
-                        <tr style="border: 0cm; height: 400px;">
-                            
-                        <td></td>
-                         <td></td>
-                          <td></td>
-                            <td></td>
-                              <td></td>
-                                    
-                                </tr>
+                      
 
                                 
                           
@@ -310,34 +321,100 @@ body {
  
 </table>
 
-
+</div>
+</div>
 
     
-      <table  style=" margin-bottom:20px;width:27%; margin-left:540px;   border: 1px solid black;
-  border-collapse: collapse;break-inside: avoid
-  ;">
-        <tr style="border-bottom:1px solid black" >
-            <td  >Total Amount</td>
-            <td  style="text-align: end;"> ${{this.0.subtotal}}</td>
-         
-        </tr>
-        <tr style="border-bottom:1px solid black">
-           <td> Payments </td>
-           <td  style="text-align: end;">0 </td>
-         
-       </tr>
-       
-        <tr style="border-bottom:1px solid black">
-           <td><b> Balance Due</b> </td>
-           <td style="text-align: end;"> ${{this.0.subtotal}} </td>
-         
-       </tr>
-       </table>
-
+   
    <!-- </div>-->
+
     
 
 </div>
+</div>
 
-</div>
-</div>
+
+
+
+   <table border="1">
+      <thead>
+     
+        <tr >
+            <th  style="text-align:center" >
+          CURRENT
+            </th>
+
+            <th  style="text-align:center">
+           1-30 DAYS <br> PAST DUE
+            </th>
+
+           
+            <th  style="text-align:center">
+             31-60 DAYS <br>
+              PAST DUE
+               </th>
+
+                 <th style="text-align:center">
+             61-90 DAYS <br>
+              PAST DUE
+               </th>
+
+
+   <th style="text-align:center">
+             OVER 90 DAYS <br>
+              PAST DUE
+               </th>
+               <th style="text-align:center">
+              AMOUNT <br> DUE
+                </th>
+        
+        </tr>
+       
+    </thead>
+
+     <tbody >
+        
+        <tr >
+       
+           <td style="text-align:center;height:90%;">
+             ${{this.0.typeBalance}}
+           </td>
+           
+            <td style="text-align:center;height:10%;">
+        -
+            </td>
+          
+       
+            <td style="text-align: center;height:10%; ">
+        -
+            </td>
+
+               <td style="text-align: center; height:10%;">
+       -
+            </td>
+
+            <td style="text-align: center;height:10%;">
+        -
+             </td>
+
+              <td style="text-align: center;height:40%;">
+         ${{this.0.typeBalance}}
+             </td>
+        </tr>
+       
+                        
+    </tbody>
+
+  
+   </table>
+
+   
+<script>
+	(function () {
+    var date = new Date().toISOString().substring(0, 10),
+        field = document.querySelector('#date');
+           field.innerText = date;
+
+
+})()
+</script>

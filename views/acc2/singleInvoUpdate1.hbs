@@ -56,11 +56,11 @@
     border: 1px solid black;
   }
 </style>
-<input type="hidden" name="invoNumber" id="invoNumber" value="{{invoiceNumber}}">
+<input type="hidden" name="invoiceNumber" id="invoiceNumber" value="{{invoiceNumber}}">
 	<!--begin::Body-->
 
 	<script>
-let id = document.getElementById('invoNumber').value
+let id = document.getElementById('invoiceNumber').value
 		function init(id){
 		
 
@@ -1266,7 +1266,7 @@ let id = document.getElementById('invoNumber').value
 											<!--begin::Card body-->
 											<div class="card-body p-12">
 												<!--begin::Form-->
-												<form action="/clerk/studentInvoiceUpdate" method="POST" id="kt_invoice_form">
+												<form action="/clerk/studentInvoiceUpdate/{{invoiceNumber}}" method="POST" id="kt_invoice_form">
 													<!--begin::Wrapper-->
 													<div class="d-flex flex-column align-items-start flex-xxl-row">
 														<!--begin::Input group-->
@@ -1372,7 +1372,7 @@ let id = document.getElementById('invoNumber').value
 
 
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Invoice Number" name="invoNumber" id="invoNumber" value="" />
+																	<input type="text" class="form-control form-control-solid" placeholder="Invoice Number" name="invoNumber" id="invoNumber" value="{{invoiceNumber}}" />
 																</div>
 																									<div class="mb-5">
 																	<input type="text" class="form-control form-control-solid" placeholder="Name" name="clientName" id="fullname" />
@@ -1455,7 +1455,7 @@ let id = document.getElementById('invoNumber').value
 																		<td>
 																			<input type="text" class="form-control form-control-solid text-end mb-2" name="price[]" id="price" placeholder="0.00" value="0.00" data-kt-element="price" />
 
-																		<input type="number" class="form-control form-control-solid text-end" name="discount[]" id="discount" placeholder="0.00" value="0" data-kt-element="amountDue" />
+																		<input type="number" class="form-control form-control-solid text-end" name="discount[]" id="discount"  value="0" data-kt-element="amountDue" />
 																		</td>
                                                                      <input type="hidden" name="id[]" id="xid" data-kt-element="xid" >
 
@@ -1526,7 +1526,7 @@ let id = document.getElementById('invoNumber').value
 																	<td>
 																			<input type="text" class="form-control form-control-solid text-end mb-2" name="price[]" id="price1" placeholder="0.00" value="0" data-kt-element="price" />
 
-																			<input type="number" class="form-control form-control-solid text-end" name="discount[]" id="discount1" placeholder="0.00" value="0" data-kt-element="amountDue" />
+																			<input type="number" class="form-control form-control-solid text-end" name="discount[]" id="discount1"  value="0" data-kt-element="amountDue"  />
 																		</td>
 
 															
@@ -1621,15 +1621,7 @@ let id = document.getElementById('invoNumber').value
 		<!--end::Page Vendors Javascript-->
 		<!--begin::Page Custom Javascript(used by this page)-->
 		<script src="assets/js/custom/apps/invoices/create7.js"></script>
-		<script src="assets/js/widgets.bundle.js"></script>
-		<script src="assets/js/custom/widgets.js"></script>
-		<script src="assets/js/custom/apps/chat/chat.js"></script>
-		<script src="assets/js/custom/utilities/modals/upgrade-plan.js"></script>
-		<script src="assets/js/custom/utilities/modals/create-app.js"></script>
-		<script src="assets/js/custom/utilities/modals/users-search.js"></script>
-		<!--end::Page Custom Javascript-->
-		<!--end::Javascript-->
-
+	
 
 
 
@@ -1774,7 +1766,8 @@ console.log(code,'code')
    
             document.getElementById("quantity").value= 1
             document.getElementById("code").value= data[i].code
-			   document.getElementById("discount").value= data[i].discount
+			  // document.getElementById("discount").value= data[i].discount
+			  document.getElementById("discount").value= 0
 			document.getElementById("description").value= data[i].item
            //  document.getElementById("invoiceNo").value= data[i].invoNumber
 			document.getElementById("xid").value= data[i]._id
@@ -1797,16 +1790,23 @@ console.log(code,'code')
         else if( i == 1){
           document.getElementById("price1").value= data[i].price
          // document.getElementById("amountDue1").value= data[i].price
-                    document.getElementById("code1").value= data[i].code
-						   document.getElementById("discount1").value= data[i].discount
+          document.getElementById("code1").value= data[i].code
+		//  document.getElementById("discount1").value= data[i].discount
+			  document.getElementById("discount1").value= 0
           document.getElementById("quantity1").value= 1
           document.getElementById("description1").value= data[i].item
          // document.getElementById("invoiceNo1").value= data[i].invoiceNumber
 		  document.getElementById("xid1").value= data[i]._id
 		 // let amountDue1 =  document.getElementById("amountDue1").value
-		  document.querySelector('[data-kt-element="grand-total"]').innerText  =number1
+		 /* document.querySelector('[data-kt-element="grand-total"]').innerText  =number1
 		  document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-		  document.querySelector('[id="total1"]').innerText  =  data[i].price
+		  document.querySelector('[id="total1"]').innerText  =  data[i].price*/
+
+
+		    document.querySelector('[data-kt-element="grand-total"]').innerText  = number1
+		  document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
+
+		    document.getElementById("total1").innerText=  data[i].price
 
 
 
@@ -1840,7 +1840,8 @@ console.log(code,'code')
 			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').value = data[i]._id
 						document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data[i].code
 
-												document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value = data[i].discount
+	//document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value = data[i].discount
+	document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value = 0
 			//document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value= data[i].amountDue
 			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').value= data[i].price
            document.querySelector('[data-kt-element="items"] tbody').appendChild(l)
@@ -2090,7 +2091,7 @@ console.log(code,'code')
 		     $('body').on('blur','#discount', function (e) {
 let number1
 let arr=[]
- console.log(document.getElementById("discount").value,'666666666666')
+                    console.log(document.getElementById("discount").value,'666666666666')
 let grandTotal
  let discount = document.getElementById("discount").value
  let totalX = document.getElementById('total0').innerText
@@ -2120,8 +2121,8 @@ let grandTotal
 
  }
 	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-	 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
+	 document.querySelector('[data-kt-element="grand-total"]').innerText  =  total
+	 document.querySelector('[data-kt-element="sub-total"]').innerText  =total
 
 
 
@@ -2143,34 +2144,33 @@ let grandTotal
 <script>
 
 		     $('body').on('click','#discount', function (e) {
-				 console.log('haa night wadii1')
-		 let number1
+				 console.log('haa night wadii')
+				 let number1
 let arr=[]
-                    console.log(document.getElementById("discount1").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount").value
- let price =document.getElementById('price').value
- let quantity = document.getElementById('quantity').value
- let totalX = document.getElementById('total0').innerText
-
-
-
+	    /* var users = $('input[name="id[]"]').map(function(){ 
+                    return this.value; 
+                }).get();*/
+				var id = document.getElementById('xid').value
+			//	console.log(users,'users')
+				
+				   $.ajax({
+    dataType: 'json',
+   data: {
+     /*'username[]': users,*/
+	 code:id
+        
+    },
+    type: 'POST',
+    url: "/clerk/autoInvo3",
+    success: function(data) {
+   console.log(data,'xxxxxxxx')
+   
  
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total0').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
+		 document.getElementById('total0').innerText = data.total
+let total = data.total
+		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
  for(var i=0;i<c-1;i++){
-console.log(i,'iiii')
+
 	let totalX3 =  document.getElementById(`total${i}`).innerText 
 	console.log(totalX3,'tX3')
 	  let regTotalX3 = /\d+\.*\d*/g;  
@@ -2178,28 +2178,22 @@ console.log(i,'iiii')
     let totalN= Number(resultTotalX3)
 arr.push(totalN)
 
-	   number1=0;
+	   number1=total;
       for(var z in arr) { number1 += arr[z]; }
 
  }
-	 
+		 document.querySelector('[data-kt-element="grand-total"]').innerText  = total
+		 document.querySelector('[data-kt-element="sub-total"]').innerText  =total
+	
 
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
+	}
 
-	   
+	})
+	
+	
 
-          
-                    
-                    
-                    
-                        
-                    
+
 			 })
-
-
-
 
 	</script>
 
@@ -2215,18 +2209,20 @@ let arr=[]
                     console.log(document.getElementById("discount1").value,'77777777777')
 let grandTotal
  let discount = document.getElementById("discount1").value
- let price =document.getElementById('price').value
- let quantity = document.getElementById('quantity').value
- let totalX = document.getElementById('total1').innerText
+ let price =document.getElementById('price1').value
+ let quantity = document.getElementById('quantity1').value
+ //let totalX = document.getElementById('total1').innerText
+  let total = price * quantity
 
 
 
  
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
+	//let regTotal = /\d+\.*\d*/g;  
+    /*let resultTotal =totalX.match(regTotal)
+    let total= Number(totalX)*/
 	let percentage = discount / 100
 	let discounted =  total * percentage
+
 
 	total -= discounted
 console.log('discounted',total)
@@ -2236,7 +2232,7 @@ console.log('discounted',total)
        var c = document.querySelectorAll(' [data-kt-element="item"]').length;
 	   console.log(c,'c')
  for(var i=0;i<c-1;i++){
-console.log(i,'iiii')
+console.log(i,'111111111111')
 	let totalX3 =  document.getElementById(`total${i}`).innerText 
 	console.log(totalX3,'tX3')
 	  let regTotalX3 = /\d+\.*\d*/g;  
@@ -2360,7 +2356,7 @@ console.log('discounted',total)
 
        var c = document.querySelectorAll(' [data-kt-element="item"]').length;
 	   console.log(c,'c')
- for(var i=0;i<c;i++){
+ for(var i=0;i<c-1;i++){
 
 	let totalX3 =  document.getElementById(`total${i}`).innerText 
 	console.log(totalX3,'tX3')

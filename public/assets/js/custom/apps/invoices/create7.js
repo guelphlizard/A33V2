@@ -185,7 +185,7 @@ console.log(total,total1,'grandTotal')
 
             $('body').on('click','#code2', function (e) {
 
-                console.log('999999999999')
+                console.log('code2222222')
 
 
                 
@@ -221,7 +221,7 @@ console.log(total,total1,'grandTotal')
                                 url: "/clerk/autoXN",
                                 success: function(data) {
                                
-                                
+                                console.log(data[0],'ant')
 
                                 
                                   $("#code2").val(data.code)
@@ -232,14 +232,19 @@ console.log(total,total1,'grandTotal')
                                let quantity =  document.getElementById('quantity').value
                                let total = price * quantity
 
+                            
+
                                let price1 = document.getElementById('price1').value
                                let quantity1 =  document.getElementById('quantity1').value
                                let total1 = price1 * quantity1
 
-                               let price2 = data.price
-                               let quantity2 =  document.getElementById('quantity2').value
-                               let total2 = price2 * quantity2
+                            
 
+
+                               let price2 = data.price
+                               let quantity2 =  data.quantity
+                               let total2 = data.price * data.qty
+                                console.log(total,total1,total2,'grandTotal')
                                let grandTotal = total1 + total + total2
                           
                                /*  document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"]').innerText= data.price
@@ -251,6 +256,7 @@ console.log(data._id,'riya riya')
 document.querySelector(' [id="total2"]').innerText  = data.price
 document.querySelector(' [id="description2"]').textContent = data.item
 document.querySelector(' [id="description2"]').innerText = data.item
+document.getElementById("description2").value = data.item
 
 document.querySelector('[data-kt-element="grand-total"]').innerText  = grandTotal
 document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
@@ -350,7 +356,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
                             
   
                                   let price3 = data.price
-                                  let quantity3 =  document.getElementById('quantity3').value
+                                  let quantity3 =  data.price
                                   let total3 = price3 * quantity3
                                   let grandTotal = total1 + total + total3
                               $("#code3").val(data.code)
@@ -550,7 +556,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
 
 
                                       let price4 = data.price
-                                      let quantity4 =  document.getElementById('quantity4').value
+                                      let quantity4 =  data.qty
                                       let total4 = price4 * quantity4
                                       let grandTotal = total1 + total + total3 + total4
                                     
@@ -669,7 +675,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
                                       let total4 = price4 * quantity4
 
                                       let price5 = data.price
-                                      let quantity5 =  document.getElementById('quantity5').value
+                                      let quantity5 =  data.qty
                                       let total5 = price5 * quantity5
                                       let grandTotal = total1 + total  + total3 + total4 + total5
                                     
@@ -786,7 +792,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
                                     let total5 = price5 * quantity5
 
                                     let price6 = data.price
-                                    let quantity6 =  document.getElementById('quantity6').value
+                                    let quantity6 =   data.qty
                                     let total6 = price6 * quantity6
                                     let grandTotal = total1 + total +  total3 + total4 + total5 + total6
                                   
@@ -907,7 +913,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
                                   let total6 = price6 * quantity6
 
                                   let price7 = data.price
-                                  let quantity7 =  document.getElementById('quantity7').value
+                                  let quantity7 =   data.qty
                                   let total7 = price7 * quantity7 
                                   let grandTotal = total1 + total +  total3 + total4 + total5 + total6 + total7
                                 
@@ -1047,7 +1053,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
                                 let total7 = price7 * quantity7
 
                                 let price8 = data.price
-                                let quantity8 =  document.getElementById('quantity8').value
+                                let quantity8 =   data.qty
                                 let total8 = price8 * quantity8 
                                 let grandTotal = total1 + total +  total3 + total4 + total5 + total6 + total7 + total8
                                 $("#code8").val(data.code)
@@ -1187,7 +1193,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
                               let total8 = price8 * quantity8
 
                               let price9 = data.price
-                              let quantity9 =  document.getElementById('quantity9').value
+                              let quantity9 =   data.qty
                               let total9 = price9 * quantity9 
                               let grandTotal = total1 + total +  total3 + total4 + total5 + total6 + total7 + total8 + total9
                             
@@ -1345,7 +1351,7 @@ document.querySelector('[data-kt-element="sub-total"]').innerText  = grandTotal
                             let total9 = price9 * quantity9
 
                             let price10 = data.price
-                            let quantity10 =  document.getElementById('quantity10').value
+                            let quantity10 =   data.qty
                             let total10 = price10 * quantity10
                             let grandTotal = total1 + total +  total3 + total4 + total5 + total6 + total7 + total8 + total9 + total10
                           

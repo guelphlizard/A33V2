@@ -16,7 +16,7 @@
 		<link rel="canonical" href="https://schoolzoid.co.zw" />
 		<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
 		<!--begin::Fonts-->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+		
 		<!--end::Fonts-->
 		<!--begin::Page Vendor Stylesheets(used by this page)-->
 		<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
@@ -26,6 +26,11 @@
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
 		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 		<!--end::Global Stylesheets Bundle-->
 	</head>
 	<!--end::Head-->
@@ -56,36 +61,45 @@
     border: 1px solid black;
   }
 </style>
-<input type="hidden" name="invoNumber" id="invoNumber" value="{{invoiceNumber}}">
+<input type="hidden" name="fullname1" id="fullname1" value="{{fullname}}">
+<input type="hidden" name="uid3" id="uid3" value="{{id}}">
 	<!--begin::Body-->
 
 	<script>
-let id = document.getElementById('invoNumber').value
-		function init(id){
+let fullname = document.getElementById('fullname1').value
+let id = document.getElementById('uid3').value
+console.log(fullname,id,'glunge')
+		function init(fullname,id){
 		
 
 			  $.ajax({
                 dataType: 'json',
                 data: {
-                    code: id,
+                    code: fullname,
                     
                 },
                 type: 'POST',
-                url: "/clerk/autoInvoiceX",
+                url: "/clerk/autoClient",
                 success: function(data) {
                
+			   console.log(data,'data')
                 
                 
-                 $("#fullname").val(data.studentName)
-                 $("#email").val(data.studentEmail)
-				 $("#address").val(data.studentAddress)
-	
-				 $("#mobile").val(data.studentMobile)
-				 $("#balance").val(data.balance)
-				 $("#uid").val(data.studentId)
-				 $("#studentId2").val(data._id)
+               
+                 $("#fullname").val(data.fullname)
+                 $("#email").val(data.email)
+				 $("#address1").val(data.address1)
+				$("#class1").val(data.class1)
+				$("#grade").val(data.grade)
+				$("#mobile").val(data.mobile)
+				$("#amountDue").val(data.amountDue)
+				$("#uid").val(data.uid)
+				$("#studentId2").val(data._id)
+				$("#balance").val(data.balance)
               
-			loadItems(data.studentId)
+			loadItems(data.uid)
+              
+		
                  
           
                 }
@@ -94,7 +108,8 @@ let id = document.getElementById('invoNumber').value
 		}
 		//console.log(document.getElementById('invoNumber').value)
 	</script>
-	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px" onload="init(id)">
+	<!--begin::Body-->
+	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px"   onload="init(fullname,id)">
 		<!--begin::Main-->
 		<!--begin::Root-->
 		<div class="d-flex flex-column flex-root">
@@ -657,7 +672,9 @@ let id = document.getElementById('invoNumber').value
 											</div>
 
 
-											
+
+
+									
 
 											<div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" class="menu-item here show menu-lg-down-accordion me-lg-1">
 												<div class="menu-item">
@@ -1122,7 +1139,7 @@ let id = document.getElementById('invoNumber').value
 										</li>
 										<!--end::Item-->
 										<!--begin::Item-->
-										<li class="breadcrumb-item text-muted">Invoice Manager</li>
+										<li class="breadcrumb-item text-muted">Receipt Manager</li>
 										<!--end::Item-->
 										<!--begin::Item-->
 										<li class="breadcrumb-item">
@@ -1130,7 +1147,7 @@ let id = document.getElementById('invoNumber').value
 										</li>
 										<!--end::Item-->
 										<!--begin::Item-->
-										<li class="breadcrumb-item text-dark">Create Invoice</li>
+										<li class="breadcrumb-item text-dark">Create Receipt</li>
 										<!--end::Item-->
 									</ul>
 									<!--end::Breadcrumb-->
@@ -1239,8 +1256,7 @@ let id = document.getElementById('invoNumber').value
 							<!--end::Container-->
 						</div>
 						<!--end::Toolbar-->
-						<!--begin::Post-->
-									<div class="col-sm-6 col-md-4 col-md-offset-4 col-sm-offset-3">
+						<div class="col-sm-6 col-md-4 col-md-offset-4 col-sm-offset-3">
         <div id="success" class="alert alert-success" {{#if noMessages}}hidden{{/if}}>
             {{ successMsg }}
      
@@ -1252,10 +1268,208 @@ let id = document.getElementById('invoNumber').value
             {{ errorMsg }}
      
         </div>
-		</div>
+    </div>		
+		<div class="modal fade" id="myModal0" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content" >
+                                                            
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                    <iframe src="#" frameborder="0" id="frame0" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+<!--2-->
+	<div class="modal fade" id="myModal1" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                   <iframe src="#" frameborder="0" id="frame1" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+<!--2-->
+	<div class="modal fade" id="myModal2" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                           
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                   <iframe src="#" frameborder="0" id="frame2" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+
+<!--3-->
+	<div class="modal fade" id="myModal3" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                           
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                 <iframe src="#" frameborder="0" id="frame3" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+<!--4-->
+
+	<div class="modal fade" id="myModal4" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                         
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                   <iframe src="#" frameborder="0" id="frame4" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+
+
+<!--5-->
+	<div class="modal fade" id="myModal5" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                          
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                 <iframe src="#" frameborder="0" id="frame5" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+<!--6-->
+	<div class="modal fade" id="myModal6" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                         
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                   <iframe src="#" frameborder="0" id="frame6" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+<!--7-->
+	<div class="modal fade" id="myModal7" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                           
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                   <iframe src="#" frameborder="0" id="frame7" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+<!--8-->
+	<div class="modal fade" id="myModal8" data-backdrop="static">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                          
+                                                            <div class="modal-body">
+                                                                <div class="ExternalFiles">
+                                                                   <iframe src="#" frameborder="0" id="frame8" width="465" height="400"   ></iframe>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+
+
+
+
+
+
+
+
+
+						<!--begin::Post-->
 						<div class="post d-flex flex-column-fluid" id="kt_post">
 							<!--begin::Container-->
-				
 							<div id="kt_content_container" class="container-xxl">
 								<!--begin::Layout-->
 								<div class="d-flex flex-column flex-lg-row">
@@ -1265,8 +1479,10 @@ let id = document.getElementById('invoNumber').value
 										<div class="card">
 											<!--begin::Card body-->
 											<div class="card-body p-12">
+
+										
 												<!--begin::Form-->
-												<form action="/clerk/studentInvoiceUpdate" method="POST" id="kt_invoice_form">
+												<form action="/clerk/invoice/{{id}}" method="POST" id="kt_invoice_form">
 													<!--begin::Wrapper-->
 													<div class="d-flex flex-column align-items-start flex-xxl-row">
 														<!--begin::Input group-->
@@ -1277,7 +1493,7 @@ let id = document.getElementById('invoNumber').value
 															<!--begin::Input-->
 															<div class="position-relative d-flex align-items-center w-150px">
 																<!--begin::Datepicker-->
-																<input type="date" class="form-control form-control-transparent fw-bolder pe-5" placeholder="Select date" name="invoice_date" id="invoice_date" value="{{mformat}}" />
+																<input type="date" class="form-control form-control-transparent fw-bolder pe-5" placeholder="Select date" name="invoice_date" id="invoice_date" />
 																<!--end::Datepicker-->
 																<!--begin::Icon-->
 																<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -1294,7 +1510,7 @@ let id = document.getElementById('invoNumber').value
 														<!--end::Input group-->
 														<!--begin::Input group-->
 														<div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Enter invoice number">
-															<span class="fs-2x fw-bolder text-gray-800">Invoice </span>
+															<span class="fs-2x fw-bolder text-gray-800">Receipt  #</span>
 															<input type="text" class="form-control form-control-flush fw-bolder text-muted fs-3 w-125px" value="2021001" placehoder="..." />
 														</div>
 														<!--end::Input group-->
@@ -1335,28 +1551,24 @@ let id = document.getElementById('invoNumber').value
 																<label class="form-label fs-6 fw-bolder text-gray-700 mb-3">Bill From</label>
 																<!--begin::Input group-->
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Name" name="businessName" id="businessName" value="{{companyName}}"  readonly/>
+																	<input type="text" class="form-control form-control-solid" placeholder="Name" name="businessName" id="businessName" value="{{companyName}}" />
 																</div>
 																<!--end::Input group-->
 																<!--begin::Input group-->
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Email" name="companyEmail" id="companyEmail" value="{{companyEmail}}" readonly />
+																	<input type="text" class="form-control form-control-solid" placeholder="Email" name="companyEmail" id="companyEmail" value="{{companyEmail}}" />
 																</div>
 																<!--end::Input group-->
                                                                	<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Contact" name="companyMobile" id="companyMobile" value="{{companyMobile}}"  readonly/>
+																	<input type="text" class="form-control form-control-solid" placeholder="Contact" name="companyMobile" id="companyMobile" value="{{companyMobile}}" />
 																</div>
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Address" name="companyAddress" id="companyAddress" value="{{companyAddress}}" readonly />
+																	<input type="text" class="form-control form-control-solid" placeholder="Address" name="companyAddress" id="companyAddress" value="{{companyAddress}}" />
 																</div>
 																<!--end::Input group-->
-																<!--begin::Input group--
+																<!--begin::Input group-->
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="City" name="invoiceId" id="invoiceId"  value="{{invoiceId}}"  readonly/>
-																</div>
-
-																	<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Clerk" name="clerk" id="clerk"  value="{{clerk}}" readonly/>
+																	<input type="text" class="form-control form-control-solid" placeholder="City" name="companyCity" id="companyCity"  value="{{companyCity}}"/>
 																</div>
 																<!--begin::Input group--
 																<div class="mb-5">
@@ -1367,53 +1579,47 @@ let id = document.getElementById('invoNumber').value
 															<!--end::Col-->
 															<!--begin::Col-->
 															<div class="col-lg-6">
-																<label class="form-label fs-6 fw-bolder text-gray-700 mb-3">Invoice Details</label>
+																<label class="form-label fs-6 fw-bolder text-gray-700 mb-3">Bill To</label>
 																<!--begin::Input group-->
-
-
 																<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Invoice Number" name="invoNumber" id="invoNumber" value="" />
-																</div>
-																									<div class="mb-5">
 																	<input type="text" class="form-control form-control-solid" placeholder="Name" name="clientName" id="fullname" />
 																</div>
 																<!--end::Input group-->
 																<!--begin::Input group-->
-																
-																									<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Email" name="clientEmail" id="email"  readonly />
+																<div class="mb-5">
+																	<input type="text" class="form-control form-control-solid" placeholder="Email" name="clientEmail" id="email" readonly />
 																</div>
 																<!--end::Input group-->
 
-															<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Address" name="clientAddress" id="address"  readonly />
+																										<div class="mb-5">
+																	<input type="text" class="form-control form-control-solid" placeholder="Mobile" name="mobile" id="mobile" readonly />
 																</div>
 
 																										<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Mobile" name="mobile" id="mobile" readonly  />
-																</div>
-
-																									<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Student ID" name="uid" id="uid" readonly  />
-																</div>
-
-																									<!--<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Description of Invoice" name="description2" id="description2" />
+																	<input type="text" class="form-control form-control-solid" placeholder="Address" name="class1" id="class1" readonly />
 																</div>
 																<!--end::Input group-->
-																<!--<div class="mb-5">
-																	<input type="number" class="form-control form-control-solid" placeholder="Client Balance" name="balance" id="balance" readonly />
-																</div>-->
-
-
-																							<!--	<div class="mb-5">
-																	<input type="text" class="form-control form-control-solid" placeholder="Class1" name="class1" id="class1" readonly />
-																</div>
 																<!--begin::Input group-->
-																<input type="hidden" class="form-control form-control-solid" placeholder="Description of Invoice" name="grade" id="grade" />
-																<!--<input type="hidden" class="form-control form-control-solid" placeholder="Description of Invoice" name="class1" id="class1" />-->
-																<input type="hidden" class="form-control form-control-solid" placeholder="Description of Invoice" name="studentId2" id="studentId2" />
+																<div class="mb-5">
+																	<input type="text" class="form-control form-control-solid" placeholder="City" name="clientCity" id="address1" readonly />
+																</div>
+
+																<div class="mb-5">
+																	<input type="text" class="form-control form-control-solid" placeholder="Student ID" name="uid" id="uid"  readonly/>
+																</div>
+
+																<div class="mb-5">
+																	<input type="number" class="form-control form-control-solid" placeholder="Student Balance" name="balance" id="balance" readonly />
+																</div>
+
+																	<div class="mb-5">
+																	<input type="number" class="form-control form-control-solid" placeholder="Enter Amount" name="amountX" id="amountX" />
+																</div>
+
 																
+																	<input type="hidden" class="form-control form-control-solid" placeholder="Student ID" name="studentId2" id="studentId2" />
+															
+
 																<!--begin::Input group--
 																<div class="mb-5">
 																	<textarea  class="form-control form-control-solid" rows="3" placeholder="What is this invoice for?" name="invoiceDescription" id="invoiceDescription"></textarea>
@@ -1422,7 +1628,6 @@ let id = document.getElementById('invoNumber').value
 															</div>
 															<!--end::Col-->
 														</div>
-														<!--e
 														<!--end::Row-->
 														<!--begin::Table wrapper-->
 														<div class="table-responsive mb-10">
@@ -1442,11 +1647,17 @@ let id = document.getElementById('invoNumber').value
 																<!--begin::Table body-->
 																<tbody>
 																	<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
-																		<td class="pe-7">
-																			<input type="text" class="form-control form-control-solid mb-2" name="code[]" id="code"  />
-																		
-																	<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" id="description" data-kt-element="description" />
-                                                                      
+
+															
+		
+											
+																										<td class="pe-7">
+
+																			<input type="text" class="form-control form-control-solid" name="invoiceNo[]" placeholder="InvoiceNo" id="invoiceNo" />
+																		<!--	<input type="text" class="form-control form-control-solid mb-2" name="name[]" id="item"  />
+				
+																	<input type="text" class="form-control form-control-solid" name="invoiceNo[]" placeholder="InvoiceNo" id="invoiceNo" />-->
+                                                                
 																		</td>
 																		<td class="ps-2">
 																			<input class="form-control form-control-solid " type="number" min="1" name="quantity[]" id="quantity" placeholder="1" value="1" data-kt-element="quantity" />
@@ -1455,9 +1666,12 @@ let id = document.getElementById('invoNumber').value
 																		<td>
 																			<input type="text" class="form-control form-control-solid text-end mb-2" name="price[]" id="price" placeholder="0.00" value="0.00" data-kt-element="price" />
 
-																		<input type="number" class="form-control form-control-solid text-end" name="discount[]" id="discount" placeholder="0.00" value="0" data-kt-element="amountDue" />
+																			<input type="number" class="form-control form-control-solid text-end" name="amountDue[]" id="amountDue" placeholder="0.00" value="" data-kt-element="amountDue" />
 																		</td>
+
+																		
                                                                      <input type="hidden" name="id[]" id="xid" data-kt-element="xid" >
+																	 <input type="hidden" name="fileId[]" id="fileId" data-kt-element="fileId" >
 
 																		<td class="pt-8 text-end text-nowrap">$
 																		<span data-kt-element="total" id="total0">0.00</span></td>
@@ -1482,23 +1696,23 @@ let id = document.getElementById('invoNumber').value
 																	<input type="hidden" name="" id="num" value="1">
 																	<tr class="border-top border-top-dashed align-top fs-6 fw-bolder text-gray-700">
 																		<th class="text-primary">
-																			<button class="btn btn-link py-1"  data-kt-element="add-item">Add item</button>
+																			<button class="btn btn-link py-1"  data-kt-element="add-item" hidden>Add item</button>
 																		</th>
 																		<th colspan="2" class="border-bottom border-bottom-dashed ps-0">
 																			<div class="d-flex flex-column align-items-start">
-																				<div class="fs-5">Subtotal</div>
+																				<div class="fs-5">Amount</div>
 																				<!--<button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add tax</button>
 																				<button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add discount</button>-->
 																			</div>
 																		</th>
 																		<th colspan="2" class="border-bottom border-bottom-dashed text-end">$
-																		<span data-kt-element="sub-total" id="sub-total">0.00</span></th>
+																		<span data-kt-element="sub-total"></span></th>
 																	</tr>
 																	<tr class="align-top fw-bolder text-gray-700">
 																		<th></th>
-																		<th colspan="2" class="fs-4 ps-0">Total</th>
+																		<th colspan="2" class="fs-4 ps-0">Remaining Balance</th>
 																		<th colspan="2" class="text-end fs-4 text-nowrap">$
-																		<span data-kt-element="grand-total" id="grand-total">0.00</span></th>
+																		<span data-kt-element="grand-total"></span></th>
 																	</tr>
 																</tfoot>
 																<!--end::Table foot-->
@@ -1510,13 +1724,13 @@ let id = document.getElementById('invoNumber').value
 														<!--begin::Item template-->
 														<table class="table d-none" data-kt-element="item-template">
 															<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
+
+																
 																<td class="pe-7" id="flint">
-																	<input type="text" class="form-control mb-2" name="code[]" id="code1"  value=""  data-kt-element="title"  />
-																	<!--<input type="text" class="form-control form-control-solid mb-2" name="code[]" id="code"  />-->
-																		
-																	<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" id="description1" data-kt-element="description" />
+																	<!--<input type="text" class="form-control mb-2" name="name[]" id="item1"  value=""  data-kt-element="title"  />-->
+														
+                                                       	<input type="text" class="form-control form-control-solid" name="invoiceNo[]" placeholder="InvoiceNo" id="invoiceNo1" data-kt-element="invoiceNo" />
 															
-                                                       	<!--<input type="text" class="form-control form-control-solid" name="invoiceNo[]" placeholder="InvoiceNo" id="invoiceNo1" data-kt-element="invoiceNo" />-->
 																</td>
 
 															
@@ -1524,13 +1738,15 @@ let id = document.getElementById('invoNumber').value
 																	<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" id="quantity1" placeholder="1" data-kt-element="quantity" />
 																</td>
 																	<td>
-																			<input type="text" class="form-control form-control-solid text-end mb-2" name="price[]" id="price1" placeholder="0.00" value="0" data-kt-element="price" />
+																			<input type="text" class="form-control form-control-solid text-end mb-2" name="price1[]" id="price1" placeholder="0.00" value="0.00" data-kt-element="price" />
 
-																			<input type="number" class="form-control form-control-solid text-end" name="discount[]" id="discount1" placeholder="0.00" value="0" data-kt-element="amountDue" />
+																			<input type="number" class="form-control form-control-solid text-end" name="amountDue[]" id="amountDue1" placeholder="0.00" value="0.00" data-kt-element="amountDue" />
 																		</td>
 
+																		
 															
 																<input type="hidden" name="id[]" id="xid1" data-kt-element="xid">
+																 <input type="hidden" name="fileId[]" id="fileId1" data-kt-element="fileId" >
 																<td class="pt-8 text-end">$
 																<span data-kt-element="total" id="total1">0.00</span></td>
 																
@@ -1575,7 +1791,7 @@ let id = document.getElementById('invoNumber').value
 															<path opacity="0.3" d="M20.664 2.06648L2.62602 9.00148C2.44768 9.07085 2.29348 9.19082 2.1824 9.34663C2.07131 9.50244 2.00818 9.68731 2.00074 9.87853C1.99331 10.0697 2.04189 10.259 2.14054 10.4229C2.23919 10.5869 2.38359 10.7185 2.55601 10.8015L7.86601 13.3365C8.02383 13.4126 8.19925 13.4448 8.37382 13.4297C8.54839 13.4145 8.71565 13.3526 8.85801 13.2505L15.43 8.56548L21.711 2.28448C21.5762 2.15096 21.4055 2.05932 21.2198 2.02064C21.034 1.98196 20.8409 1.99788 20.664 2.06648Z" fill="black" />
 														</svg>
 													</span>
-													<!--end::Svg Icon-->Send Invoice</button>
+													<!--end::Svg Icon-->Send Receipt</button>
 													<!--end::Wrapper-->
 												</form>
 												<!--end::Form-->
@@ -1620,7 +1836,7 @@ let id = document.getElementById('invoNumber').value
 		<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
 		<!--end::Page Vendors Javascript-->
 		<!--begin::Page Custom Javascript(used by this page)-->
-		<script src="assets/js/custom/apps/invoices/create7.js"></script>
+		<script src="assets/js/custom/apps/invoices/create.js"></script>
 		<script src="assets/js/widgets.bundle.js"></script>
 		<script src="assets/js/custom/widgets.js"></script>
 		<script src="assets/js/custom/apps/chat/chat.js"></script>
@@ -1629,8 +1845,6 @@ let id = document.getElementById('invoNumber').value
 		<script src="assets/js/custom/utilities/modals/users-search.js"></script>
 		<!--end::Page Custom Javascript-->
 		<!--end::Javascript-->
-
-
 
 
 <script>
@@ -1647,16 +1861,184 @@ let id = document.getElementById('invoNumber').value
 
 
 
+<script>
+
+	$("#item1").on('click', '.form-control form-control-solid mb-2',function () {
+		console.log('hameno')
+    alert("Changed");
+});
+	var itemInput = document.querySelector('input[type="text"]')
+	itemInput.addEventListener('input',AC)
+
+			 console.log(333,'dccc')
 
 
+
+
+			 function AC()
+     {
+
+
+          $('#item1').autocomplete({
+             source: function(req,res){
+         
+               $.ajax({
+                 url:"/clerk/autocompleteXN/",
+                 dataType:"jsonp",
+                 type:"GET",
+                 data:req,
+                 success: function(data){
+                   res(data)
+                 
+         
+                 },
+                 error: function(err){
+                   console.log(err.status);
+                 }
+               });
+             },
+         
+             minLength:1,
+             select: function(event,ui){
+         
+           $.ajax({
+                         dataType: 'json',
+                         data: {
+                             code: ui.item.label,
+                             
+                         },
+                         type: 'POST',
+                         url: "/clerk/autoXN",
+                         success: function(data) {
+                        
+                         
+                         
+                          $("#item1").val(data.name)
+                          $("#price1").val(data.price)
+                            $("#total2").textContent=data.price
+                         $("#xid").val(data._id)
+                       
+                     
+                          
+                   
+                         }
+                        
+                     });
+          
+         
+         
+         
+           
+             }
+         
+         
+         
+             });
+         
+               
+     
+     
+               `
+               <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+           <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+            <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+             <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+             <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+               <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+             <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>`
+     
+     }
+     
+</script>
+
+
+
+<!--
+<script>
+	$('body').on('focus', '#title1', function (e) {
+ $(this).autocomplete({
+  minLength: 2,
+  delay: 500,
+  source: function (request, response) {
+   $.ajax({
+        url:"/clerk/autocompleteXN/",
+        dataType:"jsonp",
+        type:"GET",
+        data:req,
+        success: function(data){
+          res(data)
+        
+
+        },
+        error: function(err){
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength:2,
+    select: function(event,ui){
+
+  $.ajax({
+                dataType: 'json',
+                data: {
+                    code: ui.item.label,
+                    
+                },
+                type: 'POST',
+                url: "/clerk/autoXN",
+                success: function(data) {
+               
+                
+                
+                 $("#title1").val(data.title)
+                 $("#price").val(data.price)
+				   $("#total2").textContent=data.price
+				$("#xid").val(data._id)
+              
+			
+                 
+          
+                }
+               
+            });
+ 
+
+
+
+  
+    }
+
+
+
+    });
+
+      });
+  }
+ });
+});
+</script>
+
+		
+-->
+   
+
+
+
+
+	
 		
     <script>
       $(function(){
-    $('#invoNumber').autocomplete({
+    $('#item1').autocomplete({
     source: function(req,res){
 
       $.ajax({
-        url:"/clerk/autocompleteInvoiceX/",
+        url:"/clerk/autocompleteXN/",
         dataType:"jsonp",
         type:"GET",
         data:req,
@@ -1681,21 +2063,160 @@ let id = document.getElementById('invoNumber').value
                     
                 },
                 type: 'POST',
-                url: "/clerk/autoInvoiceX",
+                url: "/clerk/autoXN",
                 success: function(data) {
                
                 
                 
-                 $("#fullname").val(data.studentName)
-                 $("#email").val(data.studentEmail)
-				 $("#address").val(data.studentAddress)
-			
-				 $("#mobile").val(data.studentMobile)
-				 $("#balance").val(data.balance)
-				 $("#uid").val(data.studentId)
-				 $("#studentId2").val(data._id)
+                 $("#item").val(data.name)
+                 $("#price").val(data.price)
+				   $("#total2").textContent=data.price
+				$("#xid").val(data._id)
               
-			loadItems(data.studentId)
+			
+                 
+          
+                }
+               
+            });
+ 
+
+
+
+  
+    }
+
+
+
+    });
+
+      });
+      </script> 
+
+
+
+	
+		
+    <script>
+      $(function(){
+    $('#item').autocomplete({
+    source: function(req,res){
+
+      $.ajax({
+        url:"/clerk/autocompleteXN/",
+        dataType:"jsonp",
+        type:"GET",
+        data:req,
+        success: function(data){
+          res(data)
+        
+
+        },
+        error: function(err){
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength:1,
+    select: function(event,ui){
+
+  $.ajax({
+                dataType: 'json',
+                data: {
+                    code: ui.item.label,
+                    
+                },
+                type: 'POST',
+                url: "/clerk/autoXN",
+                success: function(data) {
+               
+                
+                
+                 $("#item").val(data.item)
+                 $("#price").val(data.price)
+				   $("#total2").textContent=data.price
+				$("#xid").val(data._id)
+              
+			
+                 
+          
+                }
+               
+            });
+ 
+
+
+
+  
+    }
+
+
+
+    });
+
+      });
+      </script> 
+
+
+
+
+
+
+
+
+
+
+
+		
+    <script>
+      $(function(){
+    $('#fullname').autocomplete({
+    source: function(req,res){
+
+      $.ajax({
+        url:"/clerk/autocompleteClient/",
+        dataType:"jsonp",
+        type:"GET",
+        data:req,
+        success: function(data){
+          res(data)
+        
+
+        },
+        error: function(err){
+          console.log(err.status);
+        }
+      });
+    },
+
+    minLength:1,
+    select: function(event,ui){
+
+  $.ajax({
+                dataType: 'json',
+                data: {
+                    code: ui.item.label,
+                    
+                },
+                type: 'POST',
+                url: "/clerk/autoClient",
+                success: function(data) {
+               
+                
+                
+                 $("#fullname").val(data.fullname)
+                 $("#email").val(data.email)
+				 $("#address1").val(data.address1)
+				$("#class1").val(data.class1)
+				$("#grade").val(data.grade)
+				$("#mobile").val(data.mobile)
+				$("#amountDue").val(data.amountDue)
+				$("#uid").val(data.uid)
+				$("#studentId2").val(data._id)
+				$("#balance").val(data.balance)
+              
+			loadItems(data.uid)
                  
           
                 }
@@ -1724,34 +2245,28 @@ let id = document.getElementById('invoNumber').value
 
 
 
-
-
-
-
-
 <script>
 
 	
 function loadItems(code){
 	let arr16 = []
 	let number1
-	let invoNumber = document.getElementById('invoNumber').value
 console.log(code,'code')
   $.ajax({
     dataType: 'json',
     data: {
-     term:1,code:invoNumber
+     term:1,code:code
         
     },
     type: 'POST',
-    url: "/clerk/autoInvoUpdate",
+    url: "/clerk/autoInvo",
     success: function(data) {
    console.log(data,'xxxxxxxxAutoInvo')
     for(var i=0;i<data.length-1;i++){
   
         console.log(data,'datata')
       
-    arr16.push(data[i].total)
+    arr16.push(data[i].amountDue)
 
 	   number1=0;
       for(var z in arr16) { number1 += arr16[z]; }
@@ -1762,32 +2277,31 @@ console.log(code,'code')
   
         console.log(data,'datata')
       
-    arr16.push(data[i].price)
+    arr16.push(data[i].amountDue)
       
       //adding all incomes from all lots of the same batch number & growerNumber & storing them in variable called total
     
 	  console.log(arr16,'arr16')
 
         if(i == 0){
-
-            document.getElementById("price").value= data[i].price
    
-            document.getElementById("quantity").value= 1
-            document.getElementById("code").value= data[i].code
-			   document.getElementById("discount").value= data[i].discount
-			document.getElementById("description").value= data[i].item
-           //  document.getElementById("invoiceNo").value= data[i].invoNumber
-			document.getElementById("xid").value= data[i]._id
+             document.getElementById("price").value= data[i].amountDue
+			  document.getElementById("fileId").value= data[i].fileId
+			  console.log(data[i].fileId,'fileId9')
+			 document.getElementById("frame0").src = `http://localhost:8500/clerk/openInvoiceFile/${data[i].fileId}`
+       document.getElementById("amountDue").value= data[i].amountDue
+	   let amount =  document.getElementById("amountDue").value
+             document.getElementById("quantity").value= 1
+             //document.getElementById("item").value= data[i].description
+             document.getElementById("invoiceNo").value= data[i].invoiceNumber
+			  document.getElementById("xid").value= data[i]._id
 			  	  //let amountDue =  document.getElementById("amountDue1").value
 			  // document.querySelector('[data-kt-element="total"]').innerText  = data[1].amountDue
-			 console.log(data[0].price,'total0')
-			 document.querySelector('[id="total0"]').innerText  =data[0].total
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  = data[0].total
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  = data[0].total
-
-			 
-					
-				  //document.querySelector('[id="total0"]').innerText=1400
+			  	 document.querySelector('[data-kt-element="grand-total"]').innerText  =data[i].invoiceTotal
+			 document.querySelector('[data-kt-element="sub-total"]').innerText  = data[0].invoiceTotal
+			 		  document.querySelector('[id="total0"]').innerText  =data[i].amountDue
+					   console.log(data[i].amountDue,'amountDue')
+					   //document.querySelector('[id="total0"]').innerText=1400
 			 	 //document.querySelector('[data-kt-element="total"]').innerText  = data[0].amountDue
 
             
@@ -1795,18 +2309,20 @@ console.log(code,'code')
         }
 
         else if( i == 1){
-          document.getElementById("price1").value= data[i].price
-         // document.getElementById("amountDue1").value= data[i].price
-                    document.getElementById("code1").value= data[i].code
-						   document.getElementById("discount1").value= data[i].discount
+			let srcV = document.getElementById("frame1").src
+			console.log(srcV,'shayne')
+          document.getElementById("price1").value= data[i].amountDue
+          document.getElementById("amountDue1").value= data[i].amountDue
+        document.getElementById("frame1").src = "http://localhost:8500/clerk/openInvoiceFile/"+data[i].fileId
           document.getElementById("quantity1").value= 1
-          document.getElementById("description1").value= data[i].item
-         // document.getElementById("invoiceNo1").value= data[i].invoiceNumber
+         // document.getElementById("item1").value= data[i].description
+          document.getElementById("invoiceNo1").value= data[i].invoiceNumber
 		  document.getElementById("xid1").value= data[i]._id
-		 // let amountDue1 =  document.getElementById("amountDue1").value
-		  document.querySelector('[data-kt-element="grand-total"]').innerText  =number1
-		  document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-		  document.querySelector('[id="total1"]').innerText  =  data[i].price
+		  let amountDue1 =  document.getElementById("amountDue1").value
+		  document.querySelector('[data-kt-element="grand-total"]').innerText  = number1
+		  document.querySelector('[data-kt-element="sub-total"]').innerText  =0
+		  document.querySelector('[id="total1"]').innerText  =  data[i].amountDue
+		    document.getElementById("total1").innerText= data[i].amountDue
 
 
 
@@ -1827,27 +2343,26 @@ console.log(code,'code')
 			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="quantity"] ').id = 'quantity'+1
             document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').id= 'price'+i
 			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="total"] ').id= 'total'+i
-						document.querySelector('[data-kt-element="item-template"]   [data-kt-element="description"] ').id= 'description'+i
-           // document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').id= 'amountDue'+i
-           // document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+i
+            document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').id= 'amountDue'+i
+            //document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'item'+i
 			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').id= 'xid'+i
-						document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').id= 'code'+i
-												document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="amountDue"] ').id= 'discount'+i
-			//document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').id = 'invoiceNo'+i
-            document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="quantity"] ').value = 1
-           // document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data[i].description
-          //  document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').value = data[i].invoiceNumber
-			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').value = data[i]._id
-						document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data[i].code
 
-												document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value = data[i].discount
-			//document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value= data[i].amountDue
-			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').value= data[i].price
+						document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="fileId"] ').id= 'fileId'+i
+			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').id = 'invoiceNo'+i
+            document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="quantity"] ').value = 1
+            //document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="title"] ').value = data[i].description
+            document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="invoiceNo"] ').value = data[i].invoiceNumber
+			document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="xid"] ').value = data[i]._id
+						document.getElementById(`frame${i}`).src = "http://localhost:8500/clerk/openInvoiceFile/"+data[i].fileId
+						document.querySelector('  [data-kt-element="item-template"]   [data-kt-element="fileId"] ').value = data[i].fileId
+			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="amountDue"] ').value= data[i].amountDue
+			document.querySelector('[data-kt-element="item-template"]   [data-kt-element="price"] ').value= data[i].amountDue
            document.querySelector('[data-kt-element="items"] tbody').appendChild(l)
-		  // console.log(data[i].invoiceNumber,'redbull')
+		   console.log(data[i].invoiceNumber,'redbull')
 		   	  	 document.querySelector('[data-kt-element="grand-total"]').innerText  = number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-			  document.querySelector(`[id="total${i}"]`).innerText  =  data[i].total
+			 document.querySelector('[data-kt-element="sub-total"]').innerText  =0
+			 document.querySelector('[data-kt-element="total"]').innerText  = data[i].amountDue
+			 document.getElementById(`total${i}`).innerText = data[i].amountDue
           }
 
         }
@@ -1869,519 +2384,300 @@ console.log(code,'code')
 
 
 
+
+
+
+
+
+
 		
 
-	
-		
-    <script>
-      $(function(){
-    $('#code1').autocomplete({
-    source: function(req,res){
+<script>
 
-      $.ajax({
-        url:"/clerk/autocompleteXN/",
-        dataType:"jsonp",
-        type:"GET",
-        data:req,
-        success: function(data){
-          res(data)
-        
+		     $('body').on('blur','#amountX', function (e) {
 
-        },
-        error: function(err){
-          console.log(err.status);
-        }
-      });
-    },
-
-    minLength:1,
-    select: function(event,ui){
-
-  $.ajax({
-                dataType: 'json',
-                data: {
-                    code: ui.item.label,
-                    
-                },
-                type: 'POST',
-                url: "/clerk/autoXN",
-                success: function(data) {
-               
-                let price = data.price * 1
-                 $("#code1").val(data.code)
-				  $("#description1").val(data.item)
-                 $("#price").val(data.price)
-				   
-				$("#xid").val(data._id)
-             
-
-	 document.querySelector('[data-kt-element="total"] [id="total1"]').innerText  = data.price
-			
-                 
-          
-                }
-               
-            });
- 
+                    console.log(document.getElementById("amountX").value,'666666666666')
+let grandTotal
+ let amount = document.getElementById("amountX").value
+ let amountRemaining = 0
+ let balance = document.getElementById('balance').value
 
 
+console.log(balance,'balanceX')
 
+ let arr16 = []
+ let number1     
+ let number2
+             var c = document.querySelectorAll(' [data-kt-element="item"]').length;
+    
+
+	   for(var i=0;i<c-1;i++){
   
-    }
+        //console.log(data,'datata')
+      n = i+1 
+	  console.log(i,'nnn')
+	  console.log(document.getElementById(`total${i}`).textContent,'vbn')
+	  let total = document.getElementById(`total${i}`).textContent
+   /* arr16.push(document.getElementById(`price${n}`).value)
+console.log(i,'',document.getElementById(`price${n}`).value)
+	   number1=0;
+      for(var z in arr16) { number1 += arr16[z]; }*/
 
+	    let regit = /\d+\.*\d*/g;  
+    let result2 =total.match(regit)
+    let totalX= Number(result2)
 
+	 arr16.push(totalX)
+//console.log(i,'',document.getElementById(`price${n}`).value)
+	   number1=0;
+      for(var z in arr16) { number1 += arr16[z]; }
 
-    });
+	}
+   if(balance<0){
 
-      });
-      </script> 
+	   	    let regBal = /\d+\.*\d*/g;  
+    let resultBal =balance.match(regBal)
+    let balanceX= Number(resultBal)
+	   console.log('true6',balanceX)
+	  number2 =  number1 - balanceX 
+	  console.log(number2,'number2')
+	  grandTotal = number2 - amount
+   }else{
+	 grandTotal = number1 - amount
+   }
+	 document.querySelector('[data-kt-element="grand-total"]').innerText  =grandTotal
+	document.querySelector('[data-kt-element="sub-total"]').innerText  =amount
+             for(var i =0; i<c;i++){
 
+				  if(i == 0){
 
+           
+         amountDue =  document.getElementById("amountDue").value
+ if(balance<0){
 
+	   	    let regAmount = /\d+\.*\d*/g;  
+    let resultAmount =balance.match(regAmount)
+    let amount3X= Number(resultAmount)
+	   console.log('true6',amount3X)
+	 amount =  amount + amount3X
+	  console.log(amount,'amount2')
+	 // grandTotal = number2 - amount
+   }
+		  
+		  amountRemaining =  amount - amountDue
+            
+		
 
+if(amountRemaining > 0){
+ document.getElementById("amountDue").value  = 0
+ 	 
+}else if(amount == 0 || amount == " ") {
+document.getElementById("amountDue").value = amountDue
 
+}else{
+	 document.getElementById("amountDue").value  = amountRemaining
 
-
-
-	
-    <script>
-      $(function(){
-    $('#code2').autocomplete({
-    source: function(req,res){
-
-      $.ajax({
-        url:"/clerk/autocompleteXN/",
-        dataType:"jsonp",
-        type:"GET",
-        data:req,
-        success: function(data){
-          res(data)
-        
-
-        },
-        error: function(err){
-          console.log(err.status);
-        }
-      });
-    },
-
-    minLength:1,
-    select: function(event,ui){
-
-  $.ajax({
-                dataType: 'json',
-                data: {
-                    code: ui.item.label,
-                    
-                },
-                type: 'POST',
-                url: "/clerk/autoXN",
-                success: function(data) {
-               
-                let price = data.price * 1
-                 $("#code2").val(data.code)
-				  $("#description2").val(data.item)
-                 $("#price2").val(data.price)
-				   
-				$("#xid").val(data._id)
-             
-
-	 document.querySelector('[data-kt-element="total"] [id="total2"]').innerText  = data.price
-			
-                 
+}
           
-                }
-               
-            });
- 
+            
+   
+        }else if(amountRemaining > 0) {
+			console.log(amountRemaining,'structured currency',i)
+			let amountDueX9 =  document.getElementById(`amountDue${i}`).value
+			  let reg = /\d+\.*\d*/g;  
+    let result = amountDueX9.match(reg)
+    let amountDueX= Number(result)
+		  let balance =   amountDueX - amountRemaining 
+          amountRemaining - amountDueX
+		// document.getElementById(`amountDue${i}`).value  = balance
+		// console.log(amountRemaining -= amountDueX,'amountRemaining')
+console.log(amountRemaining,amountDueX,'tione')
+
+           if(amountRemaining >= amountDueX){
+			   console.log('true',i)
+			   	amountRemaining = amountRemaining - amountDueX
+			   	 document.getElementById(`amountDue${i}`).value  = 0
+		   }else if(amountRemaining < amountDueX){
+			    console.log('false',i)
+				console.log(amountRemaining,'start')
+				let vbalance  = amountDueX - amountRemaining
+				if(amountDueX >= amountRemaining){
+				amountRemaining = amountRemaining - amountDueX
+				console.log(amountRemaining,'mastanzi')
+			   	 document.getElementById(`amountDue${i}`).value  =vbalance
+
+				}else{
+document.getElementById(`amountDue${i}`).value  =0
+
+
+				}
+		   }
+		 
+		}
+
+			 }
+
+                    
+                  
+                    
+                    
+                    
+                        
+                    
+			 })
 
 
 
+	</script>
+
+	<script>
+
+		     $('body').on('click','#amountX', function (e) {
+				 console.log('haa night wadii')
+	    /* var users = $('input[name="id[]"]').map(function(){ 
+                    return this.value; 
+                }).get();*/
+				var uid = document.getElementById('uid').value
+			//	console.log(users,'users')
+				
+				   $.ajax({
+    dataType: 'json',
+   data: {
+     /*'username[]': users,*/
+	 code:uid
+        
+    },
+    type: 'POST',
+    url: "/clerk/autoInvo2",
+    success: function(data) {
+   console.log(data,'xxxxxxxx')
+   
+   for(var i = 0; i< data.length;i++){
+
+	   if( i ==0){
+		   document.getElementById('amountDue').value = data[i].amountDue
+	   }else if(i == 1){
+		   console.log('true',i)
+		   document.getElementById('amountDue1').value = data[i].amountDue
+	   }else{
+		   document.getElementById(`amountDue${i}`).value = data[i].amountDue
+	   }
+   }
+
+
+	}
+
+	})
+	
+	
+
+
+			 })
+
+	</script>
+
+<!--<script>
+
+	$('body').on('click','#amountX', function (e) {
+
+
+
+        console.log(document.getElementById("amountX").value,'666666666666')
+
+let amount = document.getElementById("amountX").value
+
+
+var c = document.querySelectorAll(' [data-kt-element="item"]').length - 1;
   
-    }
+  console.log(c,'ccc')
+             for(var i =0; i<c;i++){
+
+if(i == 0){
+	let amountDue = document.getElementById('amountDue').value 
+
+    let reg = /\d+\.*\d*/g;  
+    let result = amount.match(reg)
+    let numAmount= Number(result)
+	let due = amountDue.match(reg)
+	let numDue = Number(due)
+	let autoBalance = numDue + numAmount;
+    document.getElementById('amountDue').value = autoBalance
+}
 
 
 
-    });
+			 }
 
-      });
-      </script> 
-	
-		
-    <script>
-      $(function(){
-    $('#code').autocomplete({
-    source: function(req,res){
 
-      $.ajax({
-        url:"/clerk/autocompleteXN/",
-        dataType:"jsonp",
-        type:"GET",
-        data:req,
-        success: function(data){
-          res(data)
-        
+	})
 
-        },
-        error: function(err){
-          console.log(err.status);
-        }
-      });
-    },
-
-    minLength:1,
-    select: function(event,ui){
-
-  $.ajax({
-                dataType: 'json',
-                data: {
-                    code: ui.item.label,
-                    
-                },
-                type: 'POST',
-                url: "/clerk/autoXN",
-                success: function(data) {
-               
-                
-                let price = data.price * 1
-                $("#code").val(data.code)
-				  $("#description").val(data.item)
-                 $("#price").val(data.price)
-				 
-			 document.querySelector('[data-kt-element="total"]').innerText  = data.price
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  = data.price
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  = data.price
-				$("#xid").val(data._id)
-			
-              
-			
-                 
-          
-                }
-               
-            });
- 
+</script>
 
 
 
+
+
+<!--
+
+<script>
+
+		     $('body').on('click','#amountX', function (e) {
+
+                    console.log(document.getElementById("amountX").value,'666666666666')
+
+let amount = document.getElementById("amountX").value
+      
+             var c = document.querySelectorAll(' [data-kt-element="item"]').length - 1;
   
-    }
-
-
-
-    });
-
-      });
-      </script> 
-
-
-
-
-
-
-
-
-
-
-		
-
-<script>
-
-		     $('body').on('blur','#discount', function (e) {
-let number1
-let arr=[]
- console.log(document.getElementById("discount").value,'666666666666')
-let grandTotal
- let discount = document.getElementById("discount").value
- let totalX = document.getElementById('total0').innerText
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-
-     document.getElementById('total0').innerText = total
-	 
-    var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-    for(var i=1;i<c-1;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-    arr.push(totalN)
-
-	number1=total;
-    for(var z in arr) { number1 += arr[z]; }
-
- }
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-	 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-
-
-
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount', function (e) {
-				 console.log('haa night wadii1')
-		 let number1
-let arr=[]
-                    console.log(document.getElementById("discount1").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount").value
- let price =document.getElementById('price').value
- let quantity = document.getElementById('quantity').value
- let totalX = document.getElementById('total0').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total0').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c-1;i++){
-console.log(i,'iiii')
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-
-	   
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-
-	</script>
-
-
-<!--1-->
-		
-
-<script>
-
-		     $('body').on('blur','#discount1', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount1").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount1").value
- let price =document.getElementById('price').value
- let quantity = document.getElementById('quantity').value
- let totalX = document.getElementById('total1').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total1').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c-1;i++){
-console.log(i,'iiii')
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-
-	   
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount1', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid1').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
+  console.log(c,'ccc')
+             for(var i =0; i<c;i++){
+				 console.log(i,'i',c,'c')
+
+				  if(i == 0){
+
+         
+       let code = document.getElementById("xid").value 
+	   console.log(code,'code1')
+		 $.ajax({
     dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
+    data: {
+     code:code
         
     },
     type: 'POST',
-    url: "/clerk/autoInvo3",
+    url: "/clerk/autoInvoCode",
     success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total1').innerText = data.total
+         	  document.getElementById("amountDue").value= data.amountDue
 
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c-1;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
+	}
+					 })
+            
    
+        }else {
+console.log(i,'i')
+    let code2 = document.getElementById(`xid${i}`).value 
+	console.log(code2,'cdode2')
+		 $.ajax({
+    dataType: 'json',
+    data: {
+     code:code2
+        
+    },
+    type: 'POST',
+    url: "/clerk/autoInvoCode",
+    success: function(data) {
+		console.log(i,'hokyy')
+         	  document.getElementById(`amountDue${i}`).value=0
+console.log( document.getElementById(`amountDue${i}`))
+	}
+					 })
 
+		}
 
-	
+			 }
 
-	})
-	
-	
-
-
-			 })
-
-	</script>
-
-
-
-<!--2-->
-		
-
-<script>
-
-		     $('body').on('blur','#discount2', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount2").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount2").value
- let totalX = document.getElementById('total2').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total2').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-
-	   
-
-          
+                   
+                  
                     
                     
                     
@@ -2391,1051 +2687,81 @@ arr.push(totalN)
 
 
 
-	</script>
+	</script>-->
 
-
-
+	
 <script>
-
-		     $('body').on('click','#discount2', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid2').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total2').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c-1;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
+	   $('body').on('click','#invoiceNo', function (e) {
 
 
 
-<!--3-->
-		
+     /* let id =   document.getElementById("fileId").value
+document.getElementById("link").href = "http://localhost:8500/clerk/openInvoiceFile/"+id
+     // window.location.href = "http://localhost:8500/clerk/openInvoiceFile/"+id*/
 
-<script>
-
-		     $('body').on('blur','#discount3', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount3").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount3").value
- let totalX = document.getElementById('total3').innerText
+       $("#myModal0").modal("show");
+	 console.log('modall')
+	   })
 
 
 
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
 
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total3').innerText = total
+	   $('body').on('click','#invoiceNo1', function (e) {
+       $("#myModal1").modal("show");
+	 console.log('modall')
+	   })
 
 
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
 
 	   
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
+	   $('body').on('click','#invoiceNo2', function (e) {
+       $("#myModal1").modal("show");
+	 console.log('modall')
+	   })
 
 
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount3', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid3').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total3').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
-
-
-<!--4-->
-		
-<script>
-
-		     $('body').on('blur','#discount4', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount4").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount4").value
- let totalX = document.getElementById('total4').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total4').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
 
 	   
+	   $('body').on('click','#invoiceNo3', function (e) {
+       $("#myModal3").modal("show");
+	 console.log('modall')
+	   })
 
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount4', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid4').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total4').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
-
-
-<!--5-->
-		
-<script>
-
-		     $('body').on('blur','#discount5', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount5").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount5").value
- let totalX = document.getElementById('total5').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total5').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
 
 	   
+	   $('body').on('click','#invoiceNo4', function (e) {
+       $("#myModal4").modal("show");
+	 console.log('modall')
+	   })
 
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount5', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid5').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total5').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
-
-
-<!--6-->
-		
-<script>
-
-		     $('body').on('blur','#discount6', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount6").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount6").value
- let totalX = document.getElementById('total6').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total6').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
 
 	   
+	   $('body').on('click','#invoiceNo5', function (e) {
+       $("#myModal5").modal("show");
+	 console.log('modall')
+	   })
 
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount6', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid6').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total6').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
-
-<!--7-->
-		
-<script>
-
-		     $('body').on('blur','#discount7', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount7").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount7").value
- let totalX = document.getElementById('total7').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total7').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
 
 	   
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount7', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid7').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total7').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
-
-
-<!--8-->
-		
-<script>
-
-		     $('body').on('blur','#discount8', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount8").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount8").value
- let totalX = document.getElementById('total8').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total8').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
+	   $('body').on('click','#invoiceNo6', function (e) {
+       $("#myModal6").modal("show");
+	 console.log('modall')
+	   })
 
 	   
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount8', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid8').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total8').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
-
-
-<!--9-->
-		
-<script>
-
-		     $('body').on('blur','#discount9', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount9").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount9").value
- let totalX = document.getElementById('total9').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total9').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
+	   $('body').on('click','#invoiceNo7', function (e) {
+       $("#myModal7").modal("show");
+	 console.log('modall')
+	   })
 
 	   
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
+	   $('body').on('click','#invoiceNo8', function (e) {
+       $("#myModal8").modal("show");
+	 console.log('modall')
+	   })
+</script>
 
 
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount9', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid9').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total9').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
-<!--10-->
-		
-<script>
-
-		     $('body').on('blur','#discount10', function (e) {
-	 let number1
-let arr=[]
-                    console.log(document.getElementById("discount10").value,'77777777777')
-let grandTotal
- let discount = document.getElementById("discount10").value
- let totalX = document.getElementById('total10').innerText
-
-
-
- 
-	let regTotal = /\d+\.*\d*/g;  
-    let resultTotal =totalX.match(regTotal)
-    let total= Number(totalX)
-	let percentage = discount / 100
-	let discounted =  total * percentage
-
-	total -= discounted
-console.log('discounted',total)
-     document.getElementById('total10').innerText = total
-
-
-       var c = document.querySelectorAll(' [data-kt-element="item"]').length;
-	   console.log(c,'c')
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	 
-
-	 		 //document.querySelector('[id="total0"]').innerText  = discounted
-			 document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-			 document.querySelector('[data-kt-element="sub-total"]').innerText  =number1
-
-	   
-
-          
-                    
-                    
-                    
-                        
-                    
-			 })
-
-
-
-	</script>
-
-
-
-<script>
-
-		     $('body').on('click','#discount10', function (e) {
-				 console.log('haa night wadii')
-				 	 let number1
-let arr=[]
-	    /* var users = $('input[name="id[]"]').map(function(){ 
-                    return this.value; 
-                }).get();*/
-				var id = document.getElementById('xid10').value
-			//	console.log(users,'users')
-				
-				   $.ajax({
-    dataType: 'json',
-   data: {
-     /*'username[]': users,*/
-	 code:id
-        
-    },
-    type: 'POST',
-    url: "/clerk/autoInvo3",
-    success: function(data) {
-   console.log(data,'xxxxxxxx')
- 
-    
-	document.getElementById('total10').innerText = data.total
-
-	let total = data.total
-		  var c = document.querySelectorAll(' [data-kt-element="item"]').length;
- for(var i=0;i<c;i++){
-
-	let totalX3 =  document.getElementById(`total${i}`).innerText 
-	console.log(totalX3,'tX3')
-	  let regTotalX3 = /\d+\.*\d*/g;  
-    let resultTotalX3 =totalX3.match(regTotalX3)
-    let totalN= Number(resultTotalX3)
-arr.push(totalN)
-
-	   number1=0;
-      for(var z in arr) { number1 += arr[z]; }
-
- }
-	document.querySelector('[data-kt-element="grand-total"]').innerText  =  number1
-	document.querySelector('[data-kt-element="sub-total"]').innerText  = number1
-	   }
-   
-
-
-	
-
-	})
-	
-	
-
-
-			 })
-
-	</script>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -3452,4 +2778,7 @@ arr.push(totalN)
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	</body>
 	<!--end::Body-->
+
+
+
 </html>

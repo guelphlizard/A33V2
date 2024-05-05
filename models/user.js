@@ -139,6 +139,7 @@ var userSchema = new mongoose.Schema({
     countN:{type:Number},
     studentNumber:{type:Number},
     invoiceGrade:{type:String},
+    sibling:{type:String},
     
 });
 
