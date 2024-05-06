@@ -7763,7 +7763,17 @@ var grade = req.user.invoiceGrade
   
   })
  */
- 
+ router.get('/updateStatement',function(req,res){
+
+  InvoiceFile.find({type:"Invoice"},function(err,docs){
+    for(var i = 0; i<docs.length;i++){
+      let id = docs[i]._id
+      InvoiceFile.findByIdAndUpdate(id,{$set:{statement:"true"}},function(err,locs){
+
+      })
+    }
+  })
+ })
 
   router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
