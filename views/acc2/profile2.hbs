@@ -1453,6 +1453,7 @@ function loadItems(id){
 
 document.getElementById('img').src = 'uploads/'+data.photo
 document.getElementById('fullname').innerText = data.fullname
+document.getElementById('name2').innerText = data.fullname
 document.getElementById('balance').innerText = data.balance
 document.getElementById('class1').innerText = data.class1
 document.getElementById('address').innerText = data.address
@@ -1739,7 +1740,7 @@ addText(data);
 															<!--begin::Notes-->
 															<div class="d-flex flex-column gap-1">
 																<div class="fw-bolder text-muted">Notes</div>
-																<p>{{listX.0.fullname}} joined the team on September 2022 as an ECD A.
+																<p id="name2">{{listX.0.fullname}} joined the team on September 2022 as an ECD A.
 																<br />
 																<!--<br />{{listX.0.fullname}} now heads a team of 5 associates and leads the company's sales growth by 7%.</p>-->
 															</div>
