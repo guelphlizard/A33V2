@@ -6977,6 +6977,33 @@ if(docs.length > 0){
     });
 
 
+    
+    router.get('/invoiceDuplicates',isLoggedIn, (req, res) => {
+      var pro = req.user
+    
+     InvoiceFile.find({type:"Invoice"},(err, docs) => {
+          if (!err) {
+for(var i = 0; i<docs.length;i++){
+         let invoiceNumber = docs[i].invoiceNumber
+      InvoiceFile.find({invoiceNumber:invoiceNumber},function(err,locs){
+
+        if(locs.length>1){
+          console.log(locs)
+        }
+     
+             /* res.render("acc2/list3", {
+                 listX:docs, pro:pro
+                
+              });*/
+
+            })
+            }
+          }
+      });
+    });
+
+
+
 
     router.post('/autoInvo2',function(req,res){
      // var ar = req.body['username[]']
