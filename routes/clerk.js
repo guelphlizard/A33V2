@@ -8373,7 +8373,7 @@ pdfX = pdf
   //console.log(form)
 await Axios({
     method: "POST",
-    url: 'http://localhost:8500/clerk/wafaX',
+    url: 'https://portal.steuritinternationalschool.org/clerk/wafaX',
     headers: {
       "Content-Type": "multipart/form-data"  
     },
