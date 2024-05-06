@@ -6902,7 +6902,7 @@ router.get('/autocompleteClient/', function(req, res, next) {
 
   
       
- InvoiceFile.find({studentId:code,statement:"true"},function(err,docs){
+ InvoiceFile.find({studentId:code},function(err,docs){
      if(docs == undefined){
        res.redirect('/')
      }else
