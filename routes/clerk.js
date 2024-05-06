@@ -7739,7 +7739,7 @@ var grade = req.user.invoiceGrade
 
   })
 
-
+ /*
   router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
 
@@ -7762,8 +7762,8 @@ var grade = req.user.invoiceGrade
   
   
   })
-
-  /*
+ */
+ 
 
   router.get('/invoiceSingleCode',isLoggedIn,function(req,res){
     var id = req.user._id
@@ -7826,7 +7826,7 @@ var grade = req.user.invoiceGrade
       })
     
   
-  */
+ 
 
 
   router.get('/profileNew',function(req,res){
@@ -8385,9 +8385,9 @@ await Axios({
   
   /*process.exit()*/
 
-  //res.redirect('/clerk/invoiceSingleCode')
+  res.redirect('/clerk/invoiceSingleCode')
     
-  res.redirect('/clerk/genEmailInvoice');
+  //res.redirect('/clerk/genEmailInvoice');
   
   }catch(e) {
   
@@ -8424,7 +8424,11 @@ if(docs.length>0){
   })
 
 }
-  res.redirect('/clerk/genEmailInvoice')
+  //res.redirect('/clerk/genEmailInvoice')
+
+  req.flash('success', 'Invoice Generation Successful');
+
+  res.redirect('/clerk/invoiceSingleCode')
 })
   //res.redirect('http://localhost:8500/clerk/dashX')
 
