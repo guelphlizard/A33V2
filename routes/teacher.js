@@ -2222,7 +2222,7 @@ router.post('/dashChartA2',isLoggedIn,teacher,function(req,res){
       let subjectCode = locs[0].subjectCode
       let term = req.user.term
     Topic.find({subjectCode:subjectCode},function(err,noc){
-      if(noc){
+      if(noc.length>0){
         let name = noc[0].name
      
     
