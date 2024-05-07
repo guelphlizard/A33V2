@@ -8921,7 +8921,7 @@ res.redirect('/records/subject')
   if(code == 'null'){
     res.redirect('/records/subVBatch')
   }else{
-  Dept.find({},function(err,docs){
+  Class1.find({},function(err,docs){
     var arr1 = docs;
     if(docs.length == 0){
       res.redirect('/records/dept')
@@ -8938,7 +8938,7 @@ router.post('/subject',isLoggedIn,records,  function(req,res){
      var pro = req.user
   var name = req.body.name;
   var grade = req.body.grade;
-  var dept = req.body.dept
+  var class1 = req.body.class1
   var code = req.body.code;
   var code2 = req.body.code2;
   var status = "null"
@@ -8946,7 +8946,7 @@ router.post('/subject',isLoggedIn,records,  function(req,res){
  
       req.check('name','Enter Name Of Subject').notEmpty();
       req.check('grade','Enter Grade/Level').notEmpty();
-      req.check('dept','Enter Department').notEmpty();
+      req.check('class1','Enter Class').notEmpty();
       req.check('code','Enter Code Of Subject').notEmpty();
     
       
@@ -8977,7 +8977,7 @@ router.post('/subject',isLoggedIn,records,  function(req,res){
     
       sub.name = name;
        sub.grade = grade;
-       sub.dept = dept
+       sub.class1 = class1
       sub.code = code;
       sub.code2 = code2
       sub.icon = icon
@@ -9091,7 +9091,7 @@ let code = locs[i].code
 let name = locs[i].name
 let grade = locs[i].grade
 let icon = locs[i].icon
-let dept = locs[i].dept
+let class1 = locs[i].class1
 
 
 
@@ -9113,7 +9113,7 @@ let idN = locs[i]._id
     
       sub.name = name;
        sub.grade = grade;
-       sub.dept = dept
+       sub.class1 = class1
       sub.code = code;
       
       sub.icon = icon
@@ -9128,10 +9128,7 @@ let idN = locs[i]._id
             User.findByIdAndUpdate(uid,{$set:{paymentId:'null'}},function(err,doc){
 
     
-           
-
-
-
+          
 
             })
 
@@ -9295,7 +9292,7 @@ else
     var m2 = moment()
 var wformat = m2.format('L')
 var year = m2.format('YYYY')
-    User.find({role:'student',grade:1},function(err,docs){
+    User.find({role:'student'},function(err,docs){
     
     
      
@@ -9306,14 +9303,15 @@ var year = m2.format('YYYY')
     let grade = docs[i].grade;
     let photo = docs[i].photo
     
-    Subject.find({grade:grade},function(err,nocs){
+    Subject.find({grade:grade,class1:studentClass},function(err,nocs){
     for(var x = 0; x < nocs.length; x++){
       let subjectName = nocs[x].name;
       let subjectCode = nocs[x].code
       let icon = nocs[x].icon
+      let class1 = nocs[x].class1
        
        
-      StudentSub.findOne({'studentName':studentName, 'subjectCode':subjectCode})
+      StudentSub.findOne({'studentName':studentName, 'subjectCode':subjectCode,'class1':class1})
       .then(clax =>{
           if(clax){ 
        

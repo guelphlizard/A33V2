@@ -234,16 +234,16 @@ function addSubject()
     var code2=document.sample.code2.value;
     var name=document.sample.name.value;
     
-    var dept=document.sample.dept.value;
+    var class1=document.sample.class1.value;
     
     var icon=document.sample.icon.value;
 
-    console.log(grade,code,'th')
+    //console.log(grade,code,'th')
 	$.ajax({
    
     dataType: 'json',
     type: 'POST',
-	data:{grade:grade,code:code,code2:code2,name:name,dept:dept,icon:icon },
+	data:{grade:grade,code:code,code2:code2,name:name,class1:class1,icon:icon },
     url: "/records/subject",
     success: function(data) {
     console.log(data,'enlighted')
@@ -252,9 +252,7 @@ function addSubject()
     
    /* for(var i = 0;i<data.length;i++){*/
     var tr = document.createElement('tr');
-
-    var td1 = tr.appendChild(document.createElement('td'));
-     
+    var td1 = tr.appendChild(document.createElement('td'));   
     var td2 = tr.appendChild(document.createElement('td'));
 	var td3 = tr.appendChild(document.createElement('td'));
 	var td4 = tr.appendChild(document.createElement('td'));
