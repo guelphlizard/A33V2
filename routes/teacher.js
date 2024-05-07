@@ -4535,7 +4535,7 @@ if(!req.file){
 
 else 
 {
-TeacherSub.findOne({'subjectCode':subjectCode,'companyId':companyId})
+TeacherSub.findOne({'subjectCode':subjectCode})
 .then(teach=>{
   if(teach){
   
@@ -5570,7 +5570,7 @@ res.render('exam/batch', {
 })
 
 
-}else
+}else{
 
 
 var test = Test();
@@ -5686,6 +5686,7 @@ test.save()
 
 })
   }
+
 })
 
 //notifications
@@ -5700,7 +5701,7 @@ res.redirect('/teacher/classWork')
 
 
 })
-
+}
 
 })
 
@@ -8289,13 +8290,13 @@ router.post('/topics',isLoggedIn, function(req,res){
   var subjectCode = req.body.subjectCode
   var grade = req.body.grade
   var class1 = req.body.class1
-  var topic = req.body.name
+  var name = req.body.name
   var teacherId = req.user.uid
  
 
   req.check('subject','Enter Subject').notEmpty();
   req.check('class1','Enter Class').notEmpty();
-  req.check('topic','Enter Topic').notEmpty();
+  req.check('name','Enter Topic').notEmpty();
  
   
 
@@ -8311,7 +8312,7 @@ router.post('/topics',isLoggedIn, function(req,res){
    req.flash('success', req.session.errors[0].msg);
        
         
-   res.redirect('/teacher/addTopic');
+   res.redirect('/teacher/topics');
   
   }
   else
@@ -8323,12 +8324,12 @@ router.post('/topics',isLoggedIn, function(req,res){
 
     if(hoc){
   var book = new Topic2();
-  book.subject = subject
+  book.subjectName = subject
   book.subjectCode = subjectCode
   book.grade = grade
   book.teacherId = teacherId
   book.class1 = class1
-  book.topic = topic
+  book.name = name
   book.status =  'null'
   book.year = year
  
@@ -8413,7 +8414,7 @@ var year = m2.format('YYYY')
 
 
 
-router.get('/saveTopics/:id',isLoggedIn, function(req,res){
+router.get('/saveTopics/',isLoggedIn, function(req,res){
   var pro = req.user
  var receiver = req.user.fullname
  var code = req.params.id
@@ -8432,18 +8433,22 @@ var month = m2.format('MMMM')
 
 
 
-Topic2.find({code:code,status:'null'},function(err,locs){
+Topic2.find({status:'null'},function(err,locs){
 
 for(var i=0;i<locs.length;i++){
-let code = locs[i].code
+let code = locs[i].subjectCode
 
-let m = moment(date3)
+let m = moment()
 let year = m.format('YYYY')
 let dateValue = m.valueOf()
 let date = m.toString()
 let numDate = m.valueOf()
 let month = m.format('MMMM')
 let idN = locs[i]._id
+let class1 = locs[i].class1
+let topic = locs[i].name
+let subjectName = locs[i].subjectName
+let subjectCode = locs[i].subjectCode
 
 
   Topic2.findByIdAndUpdate(idN,{$set:{status:'saved'}},function(err,pocs){
@@ -8458,10 +8463,10 @@ let idN = locs[i]._id
 
     if(hoc){
   var book = new Topic();
-  book.subject = hoc.subject
-  book.subjectCode = hoc.subjectCode
+  book.subjectName = subjectName
+  book.subjectCode = subjectCode
   book.grade = hoc.grade
-  book.name = hoc.topic
+  book.name = topic
   book.class1 = class1
 
   book.year = year 

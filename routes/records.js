@@ -5791,7 +5791,7 @@ router.get('/addTeacher',isLoggedIn,records,  function(req,res){
     }
    else*/
     
-      res.render('teacher/admit', { pro:pro,uid:uid,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg});
+      res.render('teachers/admit', { pro:pro,uid:uid,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg});
     //  })
    
   // }
@@ -5806,7 +5806,7 @@ var readonly = ''
 
 
 
-res.render('teacher/admit',{pro:pro})
+res.render('teachers/admit',{pro:pro})
 })
 
 router.post('/addTeacher',isLoggedIn,records, function(req,res){
@@ -5918,7 +5918,7 @@ router.post('/addTeacher',isLoggedIn,records, function(req,res){
                  user.paymentId = 'null';
                  user.prefix = prefix;
                  user.photo = "propic.jpg";
-                 user.level = 'null';
+                 user.level = 0;
                  user.pollUrl ='null';
                  user.annual = 0;
                  user.fees = 0
@@ -9292,8 +9292,10 @@ else
 
   //student registering subjects
   router.get('/studentSub',isLoggedIn,records,function(req,res){
-    
-    User.find({role:'student'},function(err,docs){
+    var m2 = moment()
+var wformat = m2.format('L')
+var year = m2.format('YYYY')
+    User.find({role:'student',grade:1},function(err,docs){
     
     
      
@@ -9302,12 +9304,13 @@ else
     let studentId = docs[i].uid;
     let studentClass = docs[i].class1;
     let grade = docs[i].grade;
+    let photo = docs[i].photo
     
     Subject.find({grade:grade},function(err,nocs){
     for(var x = 0; x < nocs.length; x++){
       let subjectName = nocs[x].name;
       let subjectCode = nocs[x].code
-      let dept = nocs[x].dept
+      let icon = nocs[x].icon
        
        
       StudentSub.findOne({'studentName':studentName, 'subjectCode':subjectCode})
@@ -9321,11 +9324,13 @@ else
     var student = new StudentSub();
     student.studentName = studentName;
     student.studentId = studentId;
-    student.studentClass = studentClass;
     student.subjectCode = subjectCode;
     student.subjectName = subjectName;
-    student.dept = dept;
-
+    student.grade = grade;
+    student.class1 = studentClass;
+    student.icon = icon;
+    student.year = year
+    student.photo = photo
     student.save()
     
     
@@ -9696,7 +9701,7 @@ let idN = locs[i]._id
     teacher.subjectCode = subjectCode
     teacher.subjectName = subjectName;
     teacher.grade = grade;
-   
+    teacher.year = year;
     teacher.class1 = class1
     teacher.icon = icon
     

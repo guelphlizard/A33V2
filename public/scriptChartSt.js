@@ -33,9 +33,9 @@ td5.appendChild(link);*/
 
 
     td1.innerHTML = data[i].name;
-    td2.innerHTML = data[i].category;
-    td3.innerHTML = data[i].barcodeNumber;
-    td4.innerHTML=data[i].cases;
+    td2.innerHTML = data[i].subjectName;
+    td3.innerHTML = data[i].subjectCode;
+    td4.innerHTML=data[i].class1;
     let link2 = "/teacher/delete/"+data[i]._id
 
     //td5.innerHTML = "Delete"
@@ -224,13 +224,13 @@ function addTopic()
 	var subjectCode=document.sample.subjectCode.value;
     var grade = document.sample.grade.value;
     var class1=document.sample.class1.value;
-    var topic=document.sample.name.value;
+    var name=document.sample.name.value;
 
 	$.ajax({
    
     dataType: 'json',
     type: 'POST',
-	data:{subject:subject,topic:topic,grade:grade,class1:class1,subjectCode:subjectCode },
+	data:{subject:subject,name:name,grade:grade,class1:class1,subjectCode:subjectCode },
     url: "/teacher/topics",
     success: function(data) {
     console.log(data)
@@ -258,7 +258,7 @@ link.className = "text-end";
 
 
     td1.innerHTML = data.name;
-    td2.innerHTML = data.subject;
+    td2.innerHTML = data.subjectName;
     td3.innerHTML = data.subjectCode;
     td4.innerHTML=data.class1;
     let link2 = "/teacher/delete/"+data._id

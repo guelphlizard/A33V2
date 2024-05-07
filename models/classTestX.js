@@ -46,7 +46,7 @@ date:{type:String, required:true},
 type2:{type:String,required:true},
 type3:{type:String,required:true},
 type:{type:String,required:true},
-photo:{type:String,required:true},
+photo:{type:String},
 comments:{type:String},
 companyId:{type:String},
 

@@ -18,7 +18,7 @@ var tcXSchema = new mongoose.Schema({
     type:{type:String, required:true},
     term:{type:Number, required:true},
     icon:{type:String, required:true},
-    photo:{type:String, required:true},
+    photo:{type:String},
     year:{type:Number, required:true},
     companyId:{type:String},
 
