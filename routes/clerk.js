@@ -11129,7 +11129,7 @@ router.get('/statementGen/:id',isLoggedIn,function(req,res){
   
   
   //const content = await compile('report3',arr[uid])
-  const content = await compile('statement',arrStatement[code])
+  const content = await compile('statement2',arrStatement[code])
   
   //const content = await compile('index',arr[code])
   
