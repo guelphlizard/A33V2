@@ -8395,9 +8395,9 @@ await Axios({
   
   /*process.exit()*/
 
-  res.redirect('/clerk/invoiceSingleCode')
+  //res.redirect('/clerk/invoiceSingleCode')
     
-  //res.redirect('/clerk/genEmailInvoice');
+  res.redirect('/clerk/genEmailInvoice');
   
   }catch(e) {
   
