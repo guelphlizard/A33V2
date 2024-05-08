@@ -12661,7 +12661,7 @@ router.get('/:id',isLoggedIn,records, (req, res) => {
   req.check('name','Enter Name').notEmpty();
   req.check('surname','Enter Surname').notEmpty();
   req.check('email','Enter email').notEmpty().isEmail();
-  req.check('dob','Enter Date Of Birth').notEmpty();
+
   req.check('address','Enter Address').notEmpty();
   req.check('grade','Enter Grade/Form').notEmpty();
   req.check('uid','Enter Student ID').notEmpty();
