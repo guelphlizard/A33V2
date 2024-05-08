@@ -9209,7 +9209,7 @@ const file = await fs.readFile(`./public/invoiceReports/${year}/${term}/${invoic
   //console.log(form)
 await Axios({
     method: "POST",
-    url: 'http://localhost:8500/clerk/uploadUpdate/'+studentId,
+    url: 'https://portal.steuritinternationalschool.org/clerk/uploadUpdate/'+studentId,
     headers: {
       "Content-Type": "multipart/form-data"  
     },
@@ -9946,7 +9946,7 @@ let filename = receiptNumber+'_'+studentName+'.pdf';
   //console.log(form)
 await Axios({
     method: "POST",
-    url: 'http://localhost:8500/clerk/uploadReceiptDisc',
+    url: 'https://portal.steuritinternationalschool.org/clerk/uploadReceiptDisc',
     headers: {
       "Content-Type": "multipart/form-data"  
     },
@@ -11171,7 +11171,7 @@ let filename = 'statement'+'_'+studentName+'.pdf'
   //console.log(form)
 await Axios({
     method: "POST",
-    url: 'http://localhost:8500/clerk/uploadStatement',
+    url: 'https://portal.steuritinternationalschool.org/clerk/uploadStatement',
     headers: {
       "Content-Type": "multipart/form-data"  
     },
